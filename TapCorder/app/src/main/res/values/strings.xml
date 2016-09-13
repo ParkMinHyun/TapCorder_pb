@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AppDesign2.1</string>
+    <string name="setmenu_rectime"><u> 녹음 시간 </u></string>
+    <string name="setmenu_gps"><u> GPS 수신 </u></string>
+</resources>
