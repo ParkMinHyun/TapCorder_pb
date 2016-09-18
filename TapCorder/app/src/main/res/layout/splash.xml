@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#769fcd">
+    <!--android:background="#769FCD">-->
+
+    <!--android:background="#A600D3">-->
+    <!--android:background="#9400D3">-->
+
+    <!--android:background="#FFCC00">-->
+
+    <!--android:background="#D300A9">-->
+    <!--android:background="#533A71">-->
+    <!--android:background="#CD00CD">-->
+    <!--android:background="#551033">-->
+
+
+    <ImageView
+        android:id="@+id/logoImage"
+        android:layout_width="535dp"
+        android:layout_height="107dp"
+        android:background="@drawable/tapcorder_logo"
+        android:layout_marginTop="220dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/teamName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="50dp"
+        android:textSize="17dp"
+        android:textColor="#FFFFFF"
+        android:text="En_BEST"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+    <!--android:textColor="#B8D6DE"-->
+    <!--android:textColor="#FFCDD2"-->
+</RelativeLayout>

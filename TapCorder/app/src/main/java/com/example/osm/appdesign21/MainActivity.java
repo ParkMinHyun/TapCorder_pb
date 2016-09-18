@@ -2,17 +2,23 @@ package com.example.osm.appdesign21;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -23,23 +29,30 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCompletionListener, TimeRecyclerAdapter.OnItemClickListener {
+
+    private TimeRecyclerAdapter adapter;
     private static String TAG = "MainActivity";
     private PopupWindow pwindo;
     private Button btnClosePopup;
@@ -50,39 +63,43 @@ public class MainActivity extends AppCompatActivity {
     TextView contentsText;
     Geocoder gc;
 
-    //대량의 문자열 데이터를 저장할 Arraylist 객체 생성
-    ArrayList<String> mDatas = new ArrayList<String>();
+    //미리 상수 선언
+    private static final int PLAY_STOP = 0;
+    private static final int PLAYING = 1;
+    private static final int PLAY_PAUSE = 2;
 
-    ListView listview; //ListView 참조변수
-    private TextView popupTitle;
+    private MediaPlayer mPlayer = null;
+    private int mPlayerState = PLAY_STOP;
+    private String mFilePath; //녹음파일 디렉터리 위치
+
+    private FloatingActionButton fabButton;
+    private RecyclerView mTimeRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // 지오코더 객체 생성
-        gc = new Geocoder(this, Locale.KOREAN);
-        //FloatingButton Click에 따른 메서드
-        initFab();
 
+        Intent intent=new Intent(this,SplashActivity.class);
+        this.startActivity(intent);
 
+        gc = new Geocoder(this, Locale.KOREAN);// 지오코더 객체 생성
 
-////////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/////////
-        for(int i=0;i<15;i++){
-            mDatas.add(String.valueOf(i));
-        }
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, mDatas);
-        listview = (ListView) findViewById(R.id.listview);
-        listview.setAdapter(adapter); //위에 만들어진 Adapter를 ListView에 설정 : xml에서 'entries'속성
+        fabButton=(FloatingActionButton)findViewById(R.id.fab);
+        initFab();//FloatingButton Click에 따른 메서드
 
-        //ListView의 아이템 하나가 클릭되는 것을 감지하는 Listener객체 설정 (Button의 OnClickListener와 같은 역할)
-        //listview.setOnItemClickListener(listener);
+        mTimeRecyclerView = (RecyclerView) findViewById(R.id.mTimeRecyclerView);
+        mTimeRecyclerView.setHasFixedSize(true);
 
-        //////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~///////////////////
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        mTimeRecyclerView.setLayoutManager(layoutManager);
+
+        adapter = new TimeRecyclerAdapter(getDataset());
+        adapter.setOnItemClickListener(this);
+        mTimeRecyclerView.setAdapter(adapter);
+
         mMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(mMetrics);
-
-        ////////////////////////////////////////////////////////////
 
         WindowManager w = getWindowManager();
         Display d = w.getDefaultDisplay();
@@ -108,6 +125,112 @@ public class MainActivity extends AppCompatActivity {
                 mHeightPixels = realSize.y;
             } catch (Exception ignored) {
             }
+
+
+    }
+
+    private ArrayList<MyData> getDataset() {
+        ArrayList<MyData> dataset = new ArrayList<>();
+        ////////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/////////
+        mFilePath="/storage/sdcard0/Sounds/";
+        Log.i("mFilePath~~??",mFilePath); ///storage/emulated/0/progress_recorder/
+        File[] fileList = getFileList(mFilePath);
+
+        for(int i=0; i < fileList.length; i++)
+        {
+            Log.d("~~~~fileList[i]~~~", fileList[i].getName());
+            Date lastModifiedDate=new Date(fileList[i].lastModified());
+            Calendar lastModifiedCalendar = new GregorianCalendar();
+            lastModifiedCalendar.setTime(lastModifiedDate);
+
+            dataset.add(new MyData(fileList[i].getName(),lastModifiedCalendar.get(Calendar.YEAR),
+                    lastModifiedCalendar.get(Calendar.MONTH),
+                    lastModifiedCalendar.get(Calendar.DAY_OF_MONTH),
+                    lastModifiedCalendar.get(Calendar.HOUR_OF_DAY),
+                    lastModifiedCalendar.get(Calendar.MINUTE),
+                    lastModifiedCalendar.get(Calendar.SECOND)
+            ));
+        }
+
+        return dataset;
+    }
+
+    @Override
+    public void onItemClick(int position) {
+//        Toast.makeText(this, adapter.getItem(position).getName(), Toast.LENGTH_SHORT).show();
+        //재생되는지 테스팅
+        mBtnStartPlayOnClick(adapter.getItem(position).getName());
+    }
+
+    // 특정 폴더의 파일 목록을 구해서 반환
+    public File[] getFileList(String strPath) {
+        File[] files;
+        // 폴더 경로를 지정해서 File 객체 생성
+        File fileRoot = new File(strPath);
+        // 해당 경로가 폴더가 아니라면 함수 탈출
+        if (fileRoot.isDirectory() == false) {
+            Log.i("getFileList~~", "해당 경로가 폴더가 아닙니다");
+            return null;
+        } else {
+            Log.i("getFileList~~", strPath);
+
+            files = fileRoot.listFiles();
+        }
+
+        Log.i("~~~getfileList~~Count", "fileList의 갯수는 " + files.length);
+        return files;
+    }
+
+    private void mBtnStartPlayOnClick(String mFileName) {
+        if (mPlayerState == PLAY_STOP) {
+            mPlayerState = PLAYING;
+            startPlay(mFileName);
+        } else if (mPlayerState == PLAYING) {
+            mPlayerState = PLAY_STOP;
+            stopPlay();
+        }
+    }
+
+    // 재생 시작
+    private void startPlay(String mFileName) {
+        // 미디어 플레이어 생성
+        if (mPlayer == null)
+            mPlayer = new MediaPlayer();
+        else
+            mPlayer.reset();
+
+        mPlayer.setOnCompletionListener(this);
+
+        String fullFilePath = mFilePath + mFileName;
+        Log.v("RecFiles_makeDir", "녹음파일명 ==========> " + fullFilePath);
+
+        try {
+            mPlayer.setDataSource(fullFilePath);
+            mPlayer.prepare();
+
+        } catch (Exception e) {
+            Log.v("RecFiles_makeDir", "미디어 플레이어 Prepare Error ==========> " + e);
+        }
+
+        if (mPlayerState == PLAYING) {
+            try {
+                mPlayer.start();
+            } catch (Exception e) {
+                Toast.makeText(this, "error : " + e.getMessage(), 0).show();
+            }
+        }
+    }
+
+    //재생 중지
+    private void stopPlay() {
+        // 재생을 중지하고
+        mPlayer.stop();
+        mPlayer.release();
+        mPlayer = null;
+    }
+
+    public void onCompletion(MediaPlayer mp) {
+        mPlayerState = PLAY_STOP; // 재생이 종료됨
     }
 
 
@@ -121,14 +244,16 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                     View layout = inflater.inflate(R.layout.popup_settings,
                             (ViewGroup) findViewById(R.id.popup_layout_0));
-                    pwindo = new PopupWindow(layout, mWidthPixels-50, mHeightPixels - 300, true);
+                    pwindo = new PopupWindow(layout, mWidthPixels - 100, mHeightPixels - 320, true);
 
 //                    pwindo = new PopupWindow(layout, mWidthPixels - 175, mHeightPixels - 450, true);
-                    pwindo.setAnimationStyle(R.style.animationName);
-                    pwindo.showAtLocation(layout, Gravity.CENTER|Gravity.BOTTOM, 0, 0);
+                    //pwindo.setAnimationStyle(R.style.animationName);
+                    pwindo.showAtLocation(layout, Gravity.CENTER, 0, 0);
 
                     btnClosePopup = (Button) layout.findViewById(R.id.closebtn_popup_0);
                     btnClosePopup.setOnClickListener(cancel_button_click_listener);
+
+
                     option1 = (RadioButton) layout.findViewById(R.id.option1);
                     option2 = (RadioButton) layout.findViewById(R.id.option2);
                     option3 = (RadioButton) layout.findViewById(R.id.option3);
@@ -150,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
                                 startLocationService();
 
 
-                            }else{
+                            } else {
                                 contentsText.setText("GPS상태를 확인하세요.");
                             }
 
@@ -212,13 +337,14 @@ public class MainActivity extends AppCompatActivity {
 
                 Toast.makeText(getApplicationContext(), "Last Known Location : " + "Latitude : " + latitude + "\nLongitude:" + longitude, Toast.LENGTH_LONG).show();
             }
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
         Toast.makeText(getApplicationContext(), "위치 확인이 시작되었습니다. 로그를 확인하세요.", Toast.LENGTH_SHORT).show();
 
     }
+
 
     /**
      * 리스너 클래스 정의
@@ -231,14 +357,13 @@ public class MainActivity extends AppCompatActivity {
             Double latitude = location.getLatitude();
             Double longitude = location.getLongitude();
 
-            String msg = "Latitude : "+ latitude + "\nLongitude:"+ longitude;
+            String msg = "Latitude : " + latitude + "\nLongitude:" + longitude;
             Log.i("GPSListener", msg);
 
             Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 
             // 위치 좌표를 이용해 주소를 검색하는 메소드 호출
-            if(latitude!=null && longitude!=null)
-            {
+            if (latitude != null && longitude != null) {
                 searchLocation(latitude, longitude);
             }
         }
@@ -304,7 +429,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-        } catch(IOException ex) {
+        } catch (IOException ex) {
             Log.d(TAG, "예외 : " + ex.toString());
         }
 
@@ -312,32 +437,38 @@ public class MainActivity extends AppCompatActivity {
 
 
     //RadioButton 눌렀을때의 반응
-    private RadioButton.OnClickListener optionOnClickListener= new RadioButton.OnClickListener() {
+    private RadioButton.OnClickListener optionOnClickListener = new RadioButton.OnClickListener() {
 
         public void onClick(View v) {
-            Log.i("OnClick~~",String.valueOf(option1.isChecked()));
-            Log.i("OnClick~~",String.valueOf(option2.isChecked()));
-            Log.i("OnClick~~",String.valueOf(option3.isChecked()));
+            Log.i("OnClick~~", String.valueOf(option1.isChecked()));
+            Log.i("OnClick~~", String.valueOf(option2.isChecked()));
+            Log.i("OnClick~~", String.valueOf(option3.isChecked()));
         }
     };
 
     //팝업창 닫기
     private View.OnClickListener cancel_button_click_listener = new View.OnClickListener() {
 
-                public void onClick(View v) {
-                    pwindo.dismiss();
-                }
-            };
+        public void onClick(View v) {
+            pwindo.dismiss();
+            Animation btnAnimOff = AnimationUtils.loadAnimation(MainActivity.this, R.anim.animation_off);
+            fabButton.startAnimation(btnAnimOff);
 
-    //FloatingButton클릭에 따른 반응
+        }
+    };
+
+    //FloatingActionButton클릭에 따른 반응
     private void initFab() {
         findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                initiatePopupWindow(0);
+            @Override
+            public void onClick(View v) {
+                initiatePopupWindow(0); //팝업창 띄우기
+                //FloatingActionButton 애니메이션
+                Animation btnAnimOn = AnimationUtils.loadAnimation(MainActivity.this, R.anim.animation_on);
+                fabButton.startAnimation(btnAnimOn);
             }
         });
     }
-
 
 
 }

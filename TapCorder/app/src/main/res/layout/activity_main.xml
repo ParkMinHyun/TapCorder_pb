@@ -1,42 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="15dp"
+        style="@style/FabStyle"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        style="@style/FabStyle"/>
-
-    <TextView
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="25dp" />
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:text="녹음파일 목록"
-        android:drawableLeft="@drawable/play"
-        android:textSize="20dp"
+        android:layout_height="50dp"
+        android:background="@drawable/title_top_btm"
+        android:orientation="vertical">
+    <TextView
         android:id="@+id/textView_title"
-        android:gravity="fill_horizontal|center"
-        android:background="@drawable/title_top_btm" />
-
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/scrollView"
-        android:layout_marginTop="55dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="right"
-        android:fillViewport="true"
-        android:visibility="visible">
+        android:gravity="fill_horizontal|center_vertical"
+        android:layout_marginLeft="20dp"
+        android:drawableLeft="@drawable/tap32"
+        android:text="  음성파일 목록"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp" />
+</RelativeLayout>
 
-        <ListView
-            android:id="@+id/listview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#f3f3f7"/>
-</ScrollView>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="50dp"
+        tools:context=".MainActivity">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/mTimeRecyclerView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:background="#CAC0E4"/>
+</RelativeLayout>
+
+
 </RelativeLayout>
 
 
