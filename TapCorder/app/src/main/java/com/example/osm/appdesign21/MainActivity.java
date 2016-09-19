@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Address;
@@ -33,6 +34,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
@@ -74,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
 
     private FloatingActionButton fabButton;
     private RecyclerView mTimeRecyclerView;
+    // 연락처 ListView
+    private ListView lvPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -240,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
             LayoutInflater inflater = (LayoutInflater) MainActivity.this
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            switch (arg2) {
+            switch (1) {
                 case 0:
                     View layout = inflater.inflate(R.layout.popup_settings,
                             (ViewGroup) findViewById(R.id.popup_layout_0));
@@ -286,6 +290,28 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
 
                     break;
 
+                case 1:
+
+                    View layout1 = inflater.inflate(R.layout.phonebook_list,
+                            (ViewGroup)findViewById(R.id.popup_layout_1));
+                    pwindo = new PopupWindow(layout1, mWidthPixels - 100, mHeightPixels - 320, true);
+                    pwindo.showAtLocation(layout1, Gravity.CENTER, 0, 0);
+
+                    lvPhone = (ListView)layout1.findViewById(R.id.listPhone);
+
+                    List<PhoneBook> listPhoneBook = new ArrayList<PhoneBook>();
+                    listPhoneBook.add(new PhoneBook(BitmapFactory.decodeResource(getResources(), R.drawable.mother), "엄마", "010-9446-2575", ""));
+                    listPhoneBook.add(new PhoneBook(BitmapFactory.decodeResource(getResources(), R.drawable.father), "아빠", "010-9179-5224", ""));
+                    listPhoneBook.add(new PhoneBook(BitmapFactory.decodeResource(getResources(), R.drawable.socialparent), "사회복지사", "010-9451-1948", ""));
+
+                    PhoneBookAdapter adapter = new PhoneBookAdapter(this, listPhoneBook);
+                    lvPhone.setAdapter(adapter);
+
+
+                    btnClosePopup = (Button) layout1.findViewById(R.id.closebtn_popup_1);
+                    btnClosePopup.setOnClickListener(cancel_button_click_listener);
+
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();
