@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
@@ -37,7 +36,6 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
-import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -89,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
 
         gc = new Geocoder(this, Locale.KOREAN);// 지오코더 객체 생성
 
-        fabButton=(FloatingActionButton)findViewById(R.id.fab);
+        fabButton=(FloatingActionButton)findViewById(R.id.fab_settings);
         initFab();//FloatingButton Click에 따른 메서드
 
         mTimeRecyclerView = (RecyclerView) findViewById(R.id.mTimeRecyclerView);
@@ -136,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
     private ArrayList<MyData> getDataset() {
         ArrayList<MyData> dataset = new ArrayList<>();
         ////////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/////////
-        mFilePath="/storage/sdcard0/Sounds/";
+        mFilePath="/storage/emulated/0/progress_recorder/";
         Log.i("mFilePath~~??",mFilePath); ///storage/emulated/0/progress_recorder/
         File[] fileList = getFileList(mFilePath);
 
@@ -161,7 +159,8 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
 
     @Override
     public void onItemClick(int position) {
-//        Toast.makeText(this, adapter.getItem(position).getName(), Toast.LENGTH_SHORT).show();
+//
+// .makeText(this, adapter.getItem(position).getName(), Toast.LENGTH_SHORT).show();
         //재생되는지 테스팅
         mBtnStartPlayOnClick(adapter.getItem(position).getName());
     }
@@ -244,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
             LayoutInflater inflater = (LayoutInflater) MainActivity.this
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            switch (1) {
+            switch (arg2) {
                 case 0:
                     View layout = inflater.inflate(R.layout.popup_settings,
                             (ViewGroup) findViewById(R.id.popup_layout_0));
@@ -271,7 +270,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
                     sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            Toast.makeText(MainActivity.this, "체크상태 = " + isChecked, Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(MainActivity.this, "체크상태 = " + isChecked, Toast.LENGTH_SHORT).show();
 
                             //체크상태가 true일때
                             if (isChecked == true) {
@@ -361,13 +360,13 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
                 Double latitude = lastLocation.getLatitude();
                 Double longitude = lastLocation.getLongitude();
 
-                Toast.makeText(getApplicationContext(), "Last Known Location : " + "Latitude : " + latitude + "\nLongitude:" + longitude, Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "Last Known Location : " + "Latitude : " + latitude + "\nLongitude:" + longitude, Toast.LENGTH_LONG).show();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-        Toast.makeText(getApplicationContext(), "위치 확인이 시작되었습니다. 로그를 확인하세요.", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "위치 확인이 시작되었습니다. 로그를 확인하세요.", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -386,7 +385,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
             String msg = "Latitude : " + latitude + "\nLongitude:" + longitude;
             Log.i("GPSListener", msg);
 
-            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 
             // 위치 좌표를 이용해 주소를 검색하는 메소드 호출
             if (latitude != null && longitude != null) {
@@ -485,10 +484,21 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
 
     //FloatingActionButton클릭에 따른 반응
     private void initFab() {
-        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
+
+        findViewById(R.id.fab_settings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 initiatePopupWindow(0); //팝업창 띄우기
+                //FloatingActionButton 애니메이션
+                Animation btnAnimOn = AnimationUtils.loadAnimation(MainActivity.this, R.anim.animation_on);
+                fabButton.startAnimation(btnAnimOn);
+            }
+        });
+
+        findViewById(R.id.fab_phoneaddr).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initiatePopupWindow(1); //팝업창 띄우기
                 //FloatingActionButton 애니메이션
                 Animation btnAnimOn = AnimationUtils.loadAnimation(MainActivity.this, R.anim.animation_on);
                 fabButton.startAnimation(btnAnimOn);
