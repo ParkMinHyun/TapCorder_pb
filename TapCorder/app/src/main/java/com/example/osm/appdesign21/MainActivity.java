@@ -76,8 +76,11 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
 
     private FloatingActionButton fabButton;
     private RecyclerView mTimeRecyclerView;
+
     // 연락처 ListView
     private ListView lvPhone;
+    private Button mbtnAddContact;
+    private Button mbtnDeleteContact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -307,9 +310,17 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
                     PhoneBookAdapter adapter = new PhoneBookAdapter(this, listPhoneBook);
                     lvPhone.setAdapter(adapter);
 
-
+                    mbtnAddContact = (Button) layout1.findViewById(R.id.btn_add);
                     btnClosePopup = (Button) layout1.findViewById(R.id.closebtn_popup_1);
                     btnClosePopup.setOnClickListener(cancel_button_click_listener);
+
+                    mbtnAddContact.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(MainActivity.this, ContactActivity.class);
+                            MainActivity.this.startActivity(intent);
+                        }
+                    });
 
                     break;
             }
