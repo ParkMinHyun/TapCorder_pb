@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -44,6 +45,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -82,13 +84,13 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
     private Button mbtnAddContact;
     private Button mbtnDeleteContact;
 
+    SharedPreferences pref;
+    ArrayList<PhoneBook> saveList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Intent intent=new Intent(this,SplashActivity.class);
-        this.startActivity(intent);
 
         gc = new Geocoder(this, Locale.KOREAN);// 지오코더 객체 생성
 
@@ -133,7 +135,17 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
             } catch (Exception ignored) {
             }
 
-
+        saveList = new ArrayList<>();
+        String name;
+        String phoneNumber;
+        pref = new SharedPreferences(this);
+        for(int i = 0; i < 5; i++){
+            name = pref.getValue(Integer.toString(i), "no", "name");
+            phoneNumber = pref.getValue(Integer.toString(i), "no", "phoneNum");
+            if(!name.equals("no")){
+                saveList.add(new PhoneBook(name, phoneNumber));
+            }
+        }
     }
 
     private ArrayList<MyData> getDataset() {
@@ -294,7 +306,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
                     break;
 
                 case 1:
-
                     View layout1 = inflater.inflate(R.layout.phonebook_list,
                             (ViewGroup)findViewById(R.id.popup_layout_1));
                     pwindo = new PopupWindow(layout1, mWidthPixels - 100, mHeightPixels - 320, true);
@@ -302,23 +313,41 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
 
                     lvPhone = (ListView)layout1.findViewById(R.id.listPhone);
 
-                    List<PhoneBook> listPhoneBook = new ArrayList<PhoneBook>();
+                    final List<PhoneBook> listPhoneBook = new ArrayList<PhoneBook>();
+                    for(int i = 0; i < saveList.size() ; i++){
+                        listPhoneBook.add(new PhoneBook(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher),
+                                saveList.get(i).getmName(), saveList.get(i).getmPhone(), ""));
+                    }
+/*
                     listPhoneBook.add(new PhoneBook(BitmapFactory.decodeResource(getResources(), R.drawable.mother), "엄마", "010-9446-2575", ""));
                     listPhoneBook.add(new PhoneBook(BitmapFactory.decodeResource(getResources(), R.drawable.father), "아빠", "010-9179-5224", ""));
                     listPhoneBook.add(new PhoneBook(BitmapFactory.decodeResource(getResources(), R.drawable.socialparent), "사회복지사", "010-9451-1948", ""));
+*/
 
-                    PhoneBookAdapter adapter = new PhoneBookAdapter(this, listPhoneBook);
+                    final PhoneBookAdapter adapter = new PhoneBookAdapter(this, listPhoneBook);
                     lvPhone.setAdapter(adapter);
 
                     mbtnAddContact = (Button) layout1.findViewById(R.id.btn_add);
+                    mbtnDeleteContact = (Button) layout1.findViewById(R.id.btn_delete);
                     btnClosePopup = (Button) layout1.findViewById(R.id.closebtn_popup_1);
                     btnClosePopup.setOnClickListener(cancel_button_click_listener);
 
                     mbtnAddContact.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            finish();
                             Intent intent = new Intent(MainActivity.this, ContactActivity.class);
                             MainActivity.this.startActivity(intent);
+                        }
+                    });
+                    mbtnDeleteContact.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            pref.removeAllPreferences("name");
+                            pref.removeAllPreferences("phoneNum");
+                            listPhoneBook.clear();
+                            saveList.clear();
+                            Toast.makeText(MainActivity.this, "삭제 완료되었습니다.", Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -506,6 +535,4 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
             }
         });
     }
-
-
 }

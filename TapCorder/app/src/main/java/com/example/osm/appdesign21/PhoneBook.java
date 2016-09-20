@@ -17,6 +17,10 @@ public class PhoneBook {
         this.mPhone = mPhone;
         this.mEmail = mEmail;
     }
+    public PhoneBook(String mName, String mPhone){
+        this.mName = mName;
+        this.mPhone = mPhone;
+    }
     public Bitmap getmAvartar(){
         return mAvartar;
     }

@@ -44,4 +44,11 @@ public class SharedPreferences {
             return value;
         }
     }
+    public void removeAllPreferences(String prefName){
+        android.content.SharedPreferences pref = mContext.getSharedPreferences(prefName,
+                Activity.MODE_PRIVATE);
+        android.content.SharedPreferences.Editor editor = pref.edit();
+        editor.clear();
+        editor.commit();
+    }
 }

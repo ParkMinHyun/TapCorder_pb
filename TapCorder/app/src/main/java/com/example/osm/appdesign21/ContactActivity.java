@@ -1,6 +1,7 @@
 package com.example.osm.appdesign21;
 
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -17,12 +18,20 @@ import java.util.List;
 
 public class ContactActivity extends AppCompatActivity {
 
+    ArrayList<PhoneBook> contactList;
+    ArrayList<PhoneBook> existList;
+
     private ListView mlvContact;
+
+    SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
+
+        contactList = new ArrayList<>();
+        pref = new SharedPreferences(this);
 
         mlvContact = (ListView)findViewById(R.id.contactList);
 
@@ -63,7 +72,17 @@ public class ContactActivity extends AppCompatActivity {
                 String name = person.getmName();
                 String phoneNumber = person.getmPhone();
 
-                Toast.makeText(ContactActivity.this, phoneNumber + "\n" + name, Toast.LENGTH_SHORT).show();
+                for(int j = 0; j < 5 ; j++){
+                    if(pref.getValue(Integer.toString(j), "no", "name") == "no"){
+                        pref.putValue(Integer.toString(j), name, "name");
+                        pref.putValue(Integer.toString(j), phoneNumber, "phoneNum");
+                        break;
+                    }
+                }
+                Toast.makeText(ContactActivity.this, name + "\n" + phoneNumber, Toast.LENGTH_SHORT).show();
+                finish();
+                Intent intent = new Intent(ContactActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
 
