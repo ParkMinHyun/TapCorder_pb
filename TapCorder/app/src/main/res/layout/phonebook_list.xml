@@ -5,17 +5,79 @@
     android:layout_height="match_parent"
     android:background="@drawable/popup_bg">
 
-    <ListView android:id="@+id/listPhone"
-        android:layout_width="fill_parent"
+    <TextView
+        android:id="@+id/set_title"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/popup_title"
+        android:gravity="center_vertical"
+        android:text="보호자 연락망"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="22dp"
+        android:textStyle="normal" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="45dp"
+        android:gravity="center_vertical"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="22dp"
+        android:textStyle="normal" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
+        android:gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true">
+        <Button
+            android:id="@+id/btn_add"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/add_contact"
+            android:gravity="center_vertical"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:textAlignment="center"
+            android:textSize="16dp"
+            android:layout_alignTop="@+id/textView"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/remove_contact"
+            android:gravity="center_vertical"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:textAlignment="center"
+            android:textSize="16dp"
+            android:layout_below="@+id/textView"
+            android:layout_alignLeft="@+id/btn_add"
+            android:layout_marginLeft="50dp" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/listPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="170dp"
+        android:layout_marginTop="90dp"
+        android:background="@drawable/popup_accel_both" />
+
     <Button
         android:id="@+id/closebtn_popup_1"
-        android:layout_width="80dp"
+        android:layout_width="150dp"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="false"
         android:layout_centerHorizontal="true"
+        android:layout_gravity="fill_horizontal"
         android:layout_marginBottom="15dp"
         android:background="@drawable/closebtn_bg"
         android:gravity="center_vertical"
@@ -23,23 +85,7 @@
         android:textAlignment="center"
         android:textSize="16dp" />
 
-    <Button
-        android:layout_height="40dp"
-        android:layout_width="80dp"
-        android:text="추  가"
-        android:id="@+id/btn_add"
-        android:background="@drawable/closebtn_bg"
-        android:layout_alignTop="@+id/closebtn_popup_1"
-        android:layout_toStartOf="@+id/closebtn_popup_1"
-        android:layout_marginEnd="23dp" />
 
-    <Button
-        android:layout_height="40dp"
-        android:layout_width="80dp"
-        android:text="삭  제"
-        android:id="@+id/btn_delete"
-        android:background="@drawable/closebtn_bg"
-        android:layout_alignTop="@+id/closebtn_popup_1"
-        android:layout_toEndOf="@+id/closebtn_popup_1"
-        android:layout_marginStart="20dp" />
+
+
 </RelativeLayout>
