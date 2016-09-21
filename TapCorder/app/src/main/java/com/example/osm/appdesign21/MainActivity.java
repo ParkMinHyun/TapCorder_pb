@@ -325,11 +325,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
                         listPhoneBook.add(new PhoneBook(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher),
                                 saveList.get(i).getmName(), saveList.get(i).getmPhone(), ""));
                     }
-/*
-                    listPhoneBook.add(new PhoneBook(BitmapFactory.decodeResource(getResources(), R.drawable.mother), "엄마", "010-9446-2575", ""));
-                    listPhoneBook.add(new PhoneBook(BitmapFactory.decodeResource(getResources(), R.drawable.father), "아빠", "010-9179-5224", ""));
-                    listPhoneBook.add(new PhoneBook(BitmapFactory.decodeResource(getResources(), R.drawable.socialparent), "사회복지사", "010-9451-1948", ""));
-*/
 
                     final PhoneBookAdapter adapter = new PhoneBookAdapter(this, listPhoneBook);
                     lvPhone.setAdapter(adapter);

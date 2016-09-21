@@ -79,12 +79,18 @@ public class ContactActivity extends AppCompatActivity {
                         break;
                     }
                 }
-                Toast.makeText(ContactActivity.this, name + "\n" + phoneNumber, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ContactActivity.this, name + "님이 보호자 연락망에\n추가되었습니다.", Toast.LENGTH_SHORT).show();
                 finish();
                 Intent intent = new Intent(ContactActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });
-
     }
+    @Override
+    public void onBackPressed(){
+        finish();
+        Intent intent = new Intent(ContactActivity.this, MainActivity.class);
+        startActivity(intent);
+    }
+
 }
