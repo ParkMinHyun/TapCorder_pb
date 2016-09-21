@@ -18,7 +18,7 @@
 
     <ImageView
         android:id="@+id/logoImage"
-        android:layout_width="535dp"
+        android:layout_width="540dp"
         android:layout_height="107dp"
         android:background="@drawable/tapcorder_logo"
         android:layout_marginTop="220dp"

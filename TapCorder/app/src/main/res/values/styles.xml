@@ -16,12 +16,12 @@
 
 <resources>
 
-    <style name="animationName" parent="android:Animation">
-        <item name="android:windowEnterAnimation">@anim/animation_on</item>
-        <!--<item name="android:windowExitAnimation">@anim/animation_off</item>-->
-    </style>
+    <!--<style name="animationName" parent="android:Animation">-->
+        <!--<item name="android:windowEnterAnimation">@anim/set_anim_on</item>-->
+        <!--&lt;!&ndash;<item name="android:windowExitAnimation">@anim/set_anim_off</item>&ndash;&gt;-->
+    <!--</style>-->
 
-    <style name="AppTheme" parent="BaseTheme"/>
+    <style name="AppTheme" parent="BaseTheme" />
 
     <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primary</item> 
@@ -32,11 +32,22 @@
         <!--<item name="android:selectableItemBackground">@drawable/selectable_item_background</item>-->
     </style>
 
-    <style name="FabStyle">
+    <style name="FabSettings_Style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <!--<item name="android:layout_margin">@dimen/spacing_large</item>-->
         <item name="android:src">@drawable/settings</item>
+        <item name="borderWidth">0dp</item>
+        <item name="elevation">6dp</item>
+        <item name="pressedTranslationZ">12dp</item>
+        <item name="rippleColor">@android:color/white</item>
+    </style>
+
+    <style name="FabPhoneAddr_Style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <!--<item name="android:layout_margin">@dimen/spacing_large</item>-->
+        <item name="android:src">@drawable/phoneaddr_img</item>
         <item name="borderWidth">0dp</item>
         <item name="elevation">6dp</item>
         <item name="pressedTranslationZ">12dp</item>
