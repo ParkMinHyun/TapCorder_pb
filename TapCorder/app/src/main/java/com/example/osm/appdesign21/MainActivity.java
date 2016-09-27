@@ -36,6 +36,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -192,6 +193,52 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
             // Otherwise, setup the chat session
         } else {
             if (mChatService == null) setupChat();
+        }
+    }
+
+    @Override
+    public synchronized void onResume() {
+        super.onResume();
+        if(Bluetooth_MagicNumber.D) Log.e(TAG, "+ ON RESUME +");
+
+        // Performing this check in onResume() covers the case in which BT was
+        // not enabled during onStart(), so we were paused to enable it...
+        // onResume() will be called when ACTION_REQUEST_ENABLE activity returns.
+        if (mChatService != null) {
+            // Only if the state is STATE_NONE, do we know that we haven't started already
+            if (mChatService.getState() == BluetoothChatService.STATE_NONE) {
+                // Start the Bluetooth chat services
+                mChatService.start();
+            }
+        }
+    }
+    @Override
+    public synchronized void onPause() {
+        super.onPause();
+        if(Bluetooth_MagicNumber.D) Log.e(TAG, "- ON PAUSE -");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(Bluetooth_MagicNumber.D) Log.e(TAG, "-- ON STOP --");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Stop the Bluetooth chat services
+        if (mChatService != null) mChatService.stop();
+        if(Bluetooth_MagicNumber.D) Log.e(TAG, "--- ON DESTROY ---");
+    }
+
+    private void ensureDiscoverable() {
+        if(Bluetooth_MagicNumber.D) Log.d(TAG, "ensure discoverable");
+        if (mBluetoothAdapter.getScanMode() !=
+                BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
+            Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+            startActivity(discoverableIntent);
         }
     }
 
@@ -579,6 +626,21 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
             }
         });
     }
+
+
+    private void setupChat() {
+        Log.d(TAG, "setupChat()");
+
+        // Initialize the array adapter for the conversation thread
+        mConversationArrayAdapter = new ArrayAdapter<String>(this, R.layout.message);
+
+        // Initialize the BluetoothChatService to perform bluetooth connections
+        mChatService = new BluetoothChatService(this, mHandler);
+
+        // Initialize the buffer for outgoing messages
+        mOutStringBuffer = new StringBuffer("");
+    }
+
 
     private ArrayList<MyData> getDataset() {
         ArrayList<MyData> dataset = new ArrayList<>();
