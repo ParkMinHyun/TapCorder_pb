@@ -13,6 +13,10 @@
     <!-- 연락처 읽기위한 permission -->
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
+
+    <!--  블루투스 연결을 위한 permission  -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
