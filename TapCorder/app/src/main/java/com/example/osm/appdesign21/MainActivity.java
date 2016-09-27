@@ -179,30 +179,20 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
         layout_MainMenu.getForeground().setAlpha( 0);
     }
 
-    private ArrayList<MyData> getDataset() {
-        ArrayList<MyData> dataset = new ArrayList<>();
-        ////////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/////////
-        mFilePath="/storage/emulated/0/progress_recorder/";
-        Log.i("mFilePath~~??",mFilePath); ///storage/emulated/0/progress_recorder/
-        File[] fileList = getFileList(mFilePath);
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(Bluetooth_MagicNumber.D) Log.e(TAG, "++ ON START ++");
 
-        for(int i=0; i < fileList.length; i++)
-        {
-            Log.d("~~~~fileList[i]~~~", fileList[i].getName());
-            Date lastModifiedDate=new Date(fileList[i].lastModified());
-            Calendar lastModifiedCalendar = new GregorianCalendar();
-            lastModifiedCalendar.setTime(lastModifiedDate);
-
-            dataset.add(new MyData(fileList[i].getName(),lastModifiedCalendar.get(Calendar.YEAR),
-                    lastModifiedCalendar.get(Calendar.MONTH),
-                    lastModifiedCalendar.get(Calendar.DAY_OF_MONTH),
-                    lastModifiedCalendar.get(Calendar.HOUR_OF_DAY),
-                    lastModifiedCalendar.get(Calendar.MINUTE),
-                    lastModifiedCalendar.get(Calendar.SECOND)
-            ));
+        // If BT is not on, request that it be enabled.
+        // setupChat() will then be called during onActivityResult
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, Bluetooth_MagicNumber.REQUEST_ENABLE_BT);
+            // Otherwise, setup the chat session
+        } else {
+            if (mChatService == null) setupChat();
         }
-
-        return dataset;
     }
 
     @Override
@@ -588,5 +578,31 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
                 fabButton_set.startAnimation(btnAnimOn);
             }
         });
+    }
+
+    private ArrayList<MyData> getDataset() {
+        ArrayList<MyData> dataset = new ArrayList<>();
+        ////////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/////////
+        mFilePath="/storage/emulated/0/progress_recorder/";
+        Log.i("mFilePath~~??",mFilePath); ///storage/emulated/0/progress_recorder/
+        File[] fileList = getFileList(mFilePath);
+
+        for(int i=0; i < fileList.length; i++)
+        {
+            Log.d("~~~~fileList[i]~~~", fileList[i].getName());
+            Date lastModifiedDate=new Date(fileList[i].lastModified());
+            Calendar lastModifiedCalendar = new GregorianCalendar();
+            lastModifiedCalendar.setTime(lastModifiedDate);
+
+            dataset.add(new MyData(fileList[i].getName(),lastModifiedCalendar.get(Calendar.YEAR),
+                    lastModifiedCalendar.get(Calendar.MONTH),
+                    lastModifiedCalendar.get(Calendar.DAY_OF_MONTH),
+                    lastModifiedCalendar.get(Calendar.HOUR_OF_DAY),
+                    lastModifiedCalendar.get(Calendar.MINUTE),
+                    lastModifiedCalendar.get(Calendar.SECOND)
+            ));
+        }
+
+        return dataset;
     }
 }
