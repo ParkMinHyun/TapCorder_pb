@@ -87,12 +87,15 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
     SharedPreferences pref;
     ArrayList<PhoneBook> saveList;
     FrameLayout layout_MainMenu;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         gc = new Geocoder(this, Locale.KOREAN);// 지오코더 객체 생성
+
 
         fabButton_set =(FloatingActionButton)findViewById(R.id.fab_settings);
         fabButton_addr=(FloatingActionButton)findViewById(R.id.fab_phoneaddr);
