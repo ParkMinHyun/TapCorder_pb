@@ -1,6 +1,7 @@
 package com.example.osm.appdesign21;
 
 import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -32,6 +33,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
@@ -87,6 +89,18 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
     SharedPreferences pref;
     ArrayList<PhoneBook> saveList;
     FrameLayout layout_MainMenu;
+
+    /*블루투스에 관한 것들*/
+    // Name of the connected device
+    private String mConnectedDeviceName = null;
+    // Array adapter for the conversation thread
+    private ArrayAdapter<String> mConversationArrayAdapter;
+    // String buffer for outgoing messages
+    private StringBuffer mOutStringBuffer;
+    // Local Bluetooth adapter
+    private BluetoothAdapter mBluetoothAdapter = null;
+    // Member object for the chat services
+    private BluetoothChatService mChatService = null;
 
 
     @Override
