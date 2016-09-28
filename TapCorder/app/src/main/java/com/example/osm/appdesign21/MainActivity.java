@@ -321,6 +321,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     String readMessage = new String(readBuf, 0, msg.arg1);
                     mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
                     Toast.makeText(getApplicationContext(),readMessage,Toast.LENGTH_LONG).show();
+                    
                     break;
                 case Bluetooth_MagicNumber.MESSAGE_DEVICE_NAME:
                     // save the connected device's name
