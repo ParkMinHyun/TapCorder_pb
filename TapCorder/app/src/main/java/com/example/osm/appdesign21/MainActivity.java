@@ -95,15 +95,15 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
     /*블루투스에 관한 것들*/
     private  boolean first_start = false;
-    // Name of the connected device
+    // 연결된 디바이스의 이름
     private String mConnectedDeviceName = null;
-    // Array adapter for the conversation thread
+    // thread 소통을 위한 ArrayAdapter
     private ArrayAdapter<String> mConversationArrayAdapter;
-    // String buffer for outgoing messages
+    // 송신을 위한 outGoing StringBuffer
     private StringBuffer mOutStringBuffer;
-    // Local Bluetooth adapter
+    // 블루투스 어댑터
     private BluetoothAdapter mBluetoothAdapter = null;
-    // Member object for the chat services
+    // 블루투스챗 서비스 클래스
     private BluetoothChatService mChatService = null;
 
 
@@ -112,11 +112,10 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        // Get local Bluetooth adapter
+        //아답터 얻기
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        // If the adapter is null, then Bluetooth is not supported
+        // 만약 어댑터가 null이면 블루투스 종료
         if (mBluetoothAdapter == null) {
             Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
             finish();
@@ -207,13 +206,12 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     }
 
     // 블루투스 커넥
-
     public void bluetooth_connect()
     {
         String address = "00:14:03:05:CC:3E";
-        // Get the BluetoothDevice object
+        // 블루투스 디바이스 얻기
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
-        // Attempt to connect to the device
+        // device와 블루투스 connect 시작하기
         mChatService.connect(device, true);
     }
 
@@ -226,8 +224,8 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         // not enabled during onStart(), so we were paused to enable it...
         // onResume() will be called when ACTION_REQUEST_ENABLE activity returns.
         if (mChatService != null) {
-            // Only if the state is STATE_NONE, do we know that we haven't started already
-            if (mChatService.getState() == BluetoothChatService.STATE_NONE) {
+            // Only if the state is BCSTATE_NONE, do we know that we haven't started already
+            if (mChatService.getState() == Bluetooth_MagicNumber.BCSTATE_NONE) {
                 // Start the Bluetooth chat services
                 mChatService.start();
             }
@@ -262,13 +260,10 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             startActivity(discoverableIntent);
         }
     }
-    /**
-     * Sends a message.
-     * @param message  A string of text to send.
-     */
+
     private void sendMessage(String message) {
         // Check that we're actually connected before trying anything
-        if (mChatService.getState() != BluetoothChatService.STATE_CONNECTED) {
+        if (mChatService.getState() != Bluetooth_MagicNumber.BCSTATE_CONNECTED) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -299,17 +294,17 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case Bluetooth_MagicNumber.MESSAGE_STATE_CHANGE:
-                    if(Bluetooth_MagicNumber.D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                    if(Bluetooth_MagicNumber.D) Log.i(TAG, "MESSAGE_BCSTATE_CHANGE: " + msg.arg1);
                     switch (msg.arg1) {
-                        case BluetoothChatService.STATE_CONNECTED:
+                        case Bluetooth_MagicNumber.BCSTATE_CONNECTED:
                             setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
                             mConversationArrayAdapter.clear();
                             break;
-                        case BluetoothChatService.STATE_CONNECTING:
+                        case Bluetooth_MagicNumber.BCSTATE_CONNECTING:
                             setStatus(R.string.title_connecting);
                             break;
-                        case BluetoothChatService.STATE_LISTEN:
-                        case BluetoothChatService.STATE_NONE:
+                        case Bluetooth_MagicNumber.BCSTATE_LISTEN:
+                        case Bluetooth_MagicNumber.BCSTATE_NONE:
                             setStatus(R.string.title_not_connected);
                             break;
                     }
@@ -384,8 +379,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
     @Override
     public void onItemClick(int position) {
-//
-// .makeText(this, adapter.getItem(position).getName(), Toast.LENGTH_SHORT).show();
         //재생되는지 테스팅
         mBtnStartPlayOnClick(adapter.getItem(position).getName());
     }
@@ -507,8 +500,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                             } else {
                                 contentsText.setText("GPS상태를 확인하세요.");
                             }
-
-
                         }
 
                     });
@@ -728,6 +719,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                 Animation btnAnimOn = AnimationUtils.loadAnimation(MainActivity.this, R.anim.set_anim_on);
                 fabButton_set.startAnimation(btnAnimOn);
                 fabButton_addr.startAnimation(btnAnimOn);
+                sendMessage("1");
             }
         });
 
