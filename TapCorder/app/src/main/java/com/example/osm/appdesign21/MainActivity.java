@@ -50,6 +50,7 @@ import com.example.osm.appdesign21.BlueTooth.BluetoothChatService;
 import com.example.osm.appdesign21.BlueTooth.Bluetooth_MagicNumber;
 import com.example.osm.appdesign21.BlueTooth.DeviceListActivity;
 import com.example.osm.appdesign21.Recorder.RecFiles_makeDir;
+import com.example.osm.appdesign21.Recorder.Record_Time;
 
 import java.io.File;
 import java.io.IOException;
@@ -63,16 +64,12 @@ import java.util.Locale;
 
 public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCompletionListener, TimeRecyclerAdapter.OnItemClickListener {
 
-    private TimeRecyclerAdapter adapter;
     private static String TAG = "MainActivity";
+    private TimeRecyclerAdapter adapter;
     private PopupWindow pwindo;
     private Button btnClosePopup;
     private int mWidthPixels, mHeightPixels;
-    DisplayMetrics mMetrics;
     private RadioButton option1, option2, option3;
-
-    TextView contentsText;
-    Geocoder gc;
 
     //미리 상수 선언
     private static final int PLAY_STOP = 0;
@@ -89,24 +86,26 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     private Button mbtnAddContact;
     private Button mbtnDeleteContact;
 
+    DisplayMetrics mMetrics;
+    TextView contentsText;
+    Geocoder gc;
+
     SharedPreferences pref;
     ArrayList<PhoneBook> saveList;
     FrameLayout layout_MainMenu;
 
     /* 블루투스에 관한 것들 */
     private  boolean first_start = false;
-    // 연결된 디바이스의 이름
-    private String mConnectedDeviceName = null;
-    // thread 소통을 위한 ArrayAdapter
-    private ArrayAdapter<String> mConversationArrayAdapter;
-    // 송신을 위한 outGoing StringBuffer
-    private StringBuffer mOutStringBuffer;
-    // 블루투스 어댑터
-    private BluetoothAdapter mBluetoothAdapter = null;
-    // 블루투스챗 서비스 클래스
-    private BluetoothChatService mChatService = null;
+    private String mConnectedDeviceName = null;               // 연결된 디바이스의 이름
+    private ArrayAdapter<String> mConversationArrayAdapter;   // thread 소통을 위한 ArrayAdapter
+    private StringBuffer mOutStringBuffer;                    // 송신을 위한 outGoing StringBuffer
+    private BluetoothAdapter mBluetoothAdapter = null;        // 블루투스 어댑터
+    private BluetoothChatService mChatService = null;         // 블루투스챗 서비스 클래스
 
     /* 녹음에 관한 것들 */
+    private ArrayList<MyData> dataset = null;
+    private File[] fileList = null;
+    private Record_Time rec_time;
     private String mFilePath ; //녹음파일 디렉터리 위치
     private MediaRecorder mRecorder = null;
     private int newRecordNum=0;
@@ -129,8 +128,8 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             return;
         }
 
-        gc = new Geocoder(this, Locale.KOREAN);// 지오코더 객체 생성
-
+        gc = new Geocoder(this, Locale.KOREAN);    // 지오코더 객체 생성
+        rec_time = new Record_Time();
 
         fabButton_set =(FloatingActionButton)findViewById(R.id.fab_settings);
         fabButton_addr=(FloatingActionButton)findViewById(R.id.fab_phoneaddr);
@@ -153,7 +152,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         Display d = w.getDefaultDisplay();
         DisplayMetrics metrics = new DisplayMetrics();
         d.getMetrics(metrics);
-        // since SDK_INT = 1;
+
         mWidthPixels = metrics.widthPixels;
         mHeightPixels = metrics.heightPixels;
 
@@ -194,17 +193,14 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         super.onStart();
         if(Bluetooth_MagicNumber.D) Log.e(TAG, "++ ON START ++");
 
-        // If BT is not on, request that it be enabled.
-        // setupChat() will then be called during onActivityResult
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, Bluetooth_MagicNumber.REQUEST_ENABLE_BT);
-            // Otherwise, setup the chat session
         } else {
             if (mChatService == null) setupChat();
-            // onStart에서 블루투스 자동 커넥 시키기
         }
 
+        // onStart에서 블루투스 자동 커넥 시키기
         if ( first_start == false)
         {
             bluetooth_connect();
@@ -227,13 +223,10 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         super.onResume();
         if(Bluetooth_MagicNumber.D) Log.e(TAG, "+ ON RESUME +");
 
-        // Performing this check in onResume() covers the case in which BT was
-        // not enabled during onStart(), so we were paused to enable it...
-        // onResume() will be called when ACTION_REQUEST_ENABLE activity returns.
         if (mChatService != null) {
-            // Only if the state is BCSTATE_NONE, do we know that we haven't started already
+            // 이미 mChatService를 받았는지 안 받았는지 체크
             if (mChatService.getState() == Bluetooth_MagicNumber.BCSTATE_NONE) {
-                // Start the Bluetooth chat services
+                // 블루투스챗서비스 시작
                 mChatService.start();
             }
         }
@@ -253,49 +246,34 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // Stop the Bluetooth chat services
+        // 블루투스챗서비스 종료
         if (mChatService != null) mChatService.stop();
         if(Bluetooth_MagicNumber.D) Log.e(TAG, "--- ON DESTROY ---");
     }
 
-    private void ensureDiscoverable() {
-        if(Bluetooth_MagicNumber.D) Log.d(TAG, "ensure discoverable");
-        if (mBluetoothAdapter.getScanMode() !=
-                BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
-            Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
-            startActivity(discoverableIntent);
-        }
-    }
-
     private void sendMessage(String message) {
-        // Check that we're actually connected before trying anything
         if (mChatService.getState() != Bluetooth_MagicNumber.BCSTATE_CONNECTED) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Check that there's actually something to send
         if (message.length() > 0) {
-            // Get the message bytes and tell the BluetoothChatService to write
+            // 블루투스챗서비스에게 쓸 메세지를 알리기
             byte[] send = message.getBytes();
             mChatService.write(send);
 
-            // Reset out string buffer to zero and clear the edit text field
+            // outgoing메세지 초기화
             mOutStringBuffer.setLength(0);
         }
     }
 
     private final void setStatus(int resId) {
-        //final ActionBar actionBar = getActionBar();
-        //actionBar.setSubtitle(resId);
     }
 
     private final void setStatus(CharSequence subTitle) {
-        //final ActionBar actionBar = getActionBar();
-        //actionBar.setSubtitle(subTitle);
     }
-    // The Handler that gets information back from the BluetoothChatService
+
+    // 블루투스챗 서비스로 부터 정보를 얻는 핸들러
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -318,19 +296,22 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     break;
                 case Bluetooth_MagicNumber.MESSAGE_WRITE:
                     byte[] writeBuf = (byte[]) msg.obj;
-                    // construct a string from the buffer
+
                     String writeMessage = new String(writeBuf);
                     mConversationArrayAdapter.add("Me:  " + writeMessage);
                     break;
                 case Bluetooth_MagicNumber.MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
-                    // construct a string from the valid bytes in the buffer
+
                     String readMessage = new String(readBuf, 0, msg.arg1);
                     mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
                     Toast.makeText(getApplicationContext(),readMessage,Toast.LENGTH_LONG).show();
                     if(readMessage.equals("R") && toggle_rec == false)
                     {
                         startRec();
+                        adapter = new TimeRecyclerAdapter(getDataset());
+                        adapter.setOnItemClickListener(MainActivity.this);
+                        mTimeRecyclerView.setAdapter(adapter);
                         toggle_rec = true;
                     }
                     else if(readMessage.equals("R") && toggle_rec == true)
@@ -338,10 +319,10 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                         stopRec();
                         toggle_rec = false;
                     }
-                    
+
                     break;
                 case Bluetooth_MagicNumber.MESSAGE_DEVICE_NAME:
-                    // save the connected device's name
+                    // device이름 저장
                     mConnectedDeviceName = msg.getData().getString(Bluetooth_MagicNumber.DEVICE_NAME);
                     Toast.makeText(getApplicationContext(), "Connected to "
                             + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
@@ -385,12 +366,12 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
 
     private void connectDevice(Intent data, boolean secure) {
-        // Get the device MAC address
+        // 블루투스 페어링 되는 기기의 MAC주소 얻기
         String address = data.getExtras()
                 .getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
-        // Get the BluetoothDevice object
+        // 블루투스 객체 얻기
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
-        // Attempt to connect to the device
+        // device와 커넥시도
         mChatService.connect(device, secure);
     }
 
@@ -407,16 +388,13 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         // 폴더 경로를 지정해서 File 객체 생성
         File fileRoot = new File(strPath);
         // 해당 경로가 폴더가 아니라면 함수 탈출
+
         if (fileRoot.isDirectory() == false) {
-            Log.i("getFileList~~", "해당 경로가 폴더가 아닙니다");
             return null;
         } else {
-            Log.i("getFileList~~", strPath);
-
             files = fileRoot.listFiles();
         }
 
-        Log.i("~~~getfileList~~Count", "fileList의 갯수는 " + files.length);
         return files;
     }
 
@@ -480,7 +458,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         mPlayer.setOnCompletionListener(this);
 
         String fullFilePath = mFilePath + mFileName;
-
         try {
             mPlayer.setDataSource(fullFilePath);
             mPlayer.prepare();
@@ -508,7 +485,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         mPlayerState = PLAY_STOP; // 재생이 종료됨
     }
 
-
     private void initiatePopupWindow(int arg2) {
         try {
             //  LayoutInflater 객체와 시킴
@@ -521,8 +497,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                             (ViewGroup) findViewById(R.id.popup_layout_0));
                     pwindo = new PopupWindow(layout, mWidthPixels - 100, mHeightPixels - 320, true);
 
-//                    pwindo = new PopupWindow(layout, mWidthPixels - 175, mHeightPixels - 450, true);
-                    //pwindo.setAnimationStyle(R.style.animationName);
                     pwindo.showAtLocation(layout, Gravity.CENTER, 0, 0);
 
                     // 뒷배경은 흐리게
@@ -544,13 +518,11 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                            Toast.makeText(MainActivity.this, "체크상태 = " + isChecked, Toast.LENGTH_SHORT).show();
 
                             //체크상태가 true일때
                             if (isChecked == true) {
                                 // 위치 정보 확인을 위해 정의한 메소드 호출
                                 startLocationService();
-
 
                             } else {
                                 contentsText.setText("GPS상태를 확인하세요.");
@@ -608,9 +580,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         }
     }
 
-    /**
-     * 위치 정보 확인을 위해 정의한 메소드
-     */
     private void startLocationService() {
         // 위치 관리자 객체 참조
         LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -623,12 +592,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         // GPS를 이용한 위치 요청
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+
             return;
         }
         manager.requestLocationUpdates(
@@ -650,32 +614,22 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             if (lastLocation != null) {
                 Double latitude = lastLocation.getLatitude();
                 Double longitude = lastLocation.getLongitude();
-
-//                Toast.makeText(getApplicationContext(), "Last Known Location : " + "Latitude : " + latitude + "\nLongitude:" + longitude, Toast.LENGTH_LONG).show();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-//        Toast.makeText(getApplicationContext(), "위치 확인이 시작되었습니다. 로그를 확인하세요.", Toast.LENGTH_SHORT).show();
-
     }
 
-
     /**
-     * 리스너 클래스 정의
+     * 위치 정보가 확인될 때 자동 호출되는 메소드
      */
     private class GPSListener implements LocationListener {
-        /**
-         * 위치 정보가 확인될 때 자동 호출되는 메소드
-         */
         public void onLocationChanged(Location location) {
             Double latitude = location.getLatitude();
             Double longitude = location.getLongitude();
 
             String msg = "Latitude : " + latitude + "\nLongitude:" + longitude;
-            Log.i("GPSListener", msg);
 
-//            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 
             // 위치 좌표를 이용해 주소를 검색하는 메소드 호출
             if (latitude != null && longitude != null) {
@@ -705,8 +659,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             addressList = gc.getFromLocation(latitude, longitude, 3);
 
             if (addressList != null) {
-                //contentsText.append("\nCount of Addresses for [" + latitude + ", " + longitude + "] : " + addressList.size());
-//                for (int i = 0; i < addressList.size(); i++) {
                 for (int i = 0; i < 1; i++) {
                     Address outAddr = addressList.get(i);
                     int addrCount = outAddr.getMaxAddressLineIndex() + 1;
@@ -734,13 +686,13 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         public void onClick(View v) {
 
             if (option1.isChecked()){
-                sendMessage("120000");
+                sendMessage(String.valueOf(Record_Time.REC_TIME1));
             }
             else if (option2.isChecked()){
-                sendMessage("180000");
+                sendMessage(String.valueOf(Record_Time.REC_TIME2));
             }
             else{
-                sendMessage("300000");
+                sendMessage(String.valueOf(Record_Time.REC_TIME3));
             }
         }
     };
@@ -794,47 +746,48 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         });
     }
 
-
     private void setupChat() {
         Log.d(TAG, "setupChat()");
 
-        // Initialize the array adapter for the conversation thread
+        // thread통신을 위한 adapter를 담는 배열아답터 추가
         mConversationArrayAdapter = new ArrayAdapter<String>(this, R.layout.message);
-
-        // Initialize the BluetoothChatService to perform bluetooth connections
+        // 블루투스 연결을 위한 service 초기화
         mChatService = new BluetoothChatService(this, mHandler);
-
-        // Initialize the buffer for outgoing messages
+        // outgoing messages를 담는 버퍼 초기화
         mOutStringBuffer = new StringBuffer("");
     }
 
 
     private ArrayList<MyData> getDataset() {
-        ArrayList<MyData> dataset = new ArrayList<>();
+        dataset = new ArrayList<>();
 
         // SD카드에 디렉토리를 만든다.
         mFilePath = RecFiles_makeDir.makeDir("progress_recorder");
-        Log.i("mFilePath~~??",mFilePath); ///storage/emulated/0/progress_recorder/
-        File[] fileList = getFileList(mFilePath);
+        fileList = getFileList(mFilePath);
 
+        // list에 dataset 넣기 ( 핸드폰 안에 있는 음성 파일 )
         for(int i=0; i < fileList.length; i++)
-        {
-            Log.d("~~~~fileList[i]~~~", fileList[i].getName());
-            Date lastModifiedDate=new Date(fileList[i].lastModified());
-            Calendar lastModifiedCalendar = new GregorianCalendar();
-            lastModifiedCalendar.setTime(lastModifiedDate);
+            insertRecFile(i,fileList,dataset);
 
-            dataset.add(new MyData(fileList[i].getName(),lastModifiedCalendar.get(Calendar.YEAR),
-                    lastModifiedCalendar.get(Calendar.MONTH),
-                    lastModifiedCalendar.get(Calendar.DAY_OF_MONTH),
-                    lastModifiedCalendar.get(Calendar.HOUR_OF_DAY),
-                    lastModifiedCalendar.get(Calendar.MINUTE),
-                    lastModifiedCalendar.get(Calendar.SECOND)
-            ));
-        }
 
-        newRecordNum = fileList.length+1;
+        newRecordNum = fileList.length + 1;
         return dataset;
+    }
+    private void insertRecFile(int order, File[] fileList_copy, ArrayList<MyData> dataset_copy)
+    {
+        Date lastModifiedDate=new Date(fileList_copy[order].lastModified());
+        Calendar lastModifiedCalendar = new GregorianCalendar();
+        lastModifiedCalendar.setTime(lastModifiedDate);
+
+        dataset_copy.add(new MyData(fileList_copy[order].getName(),lastModifiedCalendar.get(Calendar.YEAR),
+                lastModifiedCalendar.get(Calendar.MONTH),
+                lastModifiedCalendar.get(Calendar.DAY_OF_MONTH),
+                lastModifiedCalendar.get(Calendar.HOUR_OF_DAY),
+                lastModifiedCalendar.get(Calendar.MINUTE),
+                lastModifiedCalendar.get(Calendar.SECOND)
+        ));
+
+
     }
 
 }
