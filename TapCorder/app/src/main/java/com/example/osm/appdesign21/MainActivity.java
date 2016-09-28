@@ -15,6 +15,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -76,7 +77,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     //미리 상수 선언
     private static final int PLAY_STOP = 0;
     private static final int PLAYING = 1;
-    private static final int PLAY_PAUSE = 2;
 
     private MediaPlayer mPlayer = null;
     private int mPlayerState = PLAY_STOP;
@@ -108,6 +108,11 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
     /* 녹음에 관한 것들 */
     private String mFilePath ; //녹음파일 디렉터리 위치
+    private MediaRecorder mRecorder = null;
+    private int newRecordNum=0;
+    private int mCurRecTimeMs = 0;
+    private int mCurProgressTimeDisplay = 0;
+    private boolean toggle_rec = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -323,6 +328,16 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     String readMessage = new String(readBuf, 0, msg.arg1);
                     mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
                     Toast.makeText(getApplicationContext(),readMessage,Toast.LENGTH_LONG).show();
+                    if(readMessage.equals("R") && toggle_rec == false)
+                    {
+                        startRec();
+                        toggle_rec = true;
+                    }
+                    else if(readMessage.equals("R") && toggle_rec == true)
+                    {
+                        stopRec();
+                        toggle_rec = false;
+                    }
                     
                     break;
                 case Bluetooth_MagicNumber.MESSAGE_DEVICE_NAME:
@@ -415,6 +430,45 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         }
     }
 
+    // 녹음 시작 메서드
+    private void startRec() {
+        mCurRecTimeMs = 0;
+        mCurProgressTimeDisplay = 0;
+
+        if (mRecorder == null) {
+            mRecorder = new MediaRecorder();
+            mRecorder.reset();
+        } else {
+            mRecorder.reset();
+        }
+
+        try {
+            mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.RAW_AMR);
+            mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+            mRecorder.setOutputFile(mFilePath+"음성녹음 "+newRecordNum+".amr"); //newRecordFile명의 음성파일에 음성 녹음.
+
+            mRecorder.prepare();
+            mRecorder.start();
+        } catch (IllegalStateException e) {
+        } catch (IOException e) {
+        }
+    }
+
+    // 녹음정지
+    private void stopRec() {
+        try {
+            mRecorder.stop();
+            newRecordNum++;
+        } catch (Exception e) {
+        } finally {
+            mRecorder.release();
+            mRecorder = null;
+        }
+
+        mCurRecTimeMs = -999;
+    }
+
     // 재생 시작
     private void startPlay(String mFileName) {
         // 미디어 플레이어 생성
@@ -426,14 +480,12 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         mPlayer.setOnCompletionListener(this);
 
         String fullFilePath = mFilePath + mFileName;
-        Log.v("RecFiles_makeDir", "녹음파일명 ==========> " + fullFilePath);
 
         try {
             mPlayer.setDataSource(fullFilePath);
             mPlayer.prepare();
 
         } catch (Exception e) {
-            Log.v("RecFiles_makeDir", "미디어 플레이어 Prepare Error ==========> " + e);
         }
 
         if (mPlayerState == PLAYING) {
@@ -781,6 +833,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             ));
         }
 
+        newRecordNum = fileList.length+1;
         return dataset;
     }
 
