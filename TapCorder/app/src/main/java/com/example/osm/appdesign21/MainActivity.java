@@ -501,9 +501,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                                 contentsText.setText("GPS상태를 확인하세요.");
                             }
                         }
-
                     });
-
                     break;
 
                 case 1:
@@ -603,7 +601,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
 //        Toast.makeText(getApplicationContext(), "위치 확인이 시작되었습니다. 로그를 확인하세요.", Toast.LENGTH_SHORT).show();
 
     }
@@ -680,9 +677,16 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     private RadioButton.OnClickListener optionOnClickListener = new RadioButton.OnClickListener() {
 
         public void onClick(View v) {
-            Log.i("OnClick~~", String.valueOf(option1.isChecked()));
-            Log.i("OnClick~~", String.valueOf(option2.isChecked()));
-            Log.i("OnClick~~", String.valueOf(option3.isChecked()));
+
+            if (option1.isChecked()){
+                sendMessage("120000");
+            }
+            else if (option2.isChecked()){
+                sendMessage("180000");
+            }
+            else{
+                sendMessage("300000");
+            }
         }
     };
 
