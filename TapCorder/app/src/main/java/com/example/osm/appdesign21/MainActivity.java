@@ -48,6 +48,7 @@ import android.widget.Toast;
 import com.example.osm.appdesign21.BlueTooth.BluetoothChatService;
 import com.example.osm.appdesign21.BlueTooth.Bluetooth_MagicNumber;
 import com.example.osm.appdesign21.BlueTooth.DeviceListActivity;
+import com.example.osm.appdesign21.Recorder.RecFiles_makeDir;
 
 import java.io.File;
 import java.io.IOException;
@@ -79,7 +80,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
     private MediaPlayer mPlayer = null;
     private int mPlayerState = PLAY_STOP;
-    private String mFilePath; //녹음파일 디렉터리 위치
 
     private FloatingActionButton fabButton_set,fabButton_addr;
     private RecyclerView mTimeRecyclerView;
@@ -93,7 +93,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     ArrayList<PhoneBook> saveList;
     FrameLayout layout_MainMenu;
 
-    /*블루투스에 관한 것들*/
+    /* 블루투스에 관한 것들 */
     private  boolean first_start = false;
     // 연결된 디바이스의 이름
     private String mConnectedDeviceName = null;
@@ -106,6 +106,8 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     // 블루투스챗 서비스 클래스
     private BluetoothChatService mChatService = null;
 
+    /* 녹음에 관한 것들 */
+    private String mFilePath ; //녹음파일 디렉터리 위치
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -757,8 +759,9 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
     private ArrayList<MyData> getDataset() {
         ArrayList<MyData> dataset = new ArrayList<>();
-        ////////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/////////
-        mFilePath="/storage/emulated/0/progress_recorder/";
+
+        // SD카드에 디렉토리를 만든다.
+        mFilePath = RecFiles_makeDir.makeDir("progress_recorder");
         Log.i("mFilePath~~??",mFilePath); ///storage/emulated/0/progress_recorder/
         File[] fileList = getFileList(mFilePath);
 
