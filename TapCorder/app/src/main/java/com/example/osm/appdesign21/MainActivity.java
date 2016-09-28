@@ -129,8 +129,9 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //아답터 얻기
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        /*--------------블루투스-------------*/
+
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();   //아답터 얻기
 
         // 만약 어댑터가 null이면 블루투스 종료
         if (mBluetoothAdapter == null) {
@@ -139,8 +140,17 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             return;
         }
 
+        /*--------------지도-------------*/
+
         gc = new Geocoder(this, Locale.KOREAN);    // 지오코더 객체 생성
-        rec_time = new Record_Time();
+
+        /*------------녹음 파일-----------*/
+
+        adapter = new TimeRecyclerAdapter(getDataset());
+        adapter.setOnItemClickListener(this);
+        mTimeRecyclerView.setAdapter(adapter);
+
+        /*--------------UI-------------*/
 
         fabButton_set =(FloatingActionButton)findViewById(R.id.fab_settings);
         fabButton_addr=(FloatingActionButton)findViewById(R.id.fab_phoneaddr);
@@ -151,10 +161,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         mTimeRecyclerView.setLayoutManager(layoutManager);
-
-        adapter = new TimeRecyclerAdapter(getDataset());
-        adapter.setOnItemClickListener(this);
-        mTimeRecyclerView.setAdapter(adapter);
 
         mMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(mMetrics);
@@ -219,14 +225,10 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         }
     }
 
-    // 블루투스 커넥
-    public void bluetooth_connect()
-    {
-        String address = "00:14:03:05:CC:3E";
-        // 블루투스 디바이스 얻기
-        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
-        // device와 블루투스 connect 시작하기
-        mChatService.connect(device, true);
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(Bluetooth_MagicNumber.D) Log.e(TAG, "-- ON STOP --");
     }
 
     @Override
@@ -249,17 +251,35 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        if(Bluetooth_MagicNumber.D) Log.e(TAG, "-- ON STOP --");
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         // 블루투스챗서비스 종료
         if (mChatService != null) mChatService.stop();
         if(Bluetooth_MagicNumber.D) Log.e(TAG, "--- ON DESTROY ---");
+    }
+
+/*--------------------------------------블루투스------------------------------------------*/
+/*--------------------------------------------------------------------------------------*/
+
+    private void setupChat() {
+        Log.d(TAG, "setupChat()");
+
+        // thread통신을 위한 adapter를 담는 배열아답터 추가
+        mConversationArrayAdapter = new ArrayAdapter<String>(this, R.layout.message);
+        // 블루투스 연결을 위한 service 초기화
+        mChatService = new BluetoothChatService(this, mHandler);
+        // outgoing messages를 담는 버퍼 초기화
+        mOutStringBuffer = new StringBuffer("");
+    }
+
+    // 블루투스 커넥
+    public void bluetooth_connect()
+    {
+        String address = "00:14:03:05:CC:3E";
+        // 블루투스 디바이스 얻기
+        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+        // device와 블루투스 connect 시작하기
+        mChatService.connect(device, true);
     }
 
     private void sendMessage(String message) {
@@ -347,24 +367,23 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         if(Bluetooth_MagicNumber.D) Log.d(TAG, "onActivityResult " + resultCode);
         switch (requestCode) {
             case Bluetooth_MagicNumber.REQUEST_CONNECT_DEVICE_SECURE:
-                // When DeviceListActivity returns with a device to connect
+                // 디바이스와 커넥이 됬을 경우
                 if (resultCode == Activity.RESULT_OK) {
                     connectDevice(data, true);
                 }
                 break;
             case Bluetooth_MagicNumber.REQUEST_CONNECT_DEVICE_INSECURE:
-                // When DeviceListActivity returns with a device to connect
                 if (resultCode == Activity.RESULT_OK) {
                     connectDevice(data, false);
                 }
                 break;
             case Bluetooth_MagicNumber.REQUEST_ENABLE_BT:
-                // When the request to enable Bluetooth returns
+                // 블루투스 요청을 할수 있을 경우
                 if (resultCode == Activity.RESULT_OK) {
-                    // Bluetooth is now enabled, so set up a chat session
+                    // 블루투스 비활성화일 경우
                     setupChat();
                 } else {
-                    // User did not enable Bluetooth or an error occurred
+                    // 유저가 블루투스를 할 수 없을 경우
                     Log.d(TAG, "BT not enabled");
                     Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
                     finish();
@@ -384,39 +403,39 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     }
 
 
-    public Runnable updateTimer = new Runnable() {
+/*----------------------------------녹음 및 재생------------------------------------------*/
+/*--------------------------------------------------------------------------------------*/
 
-        public void run() {
+    private ArrayList<MyData> getDataset() {
+        dataset = new ArrayList<>();
 
-            timeInMilliseconds = SystemClock.uptimeMillis() - starttime;
+        // SD카드에 디렉토리를 만든다.
+        mFilePath = RecFiles_makeDir.makeDir("progress_recorder");
+        fileList = getFileList(mFilePath);
 
-            updatedtime = timeSwapBuff + timeInMilliseconds;
+        // list에 dataset 넣기 ( 핸드폰 안에 있는 음성 파일 )
+        for(int i=0; i < fileList.length; i++)
+            insertRecFile(i,fileList,dataset);
 
-            secs = (int) (updatedtime / 1000);
-            mins = secs / 60;
-            secs = secs % 60;
-            milliseconds = (int) (updatedtime % 1000);
-            stopwatch_handler.postDelayed(this, 0);
 
-            if (secs > 10){
-                stopRec();
-                Toast.makeText(getApplicationContext(),"녹음 완료",Toast.LENGTH_SHORT).show();
-                initStopWatch();
-            }
-        }
-
-    };
-    private void initStopWatch()
+        newRecordNum = fileList.length + 1;
+        return dataset;
+    }
+    private void insertRecFile(int order, File[] fileList_copy, ArrayList<MyData> dataset_copy)
     {
-        starttime = 0L;
-        timeInMilliseconds = 0L;
-        timeSwapBuff = 0L;
-        updatedtime = 0L;
-        t = 1;
-        secs = 0;
-        mins = 0;
-        milliseconds = 0;
-        stopwatch_handler.removeCallbacks(updateTimer);
+        Date lastModifiedDate=new Date(fileList_copy[order].lastModified());
+        Calendar lastModifiedCalendar = new GregorianCalendar();
+        lastModifiedCalendar.setTime(lastModifiedDate);
+
+        dataset_copy.add(new MyData(fileList_copy[order].getName(),lastModifiedCalendar.get(Calendar.YEAR),
+                lastModifiedCalendar.get(Calendar.MONTH),
+                lastModifiedCalendar.get(Calendar.DAY_OF_MONTH),
+                lastModifiedCalendar.get(Calendar.HOUR_OF_DAY),
+                lastModifiedCalendar.get(Calendar.MINUTE),
+                lastModifiedCalendar.get(Calendar.SECOND)
+        ));
+
+
     }
 
     @Override
@@ -528,101 +547,47 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         mPlayerState = PLAY_STOP; // 재생이 종료됨
     }
 
-    private void initiatePopupWindow(int arg2) {
-        try {
-            //  LayoutInflater 객체와 시킴
-            LayoutInflater inflater = (LayoutInflater) MainActivity.this
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            switch (arg2) {
-                case 0:
-                    View layout = inflater.inflate(R.layout.popup_settings,
-                            (ViewGroup) findViewById(R.id.popup_layout_0));
-                    pwindo = new PopupWindow(layout, mWidthPixels - 100, mHeightPixels - 320, true);
+/*--------------------------------------스탑워치------------------------------------------*/
+/*--------------------------------------------------------------------------------------*/
 
-                    pwindo.showAtLocation(layout, Gravity.CENTER, 0, 0);
+    public Runnable updateTimer = new Runnable() {
 
-                    // 뒷배경은 흐리게
-                    layout_MainMenu.getForeground().setAlpha( 100);
-                    btnClosePopup = (Button) layout.findViewById(R.id.closebtn_popup_0);
-                    btnClosePopup.setOnClickListener(cancel_setbutton_click_listener);
+        public void run() {
 
+            timeInMilliseconds = SystemClock.uptimeMillis() - starttime;
 
-                    option1 = (RadioButton) layout.findViewById(R.id.option1);
-                    option2 = (RadioButton) layout.findViewById(R.id.option2);
-                    option3 = (RadioButton) layout.findViewById(R.id.option3);
-                    option1.setOnClickListener(optionOnClickListener);
-                    option2.setOnClickListener(optionOnClickListener);
-                    option3.setOnClickListener(optionOnClickListener);
-                    option1.setChecked(true);
-                    contentsText = (TextView) layout.findViewById(R.id.contentsText);
-                    Switch sw = (Switch) layout.findViewById(R.id.switch_gps);
-                    //스위치의 체크 이벤트를 위한 리스너 등록
-                    sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            updatedtime = timeSwapBuff + timeInMilliseconds;
 
-                            //체크상태가 true일때
-                            if (isChecked == true) {
-                                // 위치 정보 확인을 위해 정의한 메소드 호출
-                                startLocationService();
+            secs = (int) (updatedtime / 1000);
+            mins = secs / 60;
+            secs = secs % 60;
+            milliseconds = (int) (updatedtime % 1000);
+            stopwatch_handler.postDelayed(this, 0);
 
-                            } else {
-                                contentsText.setText("GPS상태를 확인하세요.");
-                            }
-                        }
-                    });
-                    break;
-
-                case 1:
-                    View layout1 = inflater.inflate(R.layout.phonebook_list,
-                            (ViewGroup)findViewById(R.id.popup_layout_1));
-                    pwindo = new PopupWindow(layout1, mWidthPixels - 100, mHeightPixels - 320, true);
-                    pwindo.showAtLocation(layout1, Gravity.CENTER, 0, 0);
-                    // 뒷배경은 흐리게
-                    layout_MainMenu.getForeground().setAlpha( 100);
-                    lvPhone = (ListView)layout1.findViewById(R.id.listPhone);
-
-                    final List<PhoneBook> listPhoneBook = new ArrayList<PhoneBook>();
-                    for(int i = 0; i < saveList.size() ; i++){
-                        listPhoneBook.add(new PhoneBook(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher),
-                                saveList.get(i).getmName(), saveList.get(i).getmPhone(), ""));
-                    }
-
-                    final PhoneBookAdapter adapter = new PhoneBookAdapter(this, listPhoneBook);
-                    lvPhone.setAdapter(adapter);
-
-                    mbtnAddContact = (Button) layout1.findViewById(R.id.btn_add);
-                    mbtnDeleteContact = (Button) layout1.findViewById(R.id.btn_delete);
-                    btnClosePopup = (Button) layout1.findViewById(R.id.closebtn_popup_1);
-                    btnClosePopup.setOnClickListener(cancel_addrbutton_click_listener);
-
-                    mbtnAddContact.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            finish();
-                            Intent intent = new Intent(MainActivity.this, ContactActivity.class);
-                            MainActivity.this.startActivity(intent);
-                        }
-                    });
-                    mbtnDeleteContact.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            pref.removeAllPreferences("name");
-                            pref.removeAllPreferences("phoneNum");
-                            listPhoneBook.clear();
-                            saveList.clear();
-                            Toast.makeText(MainActivity.this, "삭제 완료되었습니다.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                    break;
+            if (secs > 10){
+                stopRec();
+                Toast.makeText(getApplicationContext(),"녹음 완료",Toast.LENGTH_SHORT).show();
+                initStopWatch();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
+    };
+    private void initStopWatch()
+    {
+        starttime = 0L;
+        timeInMilliseconds = 0L;
+        timeSwapBuff = 0L;
+        updatedtime = 0L;
+        t = 1;
+        secs = 0;
+        mins = 0;
+        milliseconds = 0;
+        stopwatch_handler.removeCallbacks(updateTimer);
     }
 
+/*--------------------------------------현재 위치------------------------------------------*/
+/*--------------------------------------------------------------------------------------*/
     private void startLocationService() {
         // 위치 관리자 객체 참조
         LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -723,6 +688,8 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     }
 
 
+/*--------------------------------------기타 UI------------------------------------------*/
+/*--------------------------------------------------------------------------------------*/
     //RadioButton 눌렀을때의 반응
     private RadioButton.OnClickListener optionOnClickListener = new RadioButton.OnClickListener() {
 
@@ -789,48 +756,100 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         });
     }
 
-    private void setupChat() {
-        Log.d(TAG, "setupChat()");
 
-        // thread통신을 위한 adapter를 담는 배열아답터 추가
-        mConversationArrayAdapter = new ArrayAdapter<String>(this, R.layout.message);
-        // 블루투스 연결을 위한 service 초기화
-        mChatService = new BluetoothChatService(this, mHandler);
-        // outgoing messages를 담는 버퍼 초기화
-        mOutStringBuffer = new StringBuffer("");
-    }
+    private void initiatePopupWindow(int arg2) {
+        try {
+            //  LayoutInflater 객체와 시킴
+            LayoutInflater inflater = (LayoutInflater) MainActivity.this
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+            switch (arg2) {
+                case 0:
+                    View layout = inflater.inflate(R.layout.popup_settings,
+                            (ViewGroup) findViewById(R.id.popup_layout_0));
+                    pwindo = new PopupWindow(layout, mWidthPixels - 100, mHeightPixels - 320, true);
 
-    private ArrayList<MyData> getDataset() {
-        dataset = new ArrayList<>();
+                    pwindo.showAtLocation(layout, Gravity.CENTER, 0, 0);
 
-        // SD카드에 디렉토리를 만든다.
-        mFilePath = RecFiles_makeDir.makeDir("progress_recorder");
-        fileList = getFileList(mFilePath);
-
-        // list에 dataset 넣기 ( 핸드폰 안에 있는 음성 파일 )
-        for(int i=0; i < fileList.length; i++)
-            insertRecFile(i,fileList,dataset);
+                    // 뒷배경은 흐리게
+                    layout_MainMenu.getForeground().setAlpha( 100);
+                    btnClosePopup = (Button) layout.findViewById(R.id.closebtn_popup_0);
+                    btnClosePopup.setOnClickListener(cancel_setbutton_click_listener);
 
 
-        newRecordNum = fileList.length + 1;
-        return dataset;
-    }
-    private void insertRecFile(int order, File[] fileList_copy, ArrayList<MyData> dataset_copy)
-    {
-        Date lastModifiedDate=new Date(fileList_copy[order].lastModified());
-        Calendar lastModifiedCalendar = new GregorianCalendar();
-        lastModifiedCalendar.setTime(lastModifiedDate);
+                    option1 = (RadioButton) layout.findViewById(R.id.option1);
+                    option2 = (RadioButton) layout.findViewById(R.id.option2);
+                    option3 = (RadioButton) layout.findViewById(R.id.option3);
+                    option1.setOnClickListener(optionOnClickListener);
+                    option2.setOnClickListener(optionOnClickListener);
+                    option3.setOnClickListener(optionOnClickListener);
+                    option1.setChecked(true);
+                    contentsText = (TextView) layout.findViewById(R.id.contentsText);
+                    Switch sw = (Switch) layout.findViewById(R.id.switch_gps);
+                    //스위치의 체크 이벤트를 위한 리스너 등록
+                    sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-        dataset_copy.add(new MyData(fileList_copy[order].getName(),lastModifiedCalendar.get(Calendar.YEAR),
-                lastModifiedCalendar.get(Calendar.MONTH),
-                lastModifiedCalendar.get(Calendar.DAY_OF_MONTH),
-                lastModifiedCalendar.get(Calendar.HOUR_OF_DAY),
-                lastModifiedCalendar.get(Calendar.MINUTE),
-                lastModifiedCalendar.get(Calendar.SECOND)
-        ));
+                            //체크상태가 true일때
+                            if (isChecked == true) {
+                                // 위치 정보 확인을 위해 정의한 메소드 호출
+                                startLocationService();
 
+                            } else {
+                                contentsText.setText("GPS상태를 확인하세요.");
+                            }
+                        }
+                    });
+                    break;
 
+                case 1:
+                    View layout1 = inflater.inflate(R.layout.phonebook_list,
+                            (ViewGroup)findViewById(R.id.popup_layout_1));
+                    pwindo = new PopupWindow(layout1, mWidthPixels - 100, mHeightPixels - 320, true);
+                    pwindo.showAtLocation(layout1, Gravity.CENTER, 0, 0);
+                    // 뒷배경은 흐리게
+                    layout_MainMenu.getForeground().setAlpha( 100);
+                    lvPhone = (ListView)layout1.findViewById(R.id.listPhone);
+
+                    final List<PhoneBook> listPhoneBook = new ArrayList<PhoneBook>();
+                    for(int i = 0; i < saveList.size() ; i++){
+                        listPhoneBook.add(new PhoneBook(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher),
+                                saveList.get(i).getmName(), saveList.get(i).getmPhone(), ""));
+                    }
+
+                    final PhoneBookAdapter adapter = new PhoneBookAdapter(this, listPhoneBook);
+                    lvPhone.setAdapter(adapter);
+
+                    mbtnAddContact = (Button) layout1.findViewById(R.id.btn_add);
+                    mbtnDeleteContact = (Button) layout1.findViewById(R.id.btn_delete);
+                    btnClosePopup = (Button) layout1.findViewById(R.id.closebtn_popup_1);
+                    btnClosePopup.setOnClickListener(cancel_addrbutton_click_listener);
+
+                    mbtnAddContact.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            finish();
+                            Intent intent = new Intent(MainActivity.this, ContactActivity.class);
+                            MainActivity.this.startActivity(intent);
+                        }
+                    });
+                    mbtnDeleteContact.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            pref.removeAllPreferences("name");
+                            pref.removeAllPreferences("phoneNum");
+                            listPhoneBook.clear();
+                            saveList.clear();
+                            Toast.makeText(MainActivity.this, "삭제 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
