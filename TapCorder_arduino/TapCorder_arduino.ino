@@ -16,7 +16,10 @@ void loop() {
   //Serial.println(button);
   
   if (BTSerial.available()) {
-    Serial.write(BTSerial.read());
+    char serial_value =  BTSerial.read();
+    int int_serial_value = (int)serial_value;
+    
+    Serial.write(int_serial_value);
     
   }
   if (Serial.available()) {
