@@ -1,4 +1,4 @@
-package com.example.osm.appdesign21;
+package com.example.osm.appdesign21.BlueTooth;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -18,6 +18,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.osm.appdesign21.R;
 
 import java.util.Set;
 

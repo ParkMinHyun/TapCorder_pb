@@ -1,4 +1,4 @@
-package com.example.osm.appdesign21;
+package com.example.osm.appdesign21.BlueTooth;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;

@@ -29,9 +29,6 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -47,6 +44,10 @@ import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.osm.appdesign21.BlueTooth.BluetoothChatService;
+import com.example.osm.appdesign21.BlueTooth.Bluetooth_MagicNumber;
+import com.example.osm.appdesign21.BlueTooth.DeviceListActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -93,6 +94,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     FrameLayout layout_MainMenu;
 
     /*블루투스에 관한 것들*/
+    private  boolean first_start = false;
     // Name of the connected device
     private String mConnectedDeviceName = null;
     // Array adapter for the conversation thread
@@ -194,8 +196,20 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             // Otherwise, setup the chat session
         } else {
             if (mChatService == null) setupChat();
+            // onStart에서 블루투스 자동 커넥 시키기
         }
 
+        if ( first_start == false)
+        {
+            bluetooth_connect();
+            first_start = true;
+        }
+    }
+
+    // 블루투스 커넥
+
+    public void bluetooth_connect()
+    {
         String address = "00:14:03:05:CC:3E";
         // Get the BluetoothDevice object
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
@@ -311,6 +325,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
                     mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
+                    Toast.makeText(getApplicationContext(),readMessage,Toast.LENGTH_LONG).show();
                     break;
                 case Bluetooth_MagicNumber.MESSAGE_DEVICE_NAME:
                     // save the connected device's name
@@ -366,34 +381,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         mChatService.connect(device, secure);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent serverIntent = null;
-        switch (item.getItemId()) {
-            case R.id.secure_connect_scan:
-                // Launch the DeviceListActivity to see devices and do scan
-                serverIntent = new Intent(this, DeviceListActivity.class);
-                startActivityForResult(serverIntent, Bluetooth_MagicNumber.REQUEST_CONNECT_DEVICE_SECURE);
-                return true;
-            case R.id.insecure_connect_scan:
-                // Launch the DeviceListActivity to see devices and do scan
-                serverIntent = new Intent(this, DeviceListActivity.class);
-                startActivityForResult(serverIntent, Bluetooth_MagicNumber.REQUEST_CONNECT_DEVICE_INSECURE);
-                return true;
-            case R.id.discoverable:
-                // Ensure this device is discoverable by others
-                ensureDiscoverable();
-                return true;
-        }
-        return false;
-    }
 
     @Override
     public void onItemClick(int position) {
@@ -664,23 +651,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
     }
 
-
-/*
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-
-        return super.onOptionsItemSelected(item);
-    }
-*/
 
     /**
      * 위치 좌표를 이용해 주소를 검색하는 메소드 정의

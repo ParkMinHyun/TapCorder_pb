@@ -1,4 +1,4 @@
-package com.example.osm.appdesign21;
+package com.example.osm.appdesign21.BlueTooth;
 
 /**
  * Created by BlackMan on 2016-09-28.
