@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -111,7 +112,17 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     private int newRecordNum=0;
     private int mCurRecTimeMs = 0;
     private int mCurProgressTimeDisplay = 0;
-    private boolean toggle_rec = false;
+
+    /* 스탑워치에 관한 것들 */
+    private long starttime = 0L;
+    private long timeInMilliseconds = 0L;
+    private long timeSwapBuff = 0L;
+    private long updatedtime = 0L;
+    private int t = 1;
+    private int secs = 0;
+    private int mins = 0;
+    private int milliseconds = 0;
+    Handler stopwatch_handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -306,18 +317,15 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     String readMessage = new String(readBuf, 0, msg.arg1);
                     mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
                     Toast.makeText(getApplicationContext(),readMessage,Toast.LENGTH_LONG).show();
-                    if(readMessage.equals("R") && toggle_rec == false)
+                    if(readMessage.equals("R"))
                     {
                         startRec();
                         adapter = new TimeRecyclerAdapter(getDataset());
-                        adapter.setOnItemClickListener(MainActivity.this);
+                        adapter.setOnItemClickListener(MainActivity.this);        // 녹음 시작시 파일 RecyclerView에 추가하기.
                         mTimeRecyclerView.setAdapter(adapter);
-                        toggle_rec = true;
-                    }
-                    else if(readMessage.equals("R") && toggle_rec == true)
-                    {
-                        stopRec();
-                        toggle_rec = false;
+
+                        starttime = SystemClock.uptimeMillis();
+                        stopwatch_handler.postDelayed(updateTimer, 0);            // 녹음 시작시 stopWatch 시작
                     }
 
                     break;
@@ -375,6 +383,41 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         mChatService.connect(device, secure);
     }
 
+
+    public Runnable updateTimer = new Runnable() {
+
+        public void run() {
+
+            timeInMilliseconds = SystemClock.uptimeMillis() - starttime;
+
+            updatedtime = timeSwapBuff + timeInMilliseconds;
+
+            secs = (int) (updatedtime / 1000);
+            mins = secs / 60;
+            secs = secs % 60;
+            milliseconds = (int) (updatedtime % 1000);
+            stopwatch_handler.postDelayed(this, 0);
+
+            if (secs > 10){
+                stopRec();
+                Toast.makeText(getApplicationContext(),"녹음 완료",Toast.LENGTH_SHORT).show();
+                initStopWatch();
+            }
+        }
+
+    };
+    private void initStopWatch()
+    {
+        starttime = 0L;
+        timeInMilliseconds = 0L;
+        timeSwapBuff = 0L;
+        updatedtime = 0L;
+        t = 1;
+        secs = 0;
+        mins = 0;
+        milliseconds = 0;
+        stopwatch_handler.removeCallbacks(updateTimer);
+    }
 
     @Override
     public void onItemClick(int position) {
