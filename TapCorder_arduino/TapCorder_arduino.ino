@@ -2,9 +2,9 @@
 
 SoftwareSerial BTSerial(4, 7); //Connect HC-06. Use your (TX, RX) settings
 
-int  recordTime = 12000;     // default 녹음 시간 12초
+int  recordTime = 10000;     // default 녹음 시간 12초
 long previousMillis = 0;     // 상태가 변경된 마지막 시간을 저장하는 변수. 밀리 초 저장 위한 long 타입
-long currentMillis  = 0;     // 현재 시각을 밀리 초 단위로 저장하는 변수
+long currentMillis  = 9000;     // 현재 시각을 밀리 초 단위로 저장하는 변수
 
 void setup() {
   
