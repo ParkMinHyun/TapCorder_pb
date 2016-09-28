@@ -144,12 +144,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
         gc = new Geocoder(this, Locale.KOREAN);    // 지오코더 객체 생성
 
-        /*------------녹음 파일-----------*/
-
-        adapter = new TimeRecyclerAdapter(getDataset());
-        adapter.setOnItemClickListener(this);
-        mTimeRecyclerView.setAdapter(adapter);
-
         /*--------------UI-------------*/
 
         fabButton_set =(FloatingActionButton)findViewById(R.id.fab_settings);
@@ -159,6 +153,10 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         mTimeRecyclerView = (RecyclerView) findViewById(R.id.mTimeRecyclerView);
         mTimeRecyclerView.setHasFixedSize(true);
 
+        adapter = new TimeRecyclerAdapter(getDataset());
+        adapter.setOnItemClickListener(this);
+        mTimeRecyclerView.setAdapter(adapter);
+        
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         mTimeRecyclerView.setLayoutManager(layoutManager);
 
