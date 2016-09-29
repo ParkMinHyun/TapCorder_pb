@@ -121,6 +121,10 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     private int milliseconds = 0;
     Handler stopwatch_handler = new Handler();
 
+
+    //파일 업로드에 관한 전역변수
+    private int fnum = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,6 +140,15 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             finish();
             return;
         }
+
+
+        while(fileExistance("/storage/emulated/0/progress_recorder/recordFile"+ String.valueOf(fnum) +".amr")){
+            // 핸드폰에 저장되어있는 음성녹음 파일만큼 UploadTask 실행
+            String fname = "/storage/emulated/0/progress_recorder/recordFile"+ String.valueOf(fnum) +".amr";
+            new UploadTask(fname).execute();
+            fnum ++;
+        }
+
 
         /*--------------지도-------------*/
 
@@ -487,7 +500,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mRecorder.setOutputFormat(MediaRecorder.OutputFormat.RAW_AMR);
             mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-            mRecorder.setOutputFile(mFilePath+"음성녹음 "+newRecordNum+".amr"); //newRecordFile명의 음성파일에 음성 녹음.
+            mRecorder.setOutputFile(mFilePath+"recordFile"+newRecordNum+".amr"); //newRecordFile명의 음성파일에 음성 녹음.
 
             mRecorder.prepare();
             mRecorder.start();
@@ -570,6 +583,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                 stopRec();
                 Toast.makeText(getApplicationContext(),"녹음 완료",Toast.LENGTH_SHORT).show();
                 initStopWatch();
+
             }
         }
 
@@ -854,6 +868,10 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public boolean fileExistance(String fname){
+        File file = new File(fname);
+        return file.exists();
     }
 
 }
