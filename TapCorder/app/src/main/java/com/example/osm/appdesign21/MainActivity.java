@@ -72,13 +72,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     private int mWidthPixels, mHeightPixels;
     private RadioButton option1, option2, option3;
 
-    //미리 상수 선언
-    private static final int PLAY_STOP = 0;
-    private static final int PLAYING = 1;
-
-    private MediaPlayer mPlayer = null;
-    private int mPlayerState = PLAY_STOP;
-
     private FloatingActionButton fabButton_set,fabButton_addr;
     private RecyclerView mTimeRecyclerView;
 
@@ -107,11 +100,15 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     private ArrayList<MyData> dataset = null;
     private File[] fileList = null;
     private Record_Time rec_time;
-    private String mFilePath ; //녹음파일 디렉터리 위치
+    private String mFilePath ;                   //녹음파일 디렉터리 위치
     private MediaRecorder mRecorder = null;
+    private MediaPlayer mPlayer = null;
     private int newRecordNum=0;
     private int mCurRecTimeMs = 0;
     private int mCurProgressTimeDisplay = 0;
+    private static final int PLAY_STOP = 0;
+    private static final int PLAYING = 1;
+    private int mPlayerState = PLAY_STOP;
 
     /* 스탑워치에 관한 것들 */
     private long starttime = 0L;
@@ -156,7 +153,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         adapter = new TimeRecyclerAdapter(getDataset());
         adapter.setOnItemClickListener(this);
         mTimeRecyclerView.setAdapter(adapter);
-        
+
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         mTimeRecyclerView.setLayoutManager(layoutManager);
 
@@ -208,6 +205,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         super.onStart();
         if(Bluetooth_MagicNumber.D) Log.e(TAG, "++ ON START ++");
 
+        // 블루투스 아답터 연동시키기
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, Bluetooth_MagicNumber.REQUEST_ENABLE_BT);
@@ -323,16 +321,18 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                             break;
                     }
                     break;
+                /*---------블루투스 송신---------*/
                 case Bluetooth_MagicNumber.MESSAGE_WRITE:
                     byte[] writeBuf = (byte[]) msg.obj;
 
                     String writeMessage = new String(writeBuf);
                     mConversationArrayAdapter.add("Me:  " + writeMessage);
                     break;
+                /*---------블루투스 수신---------*/
                 case Bluetooth_MagicNumber.MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
 
-                    String readMessage = new String(readBuf, 0, msg.arg1);
+                    String readMessage = new String(readBuf, 0, msg.arg1);        // 블루투스값 읽기
                     mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
                     Toast.makeText(getApplicationContext(),readMessage,Toast.LENGTH_LONG).show();
                     if(readMessage.equals("R"))
@@ -347,6 +347,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     }
 
                     break;
+                /*---------블루투스 연결완료시---------*/
                 case Bluetooth_MagicNumber.MESSAGE_DEVICE_NAME:
                     // device이름 저장
                     mConnectedDeviceName = msg.getData().getString(Bluetooth_MagicNumber.DEVICE_NAME);
@@ -419,6 +420,8 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         newRecordNum = fileList.length + 1;
         return dataset;
     }
+
+    /* SD카드 경로에 있는 음성파일 TapCorder List에 시간 및 날짜별로 정리한 뒤 넣기 */
     private void insertRecFile(int order, File[] fileList_copy, ArrayList<MyData> dataset_copy)
     {
         Date lastModifiedDate=new Date(fileList_copy[order].lastModified());
@@ -432,8 +435,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                 lastModifiedCalendar.get(Calendar.MINUTE),
                 lastModifiedCalendar.get(Calendar.SECOND)
         ));
-
-
     }
 
     @Override
@@ -458,6 +459,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         return files;
     }
 
+    /* List 녹음 클릭했을 경우 Play 시키기 */
     private void mBtnStartPlayOnClick(String mFileName) {
         if (mPlayerState == PLAY_STOP) {
             mPlayerState = PLAYING;
@@ -480,6 +482,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             mRecorder.reset();
         }
 
+        // MediaRecorder를 통한 녹음 시작
         try {
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mRecorder.setOutputFormat(MediaRecorder.OutputFormat.RAW_AMR);
@@ -571,6 +574,8 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         }
 
     };
+
+    /* 스탑워치 reset */
     private void initStopWatch()
     {
         starttime = 0L;
@@ -688,6 +693,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
 /*--------------------------------------기타 UI------------------------------------------*/
 /*--------------------------------------------------------------------------------------*/
+
     //RadioButton 눌렀을때의 반응
     private RadioButton.OnClickListener optionOnClickListener = new RadioButton.OnClickListener() {
 
