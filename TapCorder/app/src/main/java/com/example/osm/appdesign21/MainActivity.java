@@ -1,6 +1,7 @@
 package com.example.osm.appdesign21;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -14,6 +15,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Build;
@@ -31,6 +33,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -41,6 +44,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.MediaController;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.Switch;
@@ -63,7 +67,12 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCompletionListener, TimeRecyclerAdapter.OnItemClickListener {
+public class MainActivity extends Activity implements MediaPlayer.OnPreparedListener,MediaPlayer.OnCompletionListener, TimeRecyclerAdapter.OnItemClickListener, MediaController.MediaPlayerControl {
+
+    private String FullFilePath;
+    private MediaPlayer mediaPlayer;
+    private MediaController mediaController;
+    private String audioFile;
 
     private static String TAG = "MainActivity";
     private TimeRecyclerAdapter adapter;
@@ -120,6 +129,9 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     private int mins = 0;
     private int milliseconds = 0;
     Handler stopwatch_handler = new Handler();
+
+
+    private long lastTimeBackPresssed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,11 +233,11 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         }
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if(Bluetooth_MagicNumber.D) Log.e(TAG, "-- ON STOP --");
-    }
+    //@Override
+    //public void onStop() {
+    //    super.onStop();
+    //    if(Bluetooth_MagicNumber.D) Log.e(TAG, "-- ON STOP --");
+    //}
 
     @Override
     public synchronized void onResume() {
@@ -464,6 +476,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         if (mPlayerState == PLAY_STOP) {
             mPlayerState = PLAYING;
             startPlay(mFileName);
+            initiatePopupWindow(2);
         } else if (mPlayerState == PLAYING) {
             mPlayerState = PLAY_STOP;
             stopPlay();
@@ -520,9 +533,9 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
         mPlayer.setOnCompletionListener(this);
 
-        String fullFilePath = mFilePath + mFileName;
+        FullFilePath = mFilePath + mFileName;
         try {
-            mPlayer.setDataSource(fullFilePath);
+            mPlayer.setDataSource(FullFilePath);
             mPlayer.prepare();
 
         } catch (Exception e) {
@@ -530,7 +543,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
         if (mPlayerState == PLAYING) {
             try {
-                mPlayer.start();
+                //mPlayer.start();
             } catch (Exception e) {
             }
         }
@@ -549,6 +562,18 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     }
 
 
+    @Override
+    public void onBackPressed() {
+        if (System.currentTimeMillis() - lastTimeBackPresssed < 1500)
+        {
+            finish();
+            super.onBackPressed();
+        } else {
+
+            Toast.makeText(this, "'뒤로' 버튼을 한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT).show();
+            lastTimeBackPresssed = System.currentTimeMillis();
+        }
+    }
 /*--------------------------------------스탑워치------------------------------------------*/
 /*--------------------------------------------------------------------------------------*/
 
@@ -732,6 +757,17 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             layout_MainMenu.getForeground().setAlpha( 0); // restore
         }
     };
+    private View.OnClickListener cancel_music_click_listener = new View.OnClickListener() {
+
+        public void onClick(View v) {
+            pwindo.dismiss();
+            onStop();
+            Animation btnAnimOff = AnimationUtils.loadAnimation(MainActivity.this, R.anim.set_anim_off);
+            fabButton_set.startAnimation(btnAnimOff);
+            fabButton_addr.startAnimation(btnAnimOff);
+            layout_MainMenu.getForeground().setAlpha( 0); // restore
+        }
+    };
 
     //FloatingActionButton클릭에 따른 반응
     private void initFab() {
@@ -850,10 +886,105 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     });
 
                     break;
+                case 2:
+                    View layout2 = inflater.inflate(R.layout.music_player,
+                            (ViewGroup) findViewById(R.id.popup_layout_2));
+                    pwindo = new PopupWindow(layout2, mWidthPixels - 100, mHeightPixels - 320, true);
+
+                    pwindo.showAtLocation(layout2, Gravity.CENTER, 0, 0);
+
+                    // 뒷배경은 흐리게
+                    layout_MainMenu.getForeground().setAlpha( 100);
+                    btnClosePopup = (Button) layout2.findViewById(R.id.closebtn_popup_2);
+                    btnClosePopup.setOnClickListener(cancel_music_click_listener);
+
+
+                    audioFile = this.getIntent().getStringExtra("audioPath");
+                    audioFile = "음악파일 경로";
+
+                    mediaPlayer = new MediaPlayer();
+                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    mediaPlayer.setOnPreparedListener(this);
+
+                    mediaController = new MediaController(this);
+                    mediaController.setMediaPlayer(this);
+                    mediaController.setAnchorView((MediaController)findViewById(R.id.mediaController));
+                    mediaController.setVisibility(View.VISIBLE);
+
+                    try{
+                        mediaPlayer.setDataSource(FullFilePath);
+                        mediaPlayer.prepare();
+                        mediaPlayer.start();
+                    }catch(IOException e){
+                        Toast.makeText(this, e.toString(),Toast.LENGTH_LONG).show();
+                    }
+
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public void onPrepared(MediaPlayer mediaPlayer){
+        mediaController = new MediaController(this);
+        mediaController.setMediaPlayer(this);
+        mediaController.setAnchorView((MediaController)findViewById(R.id.mediaController));
+    }
+    @Override
+    protected void onStop(){
+        super.onStop();
+        mediaPlayer.stop();
+        mediaPlayer.release();
+    }
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        mediaController.show(0);
+        return true;
+    }
+    @Override
+    public boolean canPause(){
+        return true;
+    }
+    @Override
+    public boolean canSeekBackward(){
+        return true;
+    }
+
+    @Override
+    public boolean canSeekForward() {
+        return false;
+    }
+
+    @Override
+    public boolean canseekForward(){
+        return true;
+    }
+    public int getBufferPercentage(){
+        return 0;
+    }
+    public int getCurrentPosition(){
+        return mediaPlayer.getCurrentPosition();
+    }
+    public int getDuration(){
+        return mediaPlayer.getDuration();
+    }
+    public boolean isPlaying(){
+        return mediaPlayer.isPlaying();
+    }
+    public void pause(){
+        mediaPlayer.pause();
+    }
+    public void seekTo(int pos){
+        mediaPlayer.seekTo(pos);
+    }
+    public void start(){
+        mediaPlayer.start();
+    }
+    public int getAudioSessionId(){
+        return 0;
+    }
+
 
 }

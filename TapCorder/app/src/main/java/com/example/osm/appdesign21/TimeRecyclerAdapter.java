@@ -135,6 +135,12 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public interface OnItemClickListener {
         public void onItemClick(int position);
+
+        boolean canPause();
+
+        boolean canSeekBackward();
+
+        boolean canseekForward();
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {

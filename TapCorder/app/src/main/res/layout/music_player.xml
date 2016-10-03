@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/popup_layout_2">
+
+    <MediaController
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:id="@+id/mediaController"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
+    <Button
+        android:id="@+id/closebtn_popup_2"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:background="@drawable/closebtn_bg"
+        android:gravity="center_vertical"
+        android:text="닫  기"
+        android:textAlignment="center"
+        android:textSize="16dp"
+        android:layout_below="@+id/mediaController"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>
