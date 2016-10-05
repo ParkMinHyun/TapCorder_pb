@@ -2,14 +2,45 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:id="@+id/mainLayout"
+    android:background="#000000">
 
-    <TextView
-        android:id="@+id/textView"
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/gmap"
+        android:layout_width="match_parent"
+        android:layout_height="380dp"
+        class="com.google.android.gms.maps.MapFragment"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Tab 2"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
+        android:id="@+id/imageView"
+        android:layout_alignBottom="@+id/gmap" />
 
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:id="@+id/Sub_Layout"
+        android:layout_below="@id/gmap"
+        android:background="#FFFFFF">
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:text="New Button"
+            android:id="@+id/button"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="75dp" />
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:id="@+id/imageView2"/>
+    </RelativeLayout>
 </RelativeLayout>
+
