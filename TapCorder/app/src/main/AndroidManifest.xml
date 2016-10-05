@@ -4,12 +4,25 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <!-- 지도permission -->
+    <permission
+        android:name="org.androidtown.lbs.map.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+
+
+    <!-- 구글맵 API v2의 권한 설정 -->
+    <uses-permission android:name="org.androidtown.lbs.map.permission.MAPS_RECEIVE" />
+
+    <!-- 구글맵 API v2의 일반 권한 설정. -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+
+    <!-- 일반 권한 설정 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <!-- 연락처 읽기위한 permission -->
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
@@ -23,6 +36,18 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <!-- 라이브러리 사용 설정 -->
+        <uses-library android:name="com.google.android.maps" />
+
+        <!-- 구글맵 API v2 키 설정 -->
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyBppXZnX69T9Uq4k-nMywrN-bHAfJ4Pzag" />
+
+        <!-- GMS 라이브러리 버전 설정 -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
         <!--<activity-->
             <!--android:name=".SplashActivity"-->
             <!--android:theme="@style/Theme.AppCompat.NoActionBar">-->

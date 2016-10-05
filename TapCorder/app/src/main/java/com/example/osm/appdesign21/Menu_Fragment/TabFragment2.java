@@ -1,10 +1,12 @@
-package com.example.osm.appdesign21;
+package com.example.osm.appdesign21.Menu_Fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.osm.appdesign21.R;
 
 public class TabFragment2 extends Fragment {
 
