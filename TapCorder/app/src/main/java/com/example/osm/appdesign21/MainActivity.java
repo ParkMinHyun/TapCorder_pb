@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
     private int mPlayerState = PLAY_STOP;
     private String mFilePath; //녹음파일 디렉터리 위치
 
-    private FloatingActionButton fabButton_set,fabButton_addr;
+    private FloatingActionButton fabButton_set, fabButton_addr;
     private RecyclerView mTimeRecyclerView;
 
     // 연락처 ListView
@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
     SharedPreferences pref;
     ArrayList<PhoneBook> saveList;
     FrameLayout layout_MainMenu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,8 +95,8 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
 
         gc = new Geocoder(this, Locale.KOREAN);// 지오코더 객체 생성
 
-        fabButton_set =(FloatingActionButton)findViewById(R.id.fab_settings);
-        fabButton_addr=(FloatingActionButton)findViewById(R.id.fab_phoneaddr);
+        fabButton_set = (FloatingActionButton) findViewById(R.id.fab_settings);
+        fabButton_addr = (FloatingActionButton) findViewById(R.id.fab_phoneaddr);
         initFab();//FloatingButton Click에 따른 메서드
 
         mTimeRecyclerView = (RecyclerView) findViewById(R.id.mTimeRecyclerView);
@@ -140,32 +141,31 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
         String name;
         String phoneNumber;
         pref = new SharedPreferences(this);
-        for(int i = 0; i < 5; i++){
+        for (int i = 0; i < 5; i++) {
             name = pref.getValue(Integer.toString(i), "no", "name");
             phoneNumber = pref.getValue(Integer.toString(i), "no", "phoneNum");
-            if(!name.equals("no")){
+            if (!name.equals("no")) {
                 saveList.add(new PhoneBook(name, phoneNumber));
             }
         }
         layout_MainMenu = (FrameLayout) findViewById(R.id.mainmenu);
-        layout_MainMenu.getForeground().setAlpha( 0);
+        layout_MainMenu.getForeground().setAlpha(0);
     }
 
     private ArrayList<MyData> getDataset() {
         ArrayList<MyData> dataset = new ArrayList<>();
         ////////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/////////
-        mFilePath="/storage/emulated/0/progress_recorder/";
-        Log.i("mFilePath~~??",mFilePath); ///storage/emulated/0/progress_recorder/
+        mFilePath = "/storage/emulated/0/progress_recorder/";
+        Log.i("mFilePath~~??", mFilePath); ///storage/emulated/0/progress_recorder/
         File[] fileList = getFileList(mFilePath);
 
-        for(int i=0; i < fileList.length; i++)
-        {
+        for (int i = 0; i < fileList.length; i++) {
             Log.d("~~~~fileList[i]~~~", fileList[i].getName());
-            Date lastModifiedDate=new Date(fileList[i].lastModified());
+            Date lastModifiedDate = new Date(fileList[i].lastModified());
             Calendar lastModifiedCalendar = new GregorianCalendar();
             lastModifiedCalendar.setTime(lastModifiedDate);
 
-            dataset.add(new MyData(fileList[i].getName(),lastModifiedCalendar.get(Calendar.YEAR),
+            dataset.add(new MyData(fileList[i].getName(), lastModifiedCalendar.get(Calendar.YEAR),
                     lastModifiedCalendar.get(Calendar.MONTH),
                     lastModifiedCalendar.get(Calendar.DAY_OF_MONTH),
                     lastModifiedCalendar.get(Calendar.HOUR_OF_DAY),
@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
                     pwindo.showAtLocation(layout, Gravity.CENTER, 0, 0);
 
                     // 뒷배경은 흐리게
-                    layout_MainMenu.getForeground().setAlpha( 100);
+                    layout_MainMenu.getForeground().setAlpha(100);
                     btnClosePopup = (Button) layout.findViewById(R.id.closebtn_popup_0);
                     btnClosePopup.setOnClickListener(cancel_setbutton_click_listener);
 
@@ -313,15 +313,15 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
 
                 case 1:
                     View layout1 = inflater.inflate(R.layout.phonebook_list,
-                            (ViewGroup)findViewById(R.id.popup_layout_1));
+                            (ViewGroup) findViewById(R.id.popup_layout_1));
                     pwindo = new PopupWindow(layout1, mWidthPixels - 100, mHeightPixels - 320, true);
                     pwindo.showAtLocation(layout1, Gravity.CENTER, 0, 0);
                     // 뒷배경은 흐리게
-                    layout_MainMenu.getForeground().setAlpha( 100);
-                    lvPhone = (ListView)layout1.findViewById(R.id.listPhone);
+                    layout_MainMenu.getForeground().setAlpha(100);
+                    lvPhone = (ListView) layout1.findViewById(R.id.listPhone);
 
                     final List<PhoneBook> listPhoneBook = new ArrayList<PhoneBook>();
-                    for(int i = 0; i < saveList.size() ; i++){
+                    for (int i = 0; i < saveList.size(); i++) {
                         listPhoneBook.add(new PhoneBook(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher),
                                 saveList.get(i).getmName(), saveList.get(i).getmPhone(), ""));
                     }
@@ -527,7 +527,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
             Animation btnAnimOff = AnimationUtils.loadAnimation(MainActivity.this, R.anim.set_anim_off);
             fabButton_set.startAnimation(btnAnimOff);
             fabButton_addr.startAnimation(btnAnimOff);
-            layout_MainMenu.getForeground().setAlpha( 0); // restore
+            layout_MainMenu.getForeground().setAlpha(0); // restore
         }
     };
     private View.OnClickListener cancel_addrbutton_click_listener = new View.OnClickListener() {
@@ -537,7 +537,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
             Animation btnAnimOff = AnimationUtils.loadAnimation(MainActivity.this, R.anim.addr_anim_off);
             fabButton_addr.startAnimation(btnAnimOff);
             fabButton_set.startAnimation(btnAnimOff);
-            layout_MainMenu.getForeground().setAlpha( 0); // restore
+            layout_MainMenu.getForeground().setAlpha(0); // restore
         }
     };
 
