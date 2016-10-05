@@ -16,6 +16,11 @@ import java.net.SocketException;
  */
 public class UploadTask extends AsyncTask<Void, Void, Void>
 {
+    private String mUploadfName;
+    public UploadTask(String fname){
+        mUploadfName = fname;
+    }
+
     final static String TAG = "UploadTask";
     @Override
     protected void onPreExecute() {
@@ -39,10 +44,17 @@ public class UploadTask extends AsyncTask<Void, Void, Void>
             mFTP.mkd("files"); // public 아래로 files 디렉토리 생성
             mFTP.cwd("files"); // public/files 로 이동 (이 디렉토리로 업로드가 진행)
 
-            String data = "/storage/extSdCard/ftpserver/audio1m.wma";
+            String data = mUploadfName;
+
+            String[] files = mFTP.listNames(); // public/files 폴더 안에 있는 파일 리스트 가져오기
+            for(int i=0; i<files.length; i++){ // 파일 갯수만큼 반복
+                if(files[i].equals(mUploadfName.substring(38))){ // 파일이 존재한다면
+                    return null; // Task종료
+                }
+            }
 
             FileInputStream in = new FileInputStream(new File(data));
-            boolean result = mFTP.storeFile("audio1m.wma", in);
+            boolean result = mFTP.storeFile(mUploadfName.substring(38), in);
             in.close();
             if(result) Log.v("upload result", "succeeded");
 
