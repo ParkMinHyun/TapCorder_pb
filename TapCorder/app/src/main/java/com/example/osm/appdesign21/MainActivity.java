@@ -25,7 +25,6 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -46,7 +45,9 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.MediaController;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,7 +70,10 @@ import java.util.Locale;
 
 public class MainActivity extends Activity implements MediaPlayer.OnPreparedListener,MediaPlayer.OnCompletionListener, TimeRecyclerAdapter.OnItemClickListener, MediaController.MediaPlayerControl {
 
-    private String FullFilePath;
+    private Button btnStart,btnStop,btnPause;
+    private TextView text;
+    private SeekBar seekBar;
+    public static String FullFilePath;
     private MediaPlayer mediaPlayer;
     private MediaController mediaController;
     private String audioFile;
@@ -143,11 +147,11 @@ public class MainActivity extends Activity implements MediaPlayer.OnPreparedList
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();   //아답터 얻기
 
         // 만약 어댑터가 null이면 블루투스 종료
-        if (mBluetoothAdapter == null) {
-            Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
-            finish();
-            return;
-        }
+        //if (mBluetoothAdapter == null) {
+        //    Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
+        //    finish();
+        //    return;
+        //}
 
         /*--------------지도-------------*/
 
@@ -210,6 +214,14 @@ public class MainActivity extends Activity implements MediaPlayer.OnPreparedList
         }
         layout_MainMenu = (FrameLayout) findViewById(R.id.mainmenu);
         layout_MainMenu.getForeground().setAlpha( 0);
+
+        //btnStart = (Button)findViewById(R.id.button);
+        //btnStart.setOnClickListener(new Button.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view) {
+        //        initiatePopupWindow(2);
+        //    }
+        //});
     }
 
     @Override
@@ -797,7 +809,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnPreparedList
     }
 
 
-    private void initiatePopupWindow(int arg2) {
+    public void initiatePopupWindow(int arg2) {
         try {
             //  LayoutInflater 객체와 시킴
             LayoutInflater inflater = (LayoutInflater) MainActivity.this
@@ -898,6 +910,13 @@ public class MainActivity extends Activity implements MediaPlayer.OnPreparedList
                     btnClosePopup = (Button) layout2.findViewById(R.id.closebtn_popup_2);
                     btnClosePopup.setOnClickListener(cancel_music_click_listener);
 
+                    //seekBar = (SeekBar) findViewById(R.id.seekBar);
+                    //seekBar.setVisibility(SeekBar.VISIBLE);
+                    //seekBar.setMax(mediaPlayer.getDuration());
+                    //text = (TextView)findViewById(R.id.textView2);
+                    //btnStart = (Button)findViewById(R.id.play);
+                    //btnStop = (Button)findViewById(R.id.stop);
+                    //btnPause = (Button)findViewById(R.id.pause);
 
                     audioFile = this.getIntent().getStringExtra("audioPath");
                     audioFile = "음악파일 경로";
@@ -918,6 +937,56 @@ public class MainActivity extends Activity implements MediaPlayer.OnPreparedList
                     }catch(IOException e){
                         Toast.makeText(this, e.toString(),Toast.LENGTH_LONG).show();
                     }
+                    //seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//
+                    //    @Override
+                    //    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    //        if(fromUser) {
+                    //            mediaPlayer.seekTo(progress);
+                    //        }
+                    //        int m = progress / 60000;
+                    //        int s = (progress % 60000) / 1000;
+                    //        String strTime = String.format("%02d:%02d", m, s);
+                    //        text.setText(strTime);
+                    //    }
+                    //    @Override
+                    //    public void onStartTrackingTouch(SeekBar seekBar) {
+                    //    }
+                    //    @Override
+                    //    public void onStopTrackingTouch(SeekBar seekBar) {
+                    //    }
+                    //});
+                    //btnStart.setOnClickListener(new View.OnClickListener() {
+                    //    @Override
+                    //    public void onClick(View v) {
+                    //        mediaPlayer.start();
+//
+                    //        new Thread();
+                    //    }
+                    //});
+                    //btnStop.setOnClickListener(new View.OnClickListener() {
+                    //    @Override
+                    //    public void onClick(View v) {
+                    //        mediaPlayer.stop();
+                    //        try
+                    //        {
+                    //            mediaPlayer.prepare();
+                    //        }
+                    //        catch(IOException ie)
+                    //        {
+                    //            ie.printStackTrace();
+                    //        }
+                    //        mediaPlayer.seekTo(0);
+                    //    }
+                    //});
+                    //btnPause.setOnClickListener(new View.OnClickListener() {
+                    //    @Override
+                    //    public void onClick(View v) {
+                    //        mediaPlayer.pause();
+                    //    }
+                    //});
+
+
 
                     break;
             }
@@ -926,6 +995,8 @@ public class MainActivity extends Activity implements MediaPlayer.OnPreparedList
         }
 
     }
+
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void onPrepared(MediaPlayer mediaPlayer){
         mediaController = new MediaController(this);
@@ -940,7 +1011,7 @@ public class MainActivity extends Activity implements MediaPlayer.OnPreparedList
     }
     @Override
     public boolean onTouchEvent(MotionEvent event){
-        mediaController.show(0);
+        mediaController.show();
         return true;
     }
     @Override

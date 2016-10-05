@@ -21,4 +21,47 @@
         android:textSize="16dp"
         android:layout_below="@+id/mediaController"
         android:layout_centerHorizontal="true" />
+
+    <SeekBar
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:id="@+id/seekBar"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/seekBar"
+        android:layout_alignEnd="@+id/seekBar"
+        android:layout_alignBottom="@+id/seekBar" />
+
+    <Button
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:text="Play"
+        android:id="@+id/play"
+        android:layout_above="@+id/closebtn_popup_2"
+        android:layout_alignStart="@+id/seekBar"
+        android:layout_toStartOf="@+id/closebtn_popup_2" />
+
+    <Button
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:text="Stop"
+        android:id="@+id/stop"
+        android:layout_alignBottom="@+id/mediaController"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:text="Pause"
+        android:id="@+id/pause"
+        android:layout_alignTop="@+id/stop"
+        android:layout_alignEnd="@+id/textView2" />
+
 </RelativeLayout>

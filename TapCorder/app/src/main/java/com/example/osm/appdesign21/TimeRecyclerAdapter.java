@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<AdapterItem> itemList;
 
+    public Button btnPlay;
     private OnItemClickListener listener;
 
     public static class TimeViewHolder extends RecyclerView.ViewHolder {
@@ -22,19 +24,47 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
+    public static class BtnViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        public Button button;
+
+        //private BtnViewHolderClickListener listener;
+
+        public BtnViewHolder(View itemView) {
+            super(itemView);
+            button = (Button) itemView.findViewById(R.id.button);
+        }
+
+
+        @Override
+        public void onClick(View view) {
+
+        }
+    }
     public static class DataViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView timeView, nameView;
+        public Button button;
 
-        private OnViewHolderClickListener listener;
+        private OnViewHolderClickListener listener;//what is this?
 
         public DataViewHolder(View v, OnViewHolderClickListener listener) {
             super(v);
             timeView = (TextView) v.findViewById(R.id.timeView);
             nameView = (TextView) v.findViewById(R.id.nameView);
-            v.setOnClickListener(this);
+            button = (Button)v.findViewById(R.id.button);
+            button.setOnClickListener(btnlistener);
+
+            //v.setOnClickListener(this);
             this.listener = listener;
+//            this.btnlistener=listener;
         }
+        Button.OnClickListener btnlistener=new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                if(listener != null)
+                listener.onViewHolderClick(getPosition());
+            }
+        };
 
         @Override
         public void onClick(View v) {
@@ -42,7 +72,7 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 listener.onViewHolderClick(getPosition());
         }
 
-        private interface OnViewHolderClickListener {
+        public interface OnViewHolderClickListener {
             void onViewHolderClick(int position);
         }
     }
@@ -96,7 +126,7 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             return new TimeViewHolder(
                     LayoutInflater.from(parent.getContext())
                             .inflate(R.layout.recycler_item_time, parent, false));
-        else
+        else //if(viewType == AdapterItem.TYPE_DATA)
             return new DataViewHolder(
                     LayoutInflater.from(parent.getContext())
                             .inflate(R.layout.recycler_item_data, parent, false),
@@ -107,21 +137,40 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                                 listener.onItemClick(position);
                         }
                     }
+
             );
+        //else
+        //    return new BtnViewHolder(
+        //            LayoutInflater.from(parent.getContext())
+        //            .inflate(R.layout.recycler_item_data, parent, false),
+        //            new BtnViewHolder.OnBtnViewHolderClickListener
+        //    )
+//
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if(holder instanceof TimeViewHolder) {
             TimeViewHolder tHolder = (TimeViewHolder) holder;
             tHolder.timeItemView.setText(itemList.get(position).getShortTimeToString());
-        } else {
+        } else if (holder instanceof DataViewHolder){
             DataViewHolder dHolder = (DataViewHolder) holder;
             dHolder.timeView.setText(itemList.get(position).getLongTimeToString());
             dHolder.nameView.setText(
                     ((MyData)itemList.get(position))
                             .getName());
         }
+        else if(holder instanceof BtnViewHolder){
+            final BtnViewHolder bHolder = (BtnViewHolder) holder;
+            bHolder.button.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view){
+                    getItem(position);
+
+                }
+            });
+        }
+
     }
 
     @Override

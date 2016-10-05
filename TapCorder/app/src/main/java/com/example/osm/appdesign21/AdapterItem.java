@@ -6,6 +6,7 @@ import java.util.Calendar;
 public abstract class AdapterItem {
     public static final int TYPE_TIME = 1;
     public static final int TYPE_DATA = 2;
+    //public static final int TYPE_BTN = 3;
 
     private long time;
 
