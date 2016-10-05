@@ -1,5 +1,7 @@
-package com.example.osm.appdesign21;
+package com.example.osm.appdesign21.Recorder;
 
+
+import com.example.osm.appdesign21.AdapterItem;
 
 public class TimeItem extends AdapterItem {
 

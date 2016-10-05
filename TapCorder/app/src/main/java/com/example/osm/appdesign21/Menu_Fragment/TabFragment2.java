@@ -2,6 +2,8 @@ package com.example.osm.appdesign21.Menu_Fragment;
 
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -18,8 +20,10 @@ import com.example.osm.appdesign21.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -42,13 +46,15 @@ public class TabFragment2 extends Fragment {
     private LatLng mCurrent_Location;
 
     private View inflatedView;
+    //btn=(Button)inflatedView.findViewById(R.id.)
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.tab_fragment_2, null);
         mapView = (MapView) view.findViewById(R.id.gmap);
         mapView.onCreate(savedInstanceState);
-
 
         init_Property();
         init_Map();
@@ -56,11 +62,13 @@ public class TabFragment2 extends Fragment {
 
         return view;
     }
+
     public void init_Property() {
         this.mSpotDbAdapter = new SpotsDbAdapter(this.getActivity());
         this.mGpsTracker = new GPSTracker(this.getContext());
         this.mSpot_array = new ArrayList<>();
     }
+
     public void init_Map() {
         gMap = mapView.getMap();
         gMap.getUiSettings().setMyLocationButtonEnabled(false);
@@ -71,18 +79,20 @@ public class TabFragment2 extends Fragment {
                 new LatLng(mCurrent_Location.latitude, mCurrent_Location.longitude), 15));
 
 
-        LatLng a = new LatLng(37.546618,127.071346);
-        LatLng b = new LatLng(mCurrent_Location.latitude,mCurrent_Location.longitude);
-        /*mPoliceMarker = gMap.addMarker(new MarkerOptions().position(new LatLng(37.546618,127.071346))
+        //LatLng a = new LatLng(37.546618,127.071346);
+        //LatLng b = new LatLng(mCurrent_Location.latitude,mCurrent_Location.longitude);
+        mPoliceMarker = gMap.addMarker(new MarkerOptions().position(new LatLng(37.546618,127.071346))
                 .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("policeoffice",130,130))));
         mPoliceMarker2 = gMap.addMarker(new MarkerOptions().position(new LatLng(37.560487,127.081460))
                 .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("policeoffice",150,150))));
         mUserMarker = gMap.addMarker(new MarkerOptions().position(new LatLng(mCurrent_Location.latitude,mCurrent_Location.longitude))
                 .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("userin",140,170))));
-        Toast.makeText(getContext(),String.valueOf(CalculationByDistance(a,b)),Toast.LENGTH_SHORT).show();
-        */
+
+        //Toast.makeText(getContext(),String.valueOf(CalculationByDistance(a,b)),Toast.LENGTH_SHORT).show();
+
         checkDangerousPermissions();
     }
+
     private void init_DB() {
         //엑셀파일 데이터를 데이터베이스에 저장
         mSpotDbAdapter.open();
@@ -131,6 +141,14 @@ public class TabFragment2 extends Fragment {
             mGpsTracker.showSettingsAlert();
         }
         return mCurrent_Location;
+    }
+
+    // taxi 이미지 줄여주는 메소드
+    public Bitmap resizeMapIcons(String iconName, int width, int height){
+        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(),getResources().getIdentifier(iconName, "drawable",
+                this.getActivity().getPackageName()));
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
+        return resizedBitmap;
     }
 
     private void checkDangerousPermissions() {
