@@ -1,11 +1,15 @@
 package com.example.osm.appdesign21.Menu_Fragment;
 
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.osm.appdesign21.DB_Excel.SpotData;
 import com.example.osm.appdesign21.DB_Excel.SpotsDbAdapter;
@@ -77,7 +81,7 @@ public class TabFragment2 extends Fragment {
                 .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("userin",140,170))));
         Toast.makeText(getContext(),String.valueOf(CalculationByDistance(a,b)),Toast.LENGTH_SHORT).show();
         */
-        //checkDangerousPermissions();
+        checkDangerousPermissions();
     }
     private void init_DB() {
         //엑셀파일 데이터를 데이터베이스에 저장
@@ -127,6 +131,46 @@ public class TabFragment2 extends Fragment {
             mGpsTracker.showSettingsAlert();
         }
         return mCurrent_Location;
+    }
+
+    private void checkDangerousPermissions() {
+        String[] permissions = {
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+        };
+
+        int permissionCheck = PackageManager.PERMISSION_GRANTED;
+        for (int i = 0; i < permissions.length; i++) {
+            permissionCheck = ContextCompat.checkSelfPermission(this.getActivity(), permissions[i]);
+            if (permissionCheck == PackageManager.PERMISSION_DENIED) {
+                break;
+            }
+        }
+
+        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this.getActivity(), "권한 있음", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this.getActivity(), "권한 없음", Toast.LENGTH_LONG).show();
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this.getActivity(), permissions[0])) {
+                Toast.makeText(this.getActivity(), "권한 설명 필요함.", Toast.LENGTH_LONG).show();
+            } else {
+                ActivityCompat.requestPermissions(this.getActivity(), permissions, 1);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            for (int i = 0; i < permissions.length; i++) {
+                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this.getActivity(), permissions[i] + " 권한이 승인됨.", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this.getActivity(), permissions[i] + " 권한이 승인되지 않음.", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 
     private void copyExcelDataToDbSpot() {
