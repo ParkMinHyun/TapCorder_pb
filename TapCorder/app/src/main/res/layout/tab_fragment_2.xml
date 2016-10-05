@@ -29,28 +29,36 @@
         android:background="#FFFFFF">
 
         <Button
-            android:layout_width="100dp"
+            android:layout_width="120dp"
             android:layout_height="60dp"
-            android:text="New Button"
-            android:id="@+id/button"
+            android:text="02-862-6828"
+            android:id="@+id/call"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:layout_marginStart="75dp" />
 
         <ImageView
             android:layout_width="100dp"
-            android:layout_height="50dp"
+            android:layout_height="70dp"
+            android:src="@drawable/policeoffice"
             android:id="@+id/imageView2"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:text="약 : 7.17km"
             android:id="@+id/between_distance"
-            android:layout_above="@+id/button"
+            android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@+id/imageView2"
-            android:layout_below="@+id/imageView2" />
+            android:layout_marginEnd="47dp" />
+
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:text=""
+            android:id="@+id/policeStationName"
+            android:layout_alignBottom="@+id/imageView2"
+            android:layout_toEndOf="@+id/imageView2" />
     </RelativeLayout>
 
 </RelativeLayout>

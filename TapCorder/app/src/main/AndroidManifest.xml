@@ -8,6 +8,8 @@
         android:name="org.androidtown.lbs.map.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
 
+    <!-- 전화하기 위한 권한 설정 -->
+    <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
 
     <!-- 구글맵 API v2의 권한 설정 -->
     <uses-permission android:name="org.androidtown.lbs.map.permission.MAPS_RECEIVE" />
