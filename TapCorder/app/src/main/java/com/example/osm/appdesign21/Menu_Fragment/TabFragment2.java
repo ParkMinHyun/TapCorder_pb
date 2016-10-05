@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.osm.appdesign21.DB_Excel.SpotData;
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,19 +48,21 @@ public class TabFragment2 extends Fragment {
     private LatLng mCurrent_Location;
 
     private View inflatedView;
+    public TextView distance;
     //btn=(Button)inflatedView.findViewById(R.id.)
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.tab_fragment_2, null);
+        LayoutInflater lf = getActivity().getLayoutInflater();
+        View view = lf.inflate(R.layout.tab_fragment_2, null);
         mapView = (MapView) view.findViewById(R.id.gmap);
         mapView.onCreate(savedInstanceState);
 
         init_Property();
-        init_Map();
         init_DB();
+        init_Map(view);
 
         return view;
     }
@@ -69,7 +73,7 @@ public class TabFragment2 extends Fragment {
         this.mSpot_array = new ArrayList<>();
     }
 
-    public void init_Map() {
+    public void init_Map(View view) {
         gMap = mapView.getMap();
         gMap.getUiSettings().setMyLocationButtonEnabled(false);
 
@@ -78,17 +82,19 @@ public class TabFragment2 extends Fragment {
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(mCurrent_Location.latitude, mCurrent_Location.longitude), 15));
 
-
-        //LatLng a = new LatLng(37.546618,127.071346);
-        //LatLng b = new LatLng(mCurrent_Location.latitude,mCurrent_Location.longitude);
-        mPoliceMarker = gMap.addMarker(new MarkerOptions().position(new LatLng(37.546618,127.071346))
+        LatLng short_policeStation = new LatLng(37.546618,127.071346);
+        mPoliceMarker = gMap.addMarker(new MarkerOptions().position(short_policeStation)
                 .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("policeoffice",130,130))));
         mPoliceMarker2 = gMap.addMarker(new MarkerOptions().position(new LatLng(37.560487,127.081460))
                 .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("policeoffice",150,150))));
-        mUserMarker = gMap.addMarker(new MarkerOptions().position(new LatLng(mCurrent_Location.latitude,mCurrent_Location.longitude))
+        mUserMarker = gMap.addMarker(new MarkerOptions().position(mCurrent_Location)
                 .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("userin",140,170))));
 
-        //Toast.makeText(getContext(),String.valueOf(CalculationByDistance(a,b)),Toast.LENGTH_SHORT).show();
+        String strNumber = String.format("%.1f", CalculationByDistance(short_policeStation,mCurrent_Location)*1000);
+        Toast.makeText(getContext(),String.valueOf( CalculationByDistance(short_policeStation,mCurrent_Location)),Toast.LENGTH_SHORT).show();
+
+        this.distance = (TextView)view.findViewById(R.id.between_distance);
+        distance.setText("약 : " + strNumber + "M ");
 
         checkDangerousPermissions();
     }
@@ -114,6 +120,10 @@ public class TabFragment2 extends Fragment {
         mSpotDbAdapter.close();
     }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+    }
     @Override
     public void onResume() {
         mapView.onResume();
@@ -235,6 +245,29 @@ public class TabFragment2 extends Fragment {
                 workbook.close();
             }
         }
+    }
+
+    public double CalculationByDistance(LatLng StartP, LatLng EndP) {
+        int Radius = 6371;// radius of earth in Km
+        double lat1 = StartP.latitude;
+        double lat2 = EndP.latitude;
+        double lon1 = StartP.longitude;
+        double lon2 = EndP.longitude;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat1))
+                * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
+                * Math.sin(dLon / 2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        double valueResult = Radius * c;
+        double km = valueResult / 1;
+        DecimalFormat newFormat = new DecimalFormat("####");
+        int kmInDec = Integer.valueOf(newFormat.format(km));
+        double meter = valueResult % 1000;
+        int meterInDec = Integer.valueOf(newFormat.format(meter));
+
+        return Radius * c;
     }
 
 }
