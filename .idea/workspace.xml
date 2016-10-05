@@ -2,14 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8da896c9-f74c-452d-9850-da9d91c0f562" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TapCorder/.idea/modules.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TapCorder/.idea/runConfigurations.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/TapCorder/.idea/inspectionProfiles/Project_Default.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/TapCorder/.idea/inspectionProfiles/profiles_settings.xml" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TapCorder/.idea/compiler.xml" afterPath="$PROJECT_DIR$/TapCorder/.idea/compiler.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TapCorder/.idea/encodings.xml" afterPath="$PROJECT_DIR$/TapCorder/.idea/encodings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TapCorder/.idea/gradle.xml" afterPath="$PROJECT_DIR$/TapCorder/.idea/gradle.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TapCorder/.idea/misc.xml" afterPath="$PROJECT_DIR$/TapCorder/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TapCorder/.idea/modules.xml" afterPath="$PROJECT_DIR$/TapCorder/.idea/modules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TapCorder/.idea/runConfigurations.xml" afterPath="$PROJECT_DIR$/TapCorder/.idea/runConfigurations.xml" />
     </list>
     <ignored path="Git_Tapcorder.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,13 +30,22 @@
     <favorites_list name="Git_Tapcorder" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="AdapterItem.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TapCorder/app/src/main/java/com/example/osm/appdesign21/AdapterItem.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
+              <folding>
+                <element signature="e#248#249#0" expanded="false" />
+                <element signature="e#280#281#0" expanded="false" />
+                <element signature="e#479#480#0" expanded="false" />
+                <element signature="e#511#512#0" expanded="false" />
+                <element signature="e#1772#1773#0" expanded="false" />
+                <element signature="e#1799#1800#0" expanded="false" />
+                <element signature="e#1842#1843#0" expanded="false" />
+                <element signature="e#1912#1913#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -45,7 +55,24 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
+              <folding>
+                <element signature="e#603#604#0" expanded="false" />
+                <element signature="e#634#635#0" expanded="false" />
+                <element signature="e#664#665#0" expanded="false" />
+                <element signature="e#692#693#0" expanded="false" />
+                <element signature="e#723#724#0" expanded="false" />
+                <element signature="e#752#753#0" expanded="false" />
+                <element signature="e#783#784#0" expanded="false" />
+                <element signature="e#812#813#0" expanded="false" />
+                <element signature="e#858#859#0" expanded="false" />
+                <element signature="e#898#899#0" expanded="false" />
+                <element signature="e#938#939#0" expanded="false" />
+                <element signature="e#972#973#0" expanded="false" />
+                <element signature="e#1014#1015#0" expanded="false" />
+                <element signature="e#1050#1051#0" expanded="false" />
+                <element signature="e#1092#1093#0" expanded="false" />
+                <element signature="e#1128#1129#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -55,7 +82,15 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#629#630#0" expanded="false" />
+                <element signature="e#673#674#0" expanded="false" />
+                <element signature="e#726#727#0" expanded="false" />
+                <element signature="e#773#774#0" expanded="false" />
+                <element signature="e#826#827#0" expanded="false" />
+                <element signature="e#853#854#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -65,7 +100,11 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#243#244#0" expanded="false" />
+                <element signature="e#271#272#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -87,12 +126,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.19723183">
               <caret line="11" column="5" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
-              <folding>
-                <element signature="e#115#116#0" expanded="false" />
-                <element signature="e#142#143#0" expanded="false" />
-                <element signature="e#341#342#0" expanded="false" />
-                <element signature="e#373#374#0" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -100,7 +134,7 @@
       <file leaf-file-name="TapCorder_arduino.ino" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TapCorder_arduino/TapCorder_arduino.ino">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.0">
+            <state vertical-scroll-proportion="0.0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
@@ -148,9 +182,11 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="Scratches" />
+      <pane id="PackagesPane">
+        <subPane />
+      </pane>
       <pane id="AndroidView">
         <subPane />
       </pane>
@@ -168,21 +204,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="TapCorder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="TapCorder_arduino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Git_Tapcorder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="TapCorder" />
+              <option name="myItemId" value="Tapcorder" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -327,6 +349,94 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/TapCorder/app/src/main/java/com/example/osm/appdesign21/AdapterItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#248#249#0" expanded="false" />
+            <element signature="e#280#281#0" expanded="false" />
+            <element signature="e#479#480#0" expanded="false" />
+            <element signature="e#511#512#0" expanded="false" />
+            <element signature="e#1772#1773#0" expanded="false" />
+            <element signature="e#1799#1800#0" expanded="false" />
+            <element signature="e#1842#1843#0" expanded="false" />
+            <element signature="e#1912#1913#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TapCorder/app/src/main/java/com/example/osm/appdesign21/PhoneBook.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#603#604#0" expanded="false" />
+            <element signature="e#634#635#0" expanded="false" />
+            <element signature="e#664#665#0" expanded="false" />
+            <element signature="e#692#693#0" expanded="false" />
+            <element signature="e#723#724#0" expanded="false" />
+            <element signature="e#752#753#0" expanded="false" />
+            <element signature="e#783#784#0" expanded="false" />
+            <element signature="e#812#813#0" expanded="false" />
+            <element signature="e#858#859#0" expanded="false" />
+            <element signature="e#898#899#0" expanded="false" />
+            <element signature="e#938#939#0" expanded="false" />
+            <element signature="e#972#973#0" expanded="false" />
+            <element signature="e#1014#1015#0" expanded="false" />
+            <element signature="e#1050#1051#0" expanded="false" />
+            <element signature="e#1092#1093#0" expanded="false" />
+            <element signature="e#1128#1129#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TapCorder/app/src/main/java/com/example/osm/appdesign21/PhoneBookAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#629#630#0" expanded="false" />
+            <element signature="e#673#674#0" expanded="false" />
+            <element signature="e#726#727#0" expanded="false" />
+            <element signature="e#773#774#0" expanded="false" />
+            <element signature="e#826#827#0" expanded="false" />
+            <element signature="e#853#854#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TapCorder/app/src/main/java/com/example/osm/appdesign21/SharedPreferences.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#243#244#0" expanded="false" />
+            <element signature="e#271#272#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TapCorder/app/src/main/java/com/example/osm/appdesign21/SplashActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TapCorder/app/src/main/java/com/example/osm/appdesign21/TimeItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/TapCorder_arduino/TapCorder_arduino.ino">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -339,7 +449,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#248#249#0" expanded="false" />
+            <element signature="e#280#281#0" expanded="false" />
+            <element signature="e#479#480#0" expanded="false" />
+            <element signature="e#511#512#0" expanded="false" />
+            <element signature="e#1772#1773#0" expanded="false" />
+            <element signature="e#1799#1800#0" expanded="false" />
+            <element signature="e#1842#1843#0" expanded="false" />
+            <element signature="e#1912#1913#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -347,7 +466,24 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#603#604#0" expanded="false" />
+            <element signature="e#634#635#0" expanded="false" />
+            <element signature="e#664#665#0" expanded="false" />
+            <element signature="e#692#693#0" expanded="false" />
+            <element signature="e#723#724#0" expanded="false" />
+            <element signature="e#752#753#0" expanded="false" />
+            <element signature="e#783#784#0" expanded="false" />
+            <element signature="e#812#813#0" expanded="false" />
+            <element signature="e#858#859#0" expanded="false" />
+            <element signature="e#898#899#0" expanded="false" />
+            <element signature="e#938#939#0" expanded="false" />
+            <element signature="e#972#973#0" expanded="false" />
+            <element signature="e#1014#1015#0" expanded="false" />
+            <element signature="e#1050#1051#0" expanded="false" />
+            <element signature="e#1092#1093#0" expanded="false" />
+            <element signature="e#1128#1129#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -355,7 +491,15 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#629#630#0" expanded="false" />
+            <element signature="e#673#674#0" expanded="false" />
+            <element signature="e#726#727#0" expanded="false" />
+            <element signature="e#773#774#0" expanded="false" />
+            <element signature="e#826#827#0" expanded="false" />
+            <element signature="e#853#854#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -363,7 +507,115 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#243#244#0" expanded="false" />
+            <element signature="e#271#272#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TapCorder/app/src/main/java/com/example/osm/appdesign21/SplashActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TapCorder/app/src/main/java/com/example/osm/appdesign21/TimeItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TapCorder_arduino/TapCorder_arduino.ino">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TapCorder_arduino/TapCorder_arduino.ino">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TapCorder/app/src/main/java/com/example/osm/appdesign21/AdapterItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#248#249#0" expanded="false" />
+            <element signature="e#280#281#0" expanded="false" />
+            <element signature="e#479#480#0" expanded="false" />
+            <element signature="e#511#512#0" expanded="false" />
+            <element signature="e#1772#1773#0" expanded="false" />
+            <element signature="e#1799#1800#0" expanded="false" />
+            <element signature="e#1842#1843#0" expanded="false" />
+            <element signature="e#1912#1913#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TapCorder/app/src/main/java/com/example/osm/appdesign21/PhoneBook.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#603#604#0" expanded="false" />
+            <element signature="e#634#635#0" expanded="false" />
+            <element signature="e#664#665#0" expanded="false" />
+            <element signature="e#692#693#0" expanded="false" />
+            <element signature="e#723#724#0" expanded="false" />
+            <element signature="e#752#753#0" expanded="false" />
+            <element signature="e#783#784#0" expanded="false" />
+            <element signature="e#812#813#0" expanded="false" />
+            <element signature="e#858#859#0" expanded="false" />
+            <element signature="e#898#899#0" expanded="false" />
+            <element signature="e#938#939#0" expanded="false" />
+            <element signature="e#972#973#0" expanded="false" />
+            <element signature="e#1014#1015#0" expanded="false" />
+            <element signature="e#1050#1051#0" expanded="false" />
+            <element signature="e#1092#1093#0" expanded="false" />
+            <element signature="e#1128#1129#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TapCorder/app/src/main/java/com/example/osm/appdesign21/PhoneBookAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#629#630#0" expanded="false" />
+            <element signature="e#673#674#0" expanded="false" />
+            <element signature="e#726#727#0" expanded="false" />
+            <element signature="e#773#774#0" expanded="false" />
+            <element signature="e#826#827#0" expanded="false" />
+            <element signature="e#853#854#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TapCorder/app/src/main/java/com/example/osm/appdesign21/SharedPreferences.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#243#244#0" expanded="false" />
+            <element signature="e#271#272#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -381,12 +633,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.19723183">
           <caret line="11" column="5" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
-          <folding>
-            <element signature="e#115#116#0" expanded="false" />
-            <element signature="e#142#143#0" expanded="false" />
-            <element signature="e#341#342#0" expanded="false" />
-            <element signature="e#373#374#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
