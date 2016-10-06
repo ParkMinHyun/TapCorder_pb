@@ -45,16 +45,12 @@ public class TabFragment2 extends Fragment {
 
     private MapView mapView;
     private GoogleMap gMap;
-    private Marker mPoliceMarker;
-    private Marker mPoliceMarker2;
-    private Marker mUserMarker;
     private LatLng mCurrent_Location;
 
     private View inflatedView;
     public TextView mDistance;
     public TextView mPoliceOffice_name;
     public Button mCall_btn;
-    //btn=(Button)inflatedView.findViewById(R.id.)
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -101,17 +97,15 @@ public class TabFragment2 extends Fragment {
                 new LatLng(mCurrent_Location.latitude, mCurrent_Location.longitude), 15));
 
         LatLng short_policeStation = new LatLng(37.546618,127.071346);
-        mPoliceMarker = gMap.addMarker(new MarkerOptions().position(short_policeStation)
-                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("policeoffice",130,130))));
-        mPoliceMarker2 = gMap.addMarker(new MarkerOptions().position(new LatLng(37.560487,127.081460))
-                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("policeoffice",150,150))));
-        mUserMarker = gMap.addMarker(new MarkerOptions().position(mCurrent_Location)
-                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("userin",140,170))));
+        Marker mPoliceMarker = gMap.addMarker(new MarkerOptions().position(short_policeStation)
+                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("policeoffice", 130, 130))));
+        Marker mUserMarker = gMap.addMarker(new MarkerOptions().position(mCurrent_Location)
+                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("userin", 140, 170))));
 
         String strNumber = String.format("%.1f", CalculationByDistance(short_policeStation,mCurrent_Location)*1000);
 
         mDistance.setText("약 : " + strNumber + "M ");
-        mPoliceOffice_name.setText(" 서울 광진 경찰서" + "\n    화양 지구대" );
+        mPoliceOffice_name.setText(" 서울 광진 경찰서 화양 지구대" );
         //mPoliceOffice_name.setText(mSpot_array.get(0).get_name());
 
         checkDangerousPermissions();
@@ -171,7 +165,7 @@ public class TabFragment2 extends Fragment {
         return mCurrent_Location;
     }
 
-    // taxi 이미지 줄여주는 메소드
+    // 이미지 줄여주는 메소드
     public Bitmap resizeMapIcons(String iconName, int width, int height){
         Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(),getResources().getIdentifier(iconName, "drawable",
                 this.getActivity().getPackageName()));
