@@ -4,12 +4,70 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Tab 1"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
 
+
+    <!--음성파일목록RecyclerView-->
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/title_top_btm"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:drawableLeft="@drawable/tap32"
+            android:gravity="fill_horizontal|center_vertical"
+            android:text="  음성파일 목록"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp" />
+    </RelativeLayout>
+
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/mainmenu"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:foreground="@drawable/shadow_window_dim" >
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="50dp"
+            tools:context=".MainActivity"
+            android:foreground="@drawable/shadow_window_dim"
+            >
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/mTimeRecyclerView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#CAC0E4"
+                android:scrollbars="vertical" />
+        </RelativeLayout>
+    </FrameLayout>
+
+    <!--연락망버튼-->
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_phoneaddr"
+        style="@style/FabPhoneAddr_Style"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="100dp"
+        android:layout_marginRight="25dp" />
+    <!--설정버튼-->
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_settings"
+        style="@style/FabSettings_Style"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="25dp" />
 </RelativeLayout>
+
+
+
