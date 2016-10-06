@@ -11,6 +11,7 @@ import android.widget.TextView;
 public class SplashActivity extends Activity {
 
     private TextView teamTitle;
+    SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,14 +19,31 @@ public class SplashActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
 
+        pref = new SharedPreferences(this);
+        pref.removeAllPreferences("mode");
+
         Handler hd = new Handler();
         hd.postDelayed(new Runnable() {
 
             @Override
             public void run() {
-                Intent intent = new Intent(SplashActivity.this, NewMainActivity.class);
-                SplashActivity.this.startActivity(intent);
-                finish();       // 3 초후 이미지를 닫아버림
+                switch(pref.getValue("mode", "no", "mode")){
+                    case "protector":
+                        Intent intent_protector = new Intent(SplashActivity.this, NewMainActivity.class);
+                        SplashActivity.this.startActivity(intent_protector);
+                        finish();       // 3 초후 이미지를 닫아버림
+                        break;
+                    case "disabled":
+                        Intent intent_disabled = new Intent(SplashActivity.this, MainActivity.class);
+                        SplashActivity.this.startActivity(intent_disabled);
+                        finish();       // 3 초후 이미지를 닫아버림
+                        break;
+                    default:
+                        Intent intent = new Intent(SplashActivity.this, SelectModeActivity.class);
+                        SplashActivity.this.startActivity(intent);
+                        finish();       // 3 초후 이미지를 닫아버림
+                        break;
+                }
             }
         }, 2000);
 
