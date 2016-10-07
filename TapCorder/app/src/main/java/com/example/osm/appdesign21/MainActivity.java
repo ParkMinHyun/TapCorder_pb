@@ -489,7 +489,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mRecorder.setOutputFormat(MediaRecorder.OutputFormat.RAW_AMR);
             mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-            mRecorder.setOutputFile(mFilePath+"음성녹음 "+newRecordNum+".amr"); //newRecordFile명의 음성파일에 음성 녹음.
+            mRecorder.setOutputFile(mFilePath+"recordFile"+newRecordNum+".amr"); //newRecordFile명의 음성파일에 음성 녹음.
 
             mRecorder.prepare();
             mRecorder.start();
