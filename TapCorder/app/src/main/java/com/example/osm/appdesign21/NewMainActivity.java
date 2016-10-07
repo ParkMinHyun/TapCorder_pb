@@ -23,7 +23,7 @@ public class NewMainActivity extends AppCompatActivity {
         if(pref.getValue("disablePnum", "no", "disablePnum").equals("no")){
             startActivity(new Intent(NewMainActivity.this, Pop.class));
         } else{
-            new DownloadTask(pref.getValue("disablePnum","download","disalbePnum")).execute();
+            new DownloadTask(pref.getValue("disablePnum","files","disablePnum"), this).execute();
         }
     }
 

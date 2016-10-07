@@ -43,7 +43,7 @@ public class Pop extends AppCompatActivity {
                     Toast.makeText(Pop.this, "올바르지 않은 번호입니다.",Toast.LENGTH_SHORT).show();
                 }else{
                     pref.putValue("disablePnum",mPhoneNum,"disablePnum");
-                    new DownloadTask(pref.getValue("disablePnum","download","disalbePnum")).execute();
+                    new DownloadTask(pref.getValue("disablePnum","files","disablePnum"), Pop.this).execute();
                     mPutNumView_Fragment.setText(mPhoneNum);
                     finish();
                 }
