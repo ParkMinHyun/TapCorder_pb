@@ -18,6 +18,12 @@ import java.io.OutputStream;
 public class DownloadTask extends AsyncTask<Void, Void, Void> {
 
     final static String TAG = "DownloadTask";
+    private String mfileName;
+    SharedPreferences pref;
+
+    public DownloadTask(String pNum){
+        mfileName = pNum;
+    }
 
     @Override
     protected void onPreExecute() {
@@ -36,7 +42,7 @@ public class DownloadTask extends AsyncTask<Void, Void, Void> {
 
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE); // 파일형식 바이너리 타입
             ftpClient.enterLocalPassiveMode(); // 패시브 모드로 접속
-            File downloadFile = new File("/storage/emulated/0/download/audio1m.wma"); // 저장할 파일 이름(local file 형식으로 된 저장할 위치)
+            File downloadFile = new File("/storage/emulated/0/" + pref.getValue("disablePnum", "download", "disablePnum") +"/"+ mfileName); // 저장할 파일 이름(local file 형식으로 된 저장할 위치)
             File parentDir = downloadFile.getParentFile();
             if(!parentDir.exists()){
                 parentDir.mkdir();
@@ -44,7 +50,7 @@ public class DownloadTask extends AsyncTask<Void, Void, Void> {
             OutputStream outputStream = null;
             try{
                 outputStream = new BufferedOutputStream(new FileOutputStream(downloadFile)); // 파일 담기
-                ftpClient.retrieveFile("/home/pi/files/audio1m.wma", outputStream); // 서버로부터 파일 저장(서버 파일 경로, outputStream)
+                ftpClient.retrieveFile("/home/pi/" + pref.getValue("disablePnum", "download", "disablePnum") + "/" + mfileName, outputStream); // 서버로부터 파일 저장(서버 파일 경로, outputStream)
             } catch (IOException e){
                 e.printStackTrace();
             }finally {

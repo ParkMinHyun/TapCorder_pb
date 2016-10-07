@@ -1,5 +1,6 @@
 package com.example.osm.appdesign21;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 public class NewMainActivity extends AppCompatActivity {
 
     private static String TAG = "NewMainActivity";
+    SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +19,12 @@ public class NewMainActivity extends AppCompatActivity {
 
         init_layout();
 
+        pref = new SharedPreferences(this);
+        if(pref.getValue("disablePnum", "no", "disablePnum").equals("no")){
+            startActivity(new Intent(NewMainActivity.this, Pop.class));
+        } else{
+            new DownloadTask(pref.getValue("disablePnum","download","disalbePnum")).execute();
+        }
     }
 
     public void init_layout()

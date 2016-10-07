@@ -1,8 +1,10 @@
 package com.example.osm.appdesign21;
 
+import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -34,6 +36,9 @@ public class SelectModeActivity extends AppCompatActivity {
         mDisabledLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                TelephonyManager tMgr = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+                String mPhoneNumber = tMgr.getLine1Number();
+                pref.putValue("fpnum",mPhoneNumber,"fpnum");
                 pref.putValue("mode", "disabled", "mode");
                 Intent intent = new Intent(SelectModeActivity.this, MainActivity.class);
                 SelectModeActivity.this.startActivity(intent);

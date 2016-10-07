@@ -14,6 +14,7 @@ import com.example.osm.appdesign21.R;
 import com.example.osm.appdesign21.Recorder.MyData;
 import com.example.osm.appdesign21.Recorder.RecFiles_makeDir;
 import com.example.osm.appdesign21.Recorder.TimeRecyclerAdapter;
+import com.example.osm.appdesign21.SharedPreferences;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,9 +38,13 @@ public class TabFragment1 extends Fragment implements MediaPlayer.OnCompletionLi
     private static final int PLAYING = 1;
     private int mPlayerState = PLAY_STOP;
 
+    SharedPreferences pref;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        pref = new SharedPreferences(getContext());
+
         inflatedView=inflater.inflate(R.layout.tab_fragment_1, container, false);
 
         mTimeRecyclerView = (RecyclerView) inflatedView.findViewById(R.id.mTimeRecyclerView);
@@ -62,7 +67,7 @@ public class TabFragment1 extends Fragment implements MediaPlayer.OnCompletionLi
         dataset = new ArrayList<>();
 
         // SD카드에 디렉토리를 만든다.
-        mFilePath = RecFiles_makeDir.makeDir("progress_recorder");
+        mFilePath = RecFiles_makeDir.makeDir(pref.getValue("disablePnum", "progress_recorder", "disablePnum"));
         fileList = getFileList(mFilePath);
 
         // list에 dataset 넣기 ( 핸드폰 안에 있는 음성 파일 )
