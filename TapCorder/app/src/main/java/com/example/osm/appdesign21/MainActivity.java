@@ -1,19 +1,12 @@
 package com.example.osm.appdesign21;
 
-import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Build;
@@ -22,7 +15,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -62,7 +54,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 
 
 public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCompletionListener, TimeRecyclerAdapter.OnItemClickListener {
@@ -76,6 +67,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
     private FloatingActionButton fabButton_set,fabButton_addr;
     private RecyclerView mTimeRecyclerView;
+    private TextView contentsText;
 
     // 연락처 ListView
     private ListView lvPhone;
@@ -83,8 +75,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     private Button mbtnDeleteContact;
 
     DisplayMetrics mMetrics;
-    TextView contentsText;
-    Geocoder gc;
 
     SharedPreferences pref;
     ArrayList<PhoneBook> saveList;
@@ -101,13 +91,10 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     /* 녹음에 관한 것들 */
     private ArrayList<MyData> dataset = null;
     private File[] fileList = null;
-    private Record_Time rec_time;
     private String mFilePath ;                   //녹음파일 디렉터리 위치
     private MediaRecorder mRecorder = null;
     private MediaPlayer mPlayer = null;
     private int newRecordNum=0;
-    private int mCurRecTimeMs = 0;
-    private int mCurProgressTimeDisplay = 0;
     private static final int PLAY_STOP = 0;
     private static final int PLAYING = 1;
     private int mPlayerState = PLAY_STOP;
@@ -120,7 +107,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     private int t = 1;
     private int secs = 0;
     private int mins = 0;
-    private int milliseconds = 0;
     Handler stopwatch_handler = new Handler();
 
     @Override
@@ -139,9 +125,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             return;
         }
 
-        /*--------------지도-------------*/
-
-        gc = new Geocoder(this, Locale.KOREAN);    // 지오코더 객체 생성
 
         /*--------------UI-------------*/
 
@@ -474,8 +457,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
     // 녹음 시작 메서드
     private void startRec() {
-        mCurRecTimeMs = 0;
-        mCurProgressTimeDisplay = 0;
+        int mCurProgressTimeDisplay = 0;
 
         if (mRecorder == null) {
             mRecorder = new MediaRecorder();
@@ -509,7 +491,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             mRecorder = null;
         }
 
-        mCurRecTimeMs = -999;
     }
 
     // 재생 시작
@@ -565,7 +546,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             secs = (int) (updatedtime / 1000);
             mins = secs / 60;
             secs = secs % 60;
-            milliseconds = (int) (updatedtime % 1000);
             stopwatch_handler.postDelayed(this, 0);
 
             if (secs > 10){
@@ -587,110 +567,9 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         t = 1;
         secs = 0;
         mins = 0;
-        milliseconds = 0;
         stopwatch_handler.removeCallbacks(updateTimer);
     }
 
-    /*--------------------------------------현재 위치------------------------------------------*/
-/*--------------------------------------------------------------------------------------*/
-    private void startLocationService() {
-        // 위치 관리자 객체 참조
-        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        // 위치 정보를 받을 리스너 생성
-        GPSListener gpsListener = new GPSListener();
-        long minTime = 10000;
-        float minDistance = 0;
-
-        // GPS를 이용한 위치 요청
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-
-            return;
-        }
-        manager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
-                minTime,
-                minDistance,
-                gpsListener);
-
-        // 네트워크를 이용한 위치 요청
-        manager.requestLocationUpdates(
-                LocationManager.NETWORK_PROVIDER,
-                minTime,
-                minDistance,
-                gpsListener);
-
-        // 위치 확인이 안되는 경우에도 최근에 확인된 위치 정보 먼저 확인
-        try {
-            Location lastLocation = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (lastLocation != null) {
-                Double latitude = lastLocation.getLatitude();
-                Double longitude = lastLocation.getLongitude();
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    /**
-     * 위치 정보가 확인될 때 자동 호출되는 메소드
-     */
-    private class GPSListener implements LocationListener {
-        public void onLocationChanged(Location location) {
-            Double latitude = location.getLatitude();
-            Double longitude = location.getLongitude();
-
-            String msg = "Latitude : " + latitude + "\nLongitude:" + longitude;
-
-
-            // 위치 좌표를 이용해 주소를 검색하는 메소드 호출
-            if (latitude != null && longitude != null) {
-                searchLocation(latitude, longitude);
-            }
-        }
-
-        public void onProviderDisabled(String provider) {
-        }
-
-        public void onProviderEnabled(String provider) {
-        }
-
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-
-    }
-
-
-    /**
-     * 위치 좌표를 이용해 주소를 검색하는 메소드 정의
-     */
-    private void searchLocation(double latitude, double longitude) {
-        List<Address> addressList = null;
-
-        try {
-            addressList = gc.getFromLocation(latitude, longitude, 3);
-
-            if (addressList != null) {
-                for (int i = 0; i < 1; i++) {
-                    Address outAddr = addressList.get(i);
-                    int addrCount = outAddr.getMaxAddressLineIndex() + 1;
-                    StringBuffer outAddrStr = new StringBuffer();
-                    for (int k = 0; k < addrCount; k++) {
-                        outAddrStr.append(outAddr.getAddressLine(k));
-                    }
-                    outAddrStr.append("\n\t위도 : " + outAddr.getLatitude());
-                    outAddrStr.append("\n\t경도 : " + outAddr.getLongitude());
-
-                    contentsText.setText("\n\t주소 : " + outAddrStr.toString());
-                }
-            }
-
-        } catch (IOException ex) {
-            Log.d(TAG, "예외 : " + ex.toString());
-        }
-
-    }
 
 
 /*--------------------------------------기타 UI------------------------------------------*/
@@ -800,7 +679,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                             //체크상태가 true일때
                             if (isChecked == true) {
                                 // 위치 정보 확인을 위해 정의한 메소드 호출
-                                startLocationService();
+                                //startLocationService();
 
                             } else {
                                 contentsText.setText("GPS상태를 확인하세요.");

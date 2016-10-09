@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.osm.appdesign21.R;
 
@@ -23,7 +22,8 @@ public class TabFragment3 extends Fragment {
         @Override
         public void onReceive(Context ctxt, Intent intent) {
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-            Toast.makeText(getContext(),String.valueOf(level) + "%",Toast.LENGTH_SHORT).show();
+            textView.setText(String.valueOf(level) + "%");
+            //Toast.makeText(getContext(),String.valueOf(level) + "%",Toast.LENGTH_SHORT).show();
         }
     };
 
