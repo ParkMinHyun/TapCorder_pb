@@ -7,8 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,6 +50,10 @@ import com.example.osm.appdesign21.Recorder.MyData;
 import com.example.osm.appdesign21.Recorder.RecFiles_makeDir;
 import com.example.osm.appdesign21.Recorder.Record_Time;
 import com.example.osm.appdesign21.Recorder.TimeRecyclerAdapter;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,13 +67,19 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCompletionListener, TimeRecyclerAdapter.OnItemClickListener {
 
     private static String TAG = "MainActivity";
+
+    private GPSListener gpsListener;
+    private double userLatitude;
+    private double userLongitude;
+    private LatLng userCurrentLatlng;
+
     private TimeRecyclerAdapter adapter;
     private PopupWindow pwindo;
     private Button btnClosePopup;
     private int mWidthPixels, mHeightPixels;
     private RadioButton option1, option2, option3;
 
-    private FloatingActionButton fabButton_set,fabButton_addr;
+    private FloatingActionButton fabButton_set, fabButton_addr;
     private RecyclerView mTimeRecyclerView;
     private TextView contentsText;
 
@@ -81,7 +95,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     FrameLayout layout_MainMenu;
 
     /* 블루투스에 관한 것들 */
-    private  boolean first_start = false;
+    private boolean first_start = false;
     private String mConnectedDeviceName = null;               // 연결된 디바이스의 이름
     private ArrayAdapter<String> mConversationArrayAdapter;   // thread 소통을 위한 ArrayAdapter
     private StringBuffer mOutStringBuffer;                    // 송신을 위한 outGoing StringBuffer
@@ -91,10 +105,10 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     /* 녹음에 관한 것들 */
     private ArrayList<MyData> dataset = null;
     private File[] fileList = null;
-    private String mFilePath ;                   //녹음파일 디렉터리 위치
+    private String mFilePath;                   //녹음파일 디렉터리 위치
     private MediaRecorder mRecorder = null;
     private MediaPlayer mPlayer = null;
-    private int newRecordNum=0;
+    private int newRecordNum = 0;
     private static final int PLAY_STOP = 0;
     private static final int PLAYING = 1;
     private int mPlayerState = PLAY_STOP;
@@ -108,6 +122,11 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     private int secs = 0;
     private int mins = 0;
     Handler stopwatch_handler = new Handler();
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,11 +144,10 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             return;
         }
 
-
         /*--------------UI-------------*/
 
-        fabButton_set =(FloatingActionButton)findViewById(R.id.fab_settings);
-        fabButton_addr=(FloatingActionButton)findViewById(R.id.fab_phoneaddr);
+        fabButton_set = (FloatingActionButton) findViewById(R.id.fab_settings);
+        fabButton_addr = (FloatingActionButton) findViewById(R.id.fab_phoneaddr);
         initFab();//FloatingButton Click에 따른 메서드
 
         mTimeRecyclerView = (RecyclerView) findViewById(R.id.mTimeRecyclerView);
@@ -174,21 +192,30 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         String name;
         String phoneNumber;
         pref = new SharedPreferences(this);
-        for(int i = 0; i < 5; i++){
+        for (int i = 0; i < 5; i++) {
             name = pref.getValue(Integer.toString(i), "no", "name");
             phoneNumber = pref.getValue(Integer.toString(i), "no", "phoneNum");
-            if(!name.equals("no")){
+            if (!name.equals("no")) {
                 saveList.add(new PhoneBook(name, phoneNumber));
             }
         }
         layout_MainMenu = (FrameLayout) findViewById(R.id.mainmenu);
-        layout_MainMenu.getForeground().setAlpha( 0);
+        layout_MainMenu.getForeground().setAlpha(0);
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+        // 위치확인 시작~
+        startLocationService();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        if(Bluetooth_MagicNumber.D) Log.e(TAG, "++ ON START ++");
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        if (Bluetooth_MagicNumber.D) Log.e(TAG, "++ ON START ++");
 
         // 블루투스 아답터 연동시키기
         if (!mBluetoothAdapter.isEnabled()) {
@@ -199,23 +226,52 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         }
 
         // onStart에서 블루투스 자동 커넥 시키기
-        if ( first_start == false)
-        {
+        if (first_start == false) {
             bluetooth_connect();
             first_start = true;
         }
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.example.osm.appdesign21/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if(Bluetooth_MagicNumber.D) Log.e(TAG, "-- ON STOP --");
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.example.osm.appdesign21/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        if (Bluetooth_MagicNumber.D) Log.e(TAG, "-- ON STOP --");
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.disconnect();
     }
 
     @Override
     public synchronized void onResume() {
         super.onResume();
-        if(Bluetooth_MagicNumber.D) Log.e(TAG, "+ ON RESUME +");
+        if (Bluetooth_MagicNumber.D) Log.e(TAG, "+ ON RESUME +");
 
         if (mChatService != null) {
             // 이미 mChatService를 받았는지 안 받았는지 체크
@@ -225,10 +281,11 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             }
         }
     }
+
     @Override
     public synchronized void onPause() {
         super.onPause();
-        if(Bluetooth_MagicNumber.D) Log.e(TAG, "- ON PAUSE -");
+        if (Bluetooth_MagicNumber.D) Log.e(TAG, "- ON PAUSE -");
     }
 
     @Override
@@ -236,7 +293,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         super.onDestroy();
         // 블루투스챗서비스 종료
         if (mChatService != null) mChatService.stop();
-        if(Bluetooth_MagicNumber.D) Log.e(TAG, "--- ON DESTROY ---");
+        if (Bluetooth_MagicNumber.D) Log.e(TAG, "--- ON DESTROY ---");
     }
 
 /*--------------------------------------블루투스------------------------------------------*/
@@ -254,8 +311,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     }
 
     // 블루투스 커넥
-    public void bluetooth_connect()
-    {
+    public void bluetooth_connect() {
         String address = "00:14:03:05:CC:3E";
         // 블루투스 디바이스 얻기
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
@@ -291,7 +347,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case Bluetooth_MagicNumber.MESSAGE_STATE_CHANGE:
-                    if(Bluetooth_MagicNumber.D) Log.i(TAG, "MESSAGE_BCSTATE_CHANGE: " + msg.arg1);
+                    if (Bluetooth_MagicNumber.D) Log.i(TAG, "MESSAGE_BCSTATE_CHANGE: " + msg.arg1);
                     switch (msg.arg1) {
                         case Bluetooth_MagicNumber.BCSTATE_CONNECTED:
                             setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
@@ -318,10 +374,9 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     byte[] readBuf = (byte[]) msg.obj;
 
                     String readMessage = new String(readBuf, 0, msg.arg1);        // 블루투스값 읽기
-                    mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
-                    Toast.makeText(getApplicationContext(),readMessage,Toast.LENGTH_LONG).show();
-                    if(readMessage.equals("R"))
-                    {
+                    mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
+                    Toast.makeText(getApplicationContext(), readMessage, Toast.LENGTH_LONG).show();
+                    if (readMessage.equals("R")) {
                         startRec();
                         adapter = new TimeRecyclerAdapter(getDataset());
                         adapter.setOnItemClickListener(MainActivity.this);        // 녹음 시작시 파일 RecyclerView에 추가하기.
@@ -348,7 +403,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     };
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(Bluetooth_MagicNumber.D) Log.d(TAG, "onActivityResult " + resultCode);
+        if (Bluetooth_MagicNumber.D) Log.d(TAG, "onActivityResult " + resultCode);
         switch (requestCode) {
             case Bluetooth_MagicNumber.REQUEST_CONNECT_DEVICE_SECURE:
                 // 디바이스와 커넥이 됬을 경우
@@ -398,8 +453,8 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         fileList = getFileList(mFilePath);
 
         // list에 dataset 넣기 ( 핸드폰 안에 있는 음성 파일 )
-        for(int i=0; i < fileList.length; i++)
-            insertRecFile(i,fileList,dataset);
+        for (int i = 0; i < fileList.length; i++)
+            insertRecFile(i, fileList, dataset);
 
 
         newRecordNum = fileList.length + 1;
@@ -407,13 +462,12 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     }
 
     /* SD카드 경로에 있는 음성파일 TapCorder List에 시간 및 날짜별로 정리한 뒤 넣기 */
-    private void insertRecFile(int order, File[] fileList_copy, ArrayList<MyData> dataset_copy)
-    {
-        Date lastModifiedDate=new Date(fileList_copy[order].lastModified());
+    private void insertRecFile(int order, File[] fileList_copy, ArrayList<MyData> dataset_copy) {
+        Date lastModifiedDate = new Date(fileList_copy[order].lastModified());
         Calendar lastModifiedCalendar = new GregorianCalendar();
         lastModifiedCalendar.setTime(lastModifiedDate);
 
-        dataset_copy.add(new MyData(fileList_copy[order].getName(),lastModifiedCalendar.get(Calendar.YEAR),
+        dataset_copy.add(new MyData(fileList_copy[order].getName(), lastModifiedCalendar.get(Calendar.YEAR),
                 lastModifiedCalendar.get(Calendar.MONTH),
                 lastModifiedCalendar.get(Calendar.DAY_OF_MONTH),
                 lastModifiedCalendar.get(Calendar.HOUR_OF_DAY),
@@ -471,7 +525,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mRecorder.setOutputFormat(MediaRecorder.OutputFormat.RAW_AMR);
             mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-            mRecorder.setOutputFile(mFilePath+"recordFile"+newRecordNum+".amr"); //newRecordFile명의 음성파일에 음성 녹음.
+            mRecorder.setOutputFile(mFilePath + "recordFile" + newRecordNum + ".amr"); //newRecordFile명의 음성파일에 음성 녹음.
 
             mRecorder.prepare();
             mRecorder.start();
@@ -548,9 +602,9 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             secs = secs % 60;
             stopwatch_handler.postDelayed(this, 0);
 
-            if (secs > 10){
+            if (secs > 10) {
                 stopRec();
-                Toast.makeText(getApplicationContext(),"녹음 완료",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "녹음 완료", Toast.LENGTH_SHORT).show();
                 initStopWatch();
             }
         }
@@ -558,8 +612,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     };
 
     /* 스탑워치 reset */
-    private void initStopWatch()
-    {
+    private void initStopWatch() {
         starttime = 0L;
         timeInMilliseconds = 0L;
         timeSwapBuff = 0L;
@@ -580,13 +633,11 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
         public void onClick(View v) {
 
-            if (option1.isChecked()){
+            if (option1.isChecked()) {
                 sendMessage(String.valueOf(Record_Time.REC_TIME1));
-            }
-            else if (option2.isChecked()){
+            } else if (option2.isChecked()) {
                 sendMessage(String.valueOf(Record_Time.REC_TIME2));
-            }
-            else{
+            } else {
                 sendMessage(String.valueOf(Record_Time.REC_TIME3));
             }
         }
@@ -600,7 +651,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             Animation btnAnimOff = AnimationUtils.loadAnimation(MainActivity.this, R.anim.set_anim_off);
             fabButton_set.startAnimation(btnAnimOff);
             fabButton_addr.startAnimation(btnAnimOff);
-            layout_MainMenu.getForeground().setAlpha( 0); // restore
+            layout_MainMenu.getForeground().setAlpha(0); // restore
         }
     };
     private View.OnClickListener cancel_addrbutton_click_listener = new View.OnClickListener() {
@@ -610,7 +661,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             Animation btnAnimOff = AnimationUtils.loadAnimation(MainActivity.this, R.anim.addr_anim_off);
             fabButton_addr.startAnimation(btnAnimOff);
             fabButton_set.startAnimation(btnAnimOff);
-            layout_MainMenu.getForeground().setAlpha( 0); // restore
+            layout_MainMenu.getForeground().setAlpha(0); // restore
         }
     };
 
@@ -657,7 +708,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     pwindo.showAtLocation(layout, Gravity.CENTER, 0, 0);
 
                     // 뒷배경은 흐리게
-                    layout_MainMenu.getForeground().setAlpha( 100);
+                    layout_MainMenu.getForeground().setAlpha(100);
                     btnClosePopup = (Button) layout.findViewById(R.id.closebtn_popup_0);
                     btnClosePopup.setOnClickListener(cancel_setbutton_click_listener);
 
@@ -690,15 +741,15 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
                 case 1:
                     View layout1 = inflater.inflate(R.layout.phonebook_list,
-                            (ViewGroup)findViewById(R.id.popup_layout_1));
+                            (ViewGroup) findViewById(R.id.popup_layout_1));
                     pwindo = new PopupWindow(layout1, mWidthPixels - 100, mHeightPixels - 320, true);
                     pwindo.showAtLocation(layout1, Gravity.CENTER, 0, 0);
                     // 뒷배경은 흐리게
-                    layout_MainMenu.getForeground().setAlpha( 100);
-                    lvPhone = (ListView)layout1.findViewById(R.id.listPhone);
+                    layout_MainMenu.getForeground().setAlpha(100);
+                    lvPhone = (ListView) layout1.findViewById(R.id.listPhone);
 
                     final List<PhoneBook> listPhoneBook = new ArrayList<PhoneBook>();
-                    for(int i = 0; i < saveList.size() ; i++){
+                    for (int i = 0; i < saveList.size(); i++) {
                         listPhoneBook.add(new PhoneBook(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher),
                                 saveList.get(i).getmName(), saveList.get(i).getmPhone(), ""));
                     }
@@ -737,4 +788,75 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         }
     }
 
+
+
+/*------------------------------------- GPS   ------------------------------------------*/
+/*--------------------------------------------------------------------------------------*/
+    /**
+     * 위치 정보 확인을 위해 정의한 메소드
+     */
+    private void startLocationService() {
+        // 위치 관리자 객체 참조
+        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        // 위치 정보를 받을 리스너 생성
+        gpsListener = new GPSListener();
+        long minTime = 1000;
+        float minDistance = 0;
+
+        try {
+            // GPS를 이용한 위치 요청
+            manager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    minTime,
+                    minDistance,
+                    gpsListener);
+
+            // 네트워크를 이용한 위치 요청
+            manager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER,
+                    minTime,
+                    minDistance,
+                    gpsListener);
+
+            // 위치 확인이 안되는 경우에도 최근에 확인된 위치 정보 먼저 확인
+            Location lastLocation = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (lastLocation != null) {
+                Double latitude = lastLocation.getLatitude();
+                Double longitude = lastLocation.getLongitude();
+
+                // Toast.makeText(getApplicationContext(), "Last Known Location : " + "Latitude : " + latitude + "\nLongitude:" + longitude, Toast.LENGTH_LONG).show();
+            }
+        } catch (SecurityException ex) {
+            ex.printStackTrace();
+        }
+
+        Toast.makeText(getApplicationContext(), "위치 확인이 시작되었습니다. 로그를 확인하세요.", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 리스너 클래스 정의
+     */
+    private class GPSListener implements LocationListener {
+        /**
+         * 위치 정보가 확인될 때 자동 호출되는 메소드
+         */
+        public void onLocationChanged(Location location) {
+            userLatitude = location.getLatitude();
+            userLongitude = location.getLongitude();
+
+            userCurrentLatlng = new LatLng(userLatitude,userLongitude);
+
+            Toast.makeText(getApplication(),userLatitude +" " + userLongitude ,Toast.LENGTH_SHORT).show();
+        }
+
+        public void onProviderDisabled(String provider) {
+        }
+
+        public void onProviderEnabled(String provider) {
+        }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+    }
 }

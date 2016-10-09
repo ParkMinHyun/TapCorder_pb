@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.example.osm.appdesign21.DB_Excel.SpotData;
 import com.example.osm.appdesign21.DB_Excel.SpotsDbAdapter;
-import com.example.osm.appdesign21.Map.GPSTracker;
 import com.example.osm.appdesign21.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,7 +38,6 @@ import jxl.Workbook;
 
 public class TabFragment2 extends Fragment {
 
-    private GPSTracker mGpsTracker;
     private SpotsDbAdapter mSpotDbAdapter;
     private List<SpotData> mSpot_array;
 
@@ -70,7 +68,6 @@ public class TabFragment2 extends Fragment {
 
     public void init_Property(View view) {
         this.mSpotDbAdapter = new SpotsDbAdapter(this.getActivity());
-        this.mGpsTracker = new GPSTracker(this.getContext());
         this.mSpot_array = new ArrayList<>();
 
         this.mDistance = (TextView)view.findViewById(R.id.between_distance);
@@ -91,16 +88,20 @@ public class TabFragment2 extends Fragment {
         gMap = mapView.getMap();
         gMap.getUiSettings().setMyLocationButtonEnabled(false);
 
-        mCurrent_Location = currentMyLocation();
-        // 해당 위경도로 카메라 이동!
+        // User 현재 위치
+        mCurrent_Location = new LatLng(37.551824, 127.074007);
+        // 해당 위경도로 카메라 이동! --> 나중엔 서버에서 사용자 현재위치 받아서 위, 경도값 넣어줘~
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                new LatLng(mCurrent_Location.latitude, mCurrent_Location.longitude), 15));
+                mCurrent_Location, 15));
 
-        LatLng short_policeStation = new LatLng(37.546618,127.071346);
-        Marker mPoliceMarker = gMap.addMarker(new MarkerOptions().position(short_policeStation)
-                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("policeoffice", 130, 130))));
+        // 이 사용자 현재 위치도 바꿔줘야해!!
         Marker mUserMarker = gMap.addMarker(new MarkerOptions().position(mCurrent_Location)
                 .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("userin", 140, 170))));
+
+        LatLng short_policeStation = new LatLng(37.546757, 127.071366);
+        Marker mPoliceMarker = gMap.addMarker(new MarkerOptions().position(short_policeStation)
+                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("policeoffice", 130, 130))));
+
 
         String strNumber = String.format("%.1f", CalculationByDistance(short_policeStation,mCurrent_Location)*1000);
 
@@ -154,6 +155,7 @@ public class TabFragment2 extends Fragment {
         mapView.onLowMemory();
     }
 
+    /* 현재 위치 받는 method
     public LatLng currentMyLocation() {
 
         // gpsTracker를 이용해 현재 위치를 받기
@@ -164,7 +166,7 @@ public class TabFragment2 extends Fragment {
         }
         return mCurrent_Location;
     }
-
+*/
     // 이미지 줄여주는 메소드
     public Bitmap resizeMapIcons(String iconName, int width, int height){
         Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(),getResources().getIdentifier(iconName, "drawable",
@@ -259,6 +261,7 @@ public class TabFragment2 extends Fragment {
         }
     }
 
+    /* 나중엔 JSON  파싱으로 네이버 지도에서 두 지점간의 거리를 정확하게 받아오는걸로 바꿀거임 */
     public double CalculationByDistance(LatLng StartP, LatLng EndP) {
         int Radius = 6371;// radius of earth in Km
         double lat1 = StartP.latitude;
