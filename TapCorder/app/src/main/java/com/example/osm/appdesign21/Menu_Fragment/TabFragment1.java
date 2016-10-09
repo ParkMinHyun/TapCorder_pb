@@ -81,6 +81,22 @@ public class TabFragment1 extends Fragment implements MediaPlayer.OnCompletionLi
     public void onItemClick(int position) {
         mBtnStartPlayOnClick(adapter.getItem(position).getName());
     }
+
+    @Override
+    public boolean canPause() {
+        return false;
+    }
+
+    @Override
+    public boolean canSeekBackward() {
+        return false;
+    }
+
+    @Override
+    public boolean canseekForward() {
+        return false;
+    }
+
     public void onCompletion(MediaPlayer mp) {
         mPlayerState = PLAY_STOP; // 재생이 종료됨
     }

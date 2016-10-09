@@ -1,6 +1,7 @@
 package com.example.osm.appdesign21;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -14,6 +15,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Build;
@@ -23,7 +25,6 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -31,6 +32,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -41,8 +43,11 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.MediaController;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,11 +70,19 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCompletionListener, TimeRecyclerAdapter.OnItemClickListener {
+public class MainActivity extends Activity implements MediaPlayer.OnPreparedListener,MediaPlayer.OnCompletionListener, TimeRecyclerAdapter.OnItemClickListener, MediaController.MediaPlayerControl {
+
+    private Button btnStart,btnStop,btnPause;
+    private TextView text;
+    private SeekBar seekBar;
+    public static String FullFilePath;
+    private MediaPlayer mediaPlayer;
+    private MediaController mediaController;
+    private String audioFile;
 
     private static String TAG = "MainActivity";
     private TimeRecyclerAdapter adapter;
-    private PopupWindow pwindo;
+    public static PopupWindow pwindo;
     private Button btnClosePopup;
     private int mWidthPixels, mHeightPixels;
     private RadioButton option1, option2, option3;
@@ -126,6 +139,8 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     /* 업로드에 관한 것들 */
     private int fcnt = 1;
     public Context mContext;
+
+    private long lastTimeBackPresssed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,6 +225,14 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         }
         layout_MainMenu = (FrameLayout) findViewById(R.id.mainmenu);
         layout_MainMenu.getForeground().setAlpha( 0);
+
+        //btnStart = (Button)findViewById(R.id.button);
+        //btnStart.setOnClickListener(new Button.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view) {
+        //        initiatePopupWindow(2);
+        //    }
+        //});
     }
 
     @Override
@@ -345,6 +368,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     byte[] readBuf = (byte[]) msg.obj;
 
                     String readMessage = new String(readBuf, 0, msg.arg1);        // 블루투스값 읽기
+                    
                     mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
                     Toast.makeText(getApplicationContext(),readMessage,Toast.LENGTH_LONG).show();
                     if(readMessage.equals("R"))
@@ -476,6 +500,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         if (mPlayerState == PLAY_STOP) {
             mPlayerState = PLAYING;
             startPlay(mFileName);
+            initiatePopupWindow(2);
         } else if (mPlayerState == PLAYING) {
             mPlayerState = PLAY_STOP;
             stopPlay();
@@ -532,9 +557,9 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
         mPlayer.setOnCompletionListener(this);
 
-        String fullFilePath = mFilePath + mFileName;
+        FullFilePath = mFilePath + mFileName;
         try {
-            mPlayer.setDataSource(fullFilePath);
+            mPlayer.setDataSource(FullFilePath);
             mPlayer.prepare();
 
         } catch (Exception e) {
@@ -542,7 +567,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
         if (mPlayerState == PLAYING) {
             try {
-                mPlayer.start();
+                //mPlayer.start();
             } catch (Exception e) {
             }
         }
@@ -561,6 +586,18 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     }
 
 
+    @Override
+    public void onBackPressed() {
+        if (System.currentTimeMillis() - lastTimeBackPresssed < 1500)
+        {
+            finish();
+            super.onBackPressed();
+        } else {
+
+            Toast.makeText(this, "'뒤로' 버튼을 한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT).show();
+            lastTimeBackPresssed = System.currentTimeMillis();
+        }
+    }
 /*--------------------------------------스탑워치------------------------------------------*/
 /*--------------------------------------------------------------------------------------*/
 
@@ -744,6 +781,17 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             layout_MainMenu.getForeground().setAlpha( 0); // restore
         }
     };
+    private View.OnClickListener cancel_music_click_listener = new View.OnClickListener() {
+
+        public void onClick(View v) {
+            pwindo.dismiss();
+            onStop();
+            Animation btnAnimOff = AnimationUtils.loadAnimation(MainActivity.this, R.anim.set_anim_off);
+            fabButton_set.startAnimation(btnAnimOff);
+            fabButton_addr.startAnimation(btnAnimOff);
+            layout_MainMenu.getForeground().setAlpha( 0); // restore
+        }
+    };
 
     //FloatingActionButton클릭에 따른 반응
     private void initFab() {
@@ -773,7 +821,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     }
 
 
-    private void initiatePopupWindow(int arg2) {
+    public void initiatePopupWindow(int arg2) {
         try {
             //  LayoutInflater 객체와 시킴
             LayoutInflater inflater = (LayoutInflater) MainActivity.this
@@ -862,14 +910,180 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     });
 
                     break;
+                case 2:
+                    View layout2 = inflater.inflate(R.layout.music_player,
+                            (ViewGroup) findViewById(R.id.popup_layout_2));
+                    pwindo = new PopupWindow(layout2, mWidthPixels - 100, mHeightPixels - 320, true);
+
+                    pwindo.showAtLocation(layout2, Gravity.CENTER, 0, 0);
+
+                    // 뒷배경은 흐리게
+                    layout_MainMenu.getForeground().setAlpha( 100);
+                    btnClosePopup = (Button) layout2.findViewById(R.id.closebtn_popup_2);
+                    btnClosePopup.setOnClickListener(cancel_music_click_listener);
+
+                    //seekBar = (SeekBar) findViewById(R.id.seekBar);
+                    //seekBar.setVisibility(SeekBar.VISIBLE);
+                    //seekBar.setMax(mediaPlayer.getDuration());
+                    //text = (TextView)findViewById(R.id.textView2);
+                    //btnStart = (Button)findViewById(R.id.play);
+                    //btnStop = (Button)findViewById(R.id.stop);
+                    //btnPause = (Button)findViewById(R.id.pause);
+
+                    audioFile = this.getIntent().getStringExtra("audioPath");
+                    audioFile = "음악파일 경로";
+
+                    mediaPlayer = new MediaPlayer();
+                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    mediaPlayer.setOnPreparedListener(this);
+
+                    mediaController = new MediaController(pwindo.getContentView().getContext());
+                    mediaController.setMediaPlayer(mPlayer);
+                    mediaController.setAnchorView((MediaController)findViewById(R.id.mediaController));
+                    mediaController.setVisibility(View.VISIBLE);
+
+                    try{
+                        mediaPlayer.setDataSource(FullFilePath);
+                        mediaPlayer.prepare();
+                        mediaPlayer.start();
+                    }catch(IOException e){
+                        Toast.makeText(this, e.toString(),Toast.LENGTH_LONG).show();
+                    }
+                    //seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//
+                    //    @Override
+                    //    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    //        if(fromUser) {
+                    //            mediaPlayer.seekTo(progress);
+                    //        }
+                    //        int m = progress / 60000;
+                    //        int s = (progress % 60000) / 1000;
+                    //        String strTime = String.format("%02d:%02d", m, s);
+                    //        text.setText(strTime);
+                    //    }
+                    //    @Override
+                    //    public void onStartTrackingTouch(SeekBar seekBar) {
+                    //    }
+                    //    @Override
+                    //    public void onStopTrackingTouch(SeekBar seekBar) {
+                    //    }
+                    //});
+                    //btnStart.setOnClickListener(new View.OnClickListener() {
+                    //    @Override
+                    //    public void onClick(View v) {
+                    //        mediaPlayer.start();
+//
+                    //        new Thread();
+                    //    }
+                    //});
+                    //btnStop.setOnClickListener(new View.OnClickListener() {
+                    //    @Override
+                    //    public void onClick(View v) {
+                    //        mediaPlayer.stop();
+                    //        try
+                    //        {
+                    //            mediaPlayer.prepare();
+                    //        }
+                    //        catch(IOException ie)
+                    //        {
+                    //            ie.printStackTrace();
+                    //        }
+                    //        mediaPlayer.seekTo(0);
+                    //    }
+                    //});
+                    //btnPause.setOnClickListener(new View.OnClickListener() {
+                    //    @Override
+                    //    public void onClick(View v) {
+                    //        mediaPlayer.pause();
+                    //    }
+                    //});
+
+
+
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
+
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public void onPrepared(MediaPlayer mediaPlayer){
+        mediaController = new MediaController(this);
+        mediaController.setMediaPlayer(this);
+        mediaController.setAnchorView((MediaController)findViewById(R.id.mediaController));
+    }
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        mediaController.show();
+        return true;
+    }
+
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public int getDuration() {
+        return 0;
+    }
+
+    @Override
+    public int getCurrentPosition() {
+        return 0;
+    }
+
+    @Override
+    public void seekTo(int i) {
+
+    }
+
+    @Override
+    public boolean isPlaying() {
+        return false;
+    }
+
+    @Override
+    public int getBufferPercentage() {
+        return 0;
+    }
+
+    @Override
+    public boolean canPause(){
+        return true;
+    }
+    @Override
+    public boolean canSeekBackward(){
+        return true;
+    }
+
+    @Override
+    public boolean canseekForward() {
+        return false;
+    }
+
+    @Override
+    public boolean canSeekForward() {
+        return false;
+    }
+
+    @Override
+    public int getAudioSessionId() {
+        return 0;
+    }
+
     public boolean fileExistance(String fname){
         File file = new File(fname);
         return file.exists();
     }
+
 
 }
