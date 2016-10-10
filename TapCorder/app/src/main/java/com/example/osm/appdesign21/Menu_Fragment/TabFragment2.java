@@ -19,7 +19,9 @@ import android.widget.Toast;
 
 import com.example.osm.appdesign21.DB_Excel.SpotData;
 import com.example.osm.appdesign21.DB_Excel.SpotsDbAdapter;
+import com.example.osm.appdesign21.NewMainActivity;
 import com.example.osm.appdesign21.R;
+import com.example.osm.appdesign21.SharedPreferences;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -50,15 +52,17 @@ public class TabFragment2 extends Fragment {
     public TextView mPoliceOffice_name;
     public Button mCall_btn;
 
+    SharedPreferences pref;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        pref = new SharedPreferences(NewMainActivity.mContext);
         LayoutInflater lf = getActivity().getLayoutInflater();
         View view = lf.inflate(R.layout.tab_fragment_2, null);
         mapView = (MapView) view.findViewById(R.id.gmap);
         mapView.onCreate(savedInstanceState);
-
         init_Property(view);
         init_DB();
         init_Map(view);
@@ -89,7 +93,7 @@ public class TabFragment2 extends Fragment {
         gMap.getUiSettings().setMyLocationButtonEnabled(false);
 
         // User 현재 위치
-        mCurrent_Location = new LatLng(37.551824, 127.074007);
+        mCurrent_Location = new LatLng(Double.parseDouble(pref.getValue("0", "37.546757", "lati")), Double.parseDouble(pref.getValue("0", "127.074007", "longi")));
         // 해당 위경도로 카메라 이동! --> 나중엔 서버에서 사용자 현재위치 받아서 위, 경도값 넣어줘~
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                 mCurrent_Location, 15));

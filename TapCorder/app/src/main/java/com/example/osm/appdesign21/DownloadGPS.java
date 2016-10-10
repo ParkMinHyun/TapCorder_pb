@@ -13,14 +13,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Created by mh on 2016-09-19.
+ * Created by mh on 2016-10-11.
  */
-public class DownloadTask extends AsyncTask<Void, Void, Void> {
+public class DownloadGPS extends AsyncTask<Void, Void, Void> {
 
-    final static String TAG = "DownloadTask";
+    final static String TAG = "DownloadGPS";
     private String mfileName;
 
-    public DownloadTask(String pNum){
+    public DownloadGPS(String pNum){
         mfileName = pNum;
     }
 
@@ -45,37 +45,33 @@ public class DownloadTask extends AsyncTask<Void, Void, Void> {
             ftpClient.cwd("public"); // ftp 상의 업로드 디렉토리
             ftpClient.cwd(mfileName); // 다운로드 디렉토리로 이동
 
-            String[] files = ftpClient.listNames();
-            for(int i=0; i<files.length;i++) {
+            File downloadFile = new File("/storage/emulated/0/" + mfileName + "/gps.txt"); // 저장할 파일 이름(local file 형식으로 된 저장할 위치)
+            File parentDir = downloadFile.getParentFile();
+            if (!parentDir.exists()) {
+                parentDir.mkdir();
+            }
+            OutputStream outputStream = null;
+            try {
+                outputStream = new BufferedOutputStream(new FileOutputStream(downloadFile)); // 파일 담기
+                ftpClient.retrieveFile("/home/pi/" + mfileName + "/gps.txt", outputStream); // 서버로부터 파일 저장(서버 파일 경로, outputStream)
 
-                if(files[i].equals("gps.txt")){
-                    continue;
-                }
-
-                File downloadFile = new File("/storage/emulated/0/" + mfileName + "/recordFile" + (i+1) + ".amr"); // 저장할 파일 이름(local file 형식으로 된 저장할 위치)
-                File parentDir = downloadFile.getParentFile();
-                if (!parentDir.exists()) {
-                    parentDir.mkdir();
-                }
-                OutputStream outputStream = null;
-                try {
-                    outputStream = new BufferedOutputStream(new FileOutputStream(downloadFile)); // 파일 담기
-                    ftpClient.retrieveFile("/home/pi/" + mfileName + "/recordFile" + (i+1) + ".amr", outputStream); // 서버로부터 파일 저장(서버 파일 경로, outputStream)
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (outputStream != null) {
-                        try {
-                            outputStream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (outputStream != null) {
+                    try {
+                        outputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
             }
             ftpClient.logout();
             ftpClient.disconnect();
+
+
+
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -88,4 +84,3 @@ public class DownloadTask extends AsyncTask<Void, Void, Void> {
         super.onPostExecute(result);
     }
 }
-

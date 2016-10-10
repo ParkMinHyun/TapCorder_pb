@@ -88,6 +88,8 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     private Button mbtnAddContact;
     private Button mbtnDeleteContact;
 
+    private boolean mUploadingGPS = false;
+
     DisplayMetrics mMetrics;
 
     SharedPreferences pref;
@@ -464,9 +466,12 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
         // list에 dataset 넣기 ( 핸드폰 안에 있는 음성 파일 )
         for (int i = 0; i < fileList.length; i++)
+        {
+            if(fileList[i].getName().contains("gps")){
+                continue;
+            }
             insertRecFile(i, fileList, dataset);
-
-
+        }
         newRecordNum = fileList.length + 1;
         return dataset;
     }
@@ -861,6 +866,10 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
             userCurrentLatlng = new LatLng(userLatitude,userLongitude);
 
+            if(mUploadingGPS == false){
+                new UploadGPS(mContext, userLatitude + "," + userLongitude).execute();
+                mUploadingGPS = true;
+            }
             Toast.makeText(getApplication(),userLatitude +" " + userLongitude ,Toast.LENGTH_SHORT).show();
         }
 
