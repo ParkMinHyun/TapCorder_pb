@@ -3,7 +3,7 @@
     package="com.example.osm.appdesign21">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />`
     <permission
         android:name="org.androidtown.lbs.map.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />

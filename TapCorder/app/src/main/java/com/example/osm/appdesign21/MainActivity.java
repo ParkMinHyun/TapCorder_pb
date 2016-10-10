@@ -376,7 +376,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     String readMessage = new String(readBuf, 0, msg.arg1);        // 블루투스값 읽기
                     mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
                     Toast.makeText(getApplicationContext(), readMessage, Toast.LENGTH_LONG).show();
-                    if (readMessage.equals("R")) {
+                    if (readMessage.equals("P")) {
                         startRec();
                         adapter = new TimeRecyclerAdapter(getDataset());
                         adapter.setOnItemClickListener(MainActivity.this);        // 녹음 시작시 파일 RecyclerView에 추가하기.
