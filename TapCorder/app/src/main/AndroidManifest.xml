@@ -27,11 +27,11 @@
 
     <!-- 연락처 읽기위한 permission -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <!-- 블루투스 연결을 위한 permission -->
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -64,7 +64,8 @@
         <activity android:name=".NewMainActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".ContactActivity" />
-        <activity android:name=".SelectModeActivity"></activity>
+        <activity android:name=".SelectModeActivity" />
+        <activity android:name=".Pop"></activity>
     </application>
 
 </manifest>

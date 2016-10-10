@@ -1,5 +1,6 @@
 package com.example.osm.appdesign21;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -17,15 +18,19 @@ import java.net.SocketException;
 public class UploadTask extends AsyncTask<Void, Void, Void>
 {
     private String mUploadfName;
-    public UploadTask(String fname){
+    private Context mContext;
+    SharedPreferences pref;
+    public UploadTask(String fname, Context context){
         mUploadfName = fname;
+        mContext = context;
     }
 
     final static String TAG = "UploadTask";
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        Log.e(TAG, "다운로드 시작");
+        Log.e(TAG, "업로드 시작");
+        pref = new SharedPreferences(mContext);
     }
     @Override
     protected Void doInBackground(Void... params) {
@@ -41,8 +46,8 @@ public class UploadTask extends AsyncTask<Void, Void, Void>
 
             // 업로드 경로 수정(선택사항)
             mFTP.cwd("public"); // ftp 상의 업로드 디렉토리
-            mFTP.mkd("files"); // public 아래로 files 디렉토리 생성
-            mFTP.cwd("files"); // public/files 로 이동 (이 디렉토리로 업로드가 진행)
+            mFTP.mkd(pref.getValue("fpnum", "files", "fpnum")); // public 아래로 files 디렉토리 생성
+            mFTP.cwd(pref.getValue("fpnum", "files", "fpnum")); // public/files 로 이동 (이 디렉토리로 업로드가 진행)
 
             String data = mUploadfName;
 
@@ -74,7 +79,7 @@ public class UploadTask extends AsyncTask<Void, Void, Void>
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
         //this method will be running on UI thread
-        Log.e(TAG, "다운로드 완료");
+        Log.e(TAG, "업로드 완료");
     }
 
 }
