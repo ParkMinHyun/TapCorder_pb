@@ -21,4 +21,12 @@
         android:layout_below="@+id/textView_phoneNum"
         android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:id="@+id/tvBattery"
+        android:layout_below="@+id/btn_change_num"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

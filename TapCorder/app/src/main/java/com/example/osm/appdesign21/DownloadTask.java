@@ -1,6 +1,5 @@
 package com.example.osm.appdesign21;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -20,19 +19,18 @@ public class DownloadTask extends AsyncTask<Void, Void, Void> {
 
     final static String TAG = "DownloadTask";
     private String mfileName;
-    private Context mContext;
-    SharedPreferences pref;
+    private int j;
 
-    public DownloadTask(String pNum, Context context){
+
+    public DownloadTask(String pNum){
         mfileName = pNum;
-        mContext = context;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
         Log.e(TAG, "다운로드 시작");
-        pref = new SharedPreferences(mContext);
+        j = 0;
     }
 
     @Override
@@ -52,8 +50,12 @@ public class DownloadTask extends AsyncTask<Void, Void, Void> {
 
             String[] files = ftpClient.listNames();
             for(int i=0; i<files.length;i++) {
-
-                File downloadFile = new File("/storage/emulated/0/" + mfileName + "/recordFile" + (i+1) + ".amr"); // 저장할 파일 이름(local file 형식으로 된 저장할 위치)
+                if(files[i].equals("gps.txt")){
+                    continue;
+                }else{
+                    j++;
+                }
+                File downloadFile = new File("/storage/emulated/0/" + mfileName + "/recordFile" + (j) + ".amr"); // 저장할 파일 이름(local file 형식으로 된 저장할 위치)
                 File parentDir = downloadFile.getParentFile();
                 if (!parentDir.exists()) {
                     parentDir.mkdir();
@@ -61,7 +63,7 @@ public class DownloadTask extends AsyncTask<Void, Void, Void> {
                 OutputStream outputStream = null;
                 try {
                     outputStream = new BufferedOutputStream(new FileOutputStream(downloadFile)); // 파일 담기
-                    ftpClient.retrieveFile("/home/pi/" + mfileName + "/recordFile" + (i+1) + ".amr", outputStream); // 서버로부터 파일 저장(서버 파일 경로, outputStream)
+                    ftpClient.retrieveFile("/home/pi/" + mfileName + "/recordFile" + (j) + ".amr", outputStream); // 서버로부터 파일 저장(서버 파일 경로, outputStream)
 
                 } catch (IOException e) {
                     e.printStackTrace();
