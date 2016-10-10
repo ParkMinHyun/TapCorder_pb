@@ -128,10 +128,20 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
      */
     private GoogleApiClient client;
 
+    /* 업로드에 관한 것들 */
+    private int fcnt = 1;
+    public Context mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // 파일 자동 업로드
+        mContext = this;
+        while(fileExistance("/storage/emulated/0/progress_recorder/recordFile" + fcnt + ".amr")){
+            new UploadTask("/storage/emulated/0/progress_recorder/recordFile" + fcnt + ".amr", mContext).execute();
+            fcnt++;
+        }
 
         /*--------------블루투스-------------*/
 
@@ -786,6 +796,10 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public boolean fileExistance(String fname){
+        File file = new File(fname);
+        return file.exists();
     }
 
 

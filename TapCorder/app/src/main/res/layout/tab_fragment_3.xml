@@ -5,11 +5,20 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView_phoneNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="Tab 3"
+        android:text="번호를 저장하세요"
+        android:textSize="30dp"
         android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="변경"
+        android:id="@+id/btn_change_num"
+        android:layout_below="@+id/textView_phoneNum"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
