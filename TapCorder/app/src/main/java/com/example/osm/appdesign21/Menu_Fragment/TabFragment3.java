@@ -19,7 +19,8 @@ import com.example.osm.appdesign21.SharedPreferences;
 
 public class TabFragment3 extends Fragment {
 
-    public TextView textView;
+    public static TextView textView;
+    private TextView tvBattery;
     private Button mChange; // 사용자 번호 변경 버튼
     SharedPreferences pref;
 
@@ -27,7 +28,7 @@ public class TabFragment3 extends Fragment {
         @Override
         public void onReceive(Context ctxt, Intent intent) {
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-            textView.setText(String.valueOf(level) + "%");
+            tvBattery.setText(String.valueOf(level) + "%");
             //Toast.makeText(getContext(),String.valueOf(level) + "%",Toast.LENGTH_SHORT).show();
         }
     };
@@ -40,6 +41,7 @@ public class TabFragment3 extends Fragment {
         pref = new SharedPreferences(getContext());
         // 저장해둔 사용자 번호 설정
         textView = (TextView)view.findViewById(R.id.textView_phoneNum);
+        tvBattery = (TextView)view.findViewById(R.id.tvBattery);
         textView.setText(pref.getValue("disablePnum", "번호를 저장하세요.", "disablePnum"));
         mChange = (Button)view.findViewById(R.id.btn_change_num);
         mChange.setOnClickListener(new View.OnClickListener() {
