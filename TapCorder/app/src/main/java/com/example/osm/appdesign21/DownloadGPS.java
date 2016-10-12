@@ -8,9 +8,12 @@ import org.apache.commons.net.ftp.FTPClient;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Reader;
 
 /**
  * Created by mh on 2016-10-11.
@@ -84,5 +87,36 @@ public class DownloadGPS extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
+        ReadGPS();
     }
+
+    public void ReadGPS(){
+        String text = null;
+        String[] gps = null;
+        try{
+            File file = NewMainActivity.mContext.getFileStreamPath("gps.txt");
+            FileInputStream fIs = new FileInputStream(file);
+            Reader in = new InputStreamReader(fIs);
+            int size = fIs.available();
+            char[] buffer = new char[size];
+            in.read(buffer);
+            in.close();
+
+            text = new String(buffer);
+
+            if(!text.equals("")){
+                gps = text.split(",");
+                pref.putValue("0", gps[0], "lati");
+                pref.putValue("0", gps[1], "longi");
+            }else {
+
+            }
+
+        } catch (IOException e){
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
 }
