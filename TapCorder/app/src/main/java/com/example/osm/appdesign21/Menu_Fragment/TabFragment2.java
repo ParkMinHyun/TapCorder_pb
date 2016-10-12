@@ -49,7 +49,7 @@ public class TabFragment2 extends Fragment {
     private LatLng mCurrent_Location;
     private double mCamera_Position_latitude;
     private double mCamera_Position_longitude;
-    private float mZoomLevel = (float) 15.5;
+    private float mZoomLevel = 15;
 
     private View inflatedView;
     public TextView mDistance;
