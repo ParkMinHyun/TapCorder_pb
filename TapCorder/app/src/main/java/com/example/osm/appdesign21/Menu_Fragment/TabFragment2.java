@@ -49,7 +49,7 @@ public class TabFragment2 extends Fragment {
     private LatLng mCurrent_Location;
     private double mCamera_Position_latitude;
     private double mCamera_Position_longitude;
-    private float mZoomLevel = 15;
+    private float mZoomLevel = (float) 15.5;
 
     private View inflatedView;
     public TextView mDistance;
@@ -125,7 +125,7 @@ public class TabFragment2 extends Fragment {
         mCurrent_Location = new LatLng(Double.parseDouble(pref.getValue("0", "37.546757", "lati")), Double.parseDouble(pref.getValue("0", "127.074007", "longi")));
         // 해당 위경도로 카메라 이동! --> 나중엔 서버에서 사용자 현재위치 받아서 위, 경도값 넣어줘~
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                mCurrent_Location, (float) 15.5));
+                mCurrent_Location, mZoomLevel));
 
         // 이 사용자 현재 위치도 바꿔줘야해!!
         Marker mUserMarker = gMap.addMarker(new MarkerOptions().position(mCurrent_Location)
