@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -46,11 +47,16 @@ public class TabFragment2 extends Fragment {
     private MapView mapView;
     private GoogleMap gMap;
     private LatLng mCurrent_Location;
+    private double mCamera_Position_latitude;
+    private double mCamera_Position_longitude;
+    private float mZoomLevel = 15;
 
     private View inflatedView;
     public TextView mDistance;
     public TextView mPoliceOffice_name;
     public Button mCall_btn;
+    private FloatingActionButton mZoonIn_btn;
+    private FloatingActionButton mZoonOut_btn;
 
     SharedPreferences pref;
 
@@ -61,22 +67,31 @@ public class TabFragment2 extends Fragment {
         pref = new SharedPreferences(NewMainActivity.mContext);
         LayoutInflater lf = getActivity().getLayoutInflater();
         View view = lf.inflate(R.layout.tab_fragment_2, null);
-        mapView = (MapView) view.findViewById(R.id.gmap);
-        mapView.onCreate(savedInstanceState);
-        init_Property(view);
+
+        init_Property(view,savedInstanceState);
         init_DB();
         init_Map(view);
+        set_ButtonClick();
 
         return view;
     }
 
-    public void init_Property(View view) {
+    public void init_Property(View view,Bundle savedInstanceState) {
         this.mSpotDbAdapter = new SpotsDbAdapter(this.getActivity());
         this.mSpot_array = new ArrayList<>();
 
         this.mDistance = (TextView)view.findViewById(R.id.between_distance);
         this.mPoliceOffice_name = (TextView)view.findViewById(R.id.policeStationName);
         this.mCall_btn = (Button)view.findViewById(R.id.call);
+        this.mZoonIn_btn = (FloatingActionButton)view.findViewById(R.id.zoom_in);
+        this.mZoonOut_btn = (FloatingActionButton)view.findViewById(R.id.zoom_out);
+
+        mapView = (MapView) view.findViewById(R.id.gmap);
+        mapView.onCreate(savedInstanceState);
+
+    }
+
+    public void set_ButtonClick(){
 
         mCall_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +101,21 @@ public class TabFragment2 extends Fragment {
                 startActivity(callIntent);
             }
         });
+
+        mZoonIn_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getCameraPosition_ConvertZoom("ZoomIn");
+            }
+        });
+        mZoonOut_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getCameraPosition_ConvertZoom("ZoomOut");
+            }
+        });
     }
+
 
     public void init_Map(View view) {
         gMap = mapView.getMap();
@@ -96,7 +125,7 @@ public class TabFragment2 extends Fragment {
         mCurrent_Location = new LatLng(Double.parseDouble(pref.getValue("0", "37.546757", "lati")), Double.parseDouble(pref.getValue("0", "127.074007", "longi")));
         // 해당 위경도로 카메라 이동! --> 나중엔 서버에서 사용자 현재위치 받아서 위, 경도값 넣어줘~
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                mCurrent_Location, 15));
+                mCurrent_Location, (float) 15.5));
 
         // 이 사용자 현재 위치도 바꿔줘야해!!
         Marker mUserMarker = gMap.addMarker(new MarkerOptions().position(mCurrent_Location)
@@ -137,6 +166,23 @@ public class TabFragment2 extends Fragment {
         mSpotDbAdapter.close();
     }
 
+    public void getCameraPosition_ConvertZoom(String ZoomState)
+    {
+        switch (ZoomState){
+            case "ZoomIn":
+                mZoomLevel += 0.3;
+                break;
+            case "ZoomOut" :
+                mZoomLevel -= 0.3;
+                break;
+        }
+        /* 현재 내 Map 가운데의 위,경도를 받은 후 그 곳에 Zoom 상태를 바꾸기 */
+        mCamera_Position_latitude = gMap.getCameraPosition().target.latitude;
+        mCamera_Position_longitude = gMap.getCameraPosition().target.longitude;
+        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                new LatLng(mCamera_Position_latitude,mCamera_Position_longitude), mZoomLevel));
+    }
+
     @Override
     public void onStart(){
         super.onStart();
@@ -159,18 +205,6 @@ public class TabFragment2 extends Fragment {
         mapView.onLowMemory();
     }
 
-    /* 현재 위치 받는 method
-    public LatLng currentMyLocation() {
-
-        // gpsTracker를 이용해 현재 위치를 받기
-        if (mGpsTracker.canGetLocation()) {
-            mCurrent_Location = new LatLng(mGpsTracker.getLatitude(), mGpsTracker.getLongitude());
-        } else {
-            mGpsTracker.showSettingsAlert();
-        }
-        return mCurrent_Location;
-    }
-*/
     // 이미지 줄여주는 메소드
     public Bitmap resizeMapIcons(String iconName, int width, int height){
         Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(),getResources().getIdentifier(iconName, "drawable",

@@ -87,7 +87,7 @@ public class DownloadGPS extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
-        ReadGPS();
+        //ReadGPS();
     }
 
     public void ReadGPS(){
