@@ -19,6 +19,7 @@ public class DownloadGPS extends AsyncTask<Void, Void, Void> {
 
     final static String TAG = "DownloadGPS";
     private String mfileName;
+    SharedPreferences pref;
 
     public DownloadGPS(String pNum){
         mfileName = pNum;
@@ -28,6 +29,7 @@ public class DownloadGPS extends AsyncTask<Void, Void, Void> {
     protected void onPreExecute() {
         super.onPreExecute();
         Log.e(TAG, "다운로드 시작");
+        pref = new SharedPreferences(NewMainActivity.mContext);
     }
 
     @Override

@@ -6,24 +6,24 @@
 
 
 
-    <!--음성파일목록RecyclerView-->
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/title_top_btm"
-        android:orientation="vertical">
+    <!--&lt;!&ndash;음성파일목록RecyclerView&ndash;&gt;-->
+    <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:background="@drawable/title_top_btm"-->
+        <!--android:orientation="vertical">-->
 
-        <TextView
-            android:id="@+id/textView_title"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
-            android:drawableLeft="@drawable/tap32"
-            android:gravity="fill_horizontal|center_vertical"
-            android:text="  음성파일 목록"
-            android:textColor="#FFFFFF"
-            android:textSize="20dp" />
-    </RelativeLayout>
+        <!--<TextView-->
+            <!--android:id="@+id/textView_title"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_marginLeft="20dp"-->
+            <!--android:drawableLeft="@drawable/tap32"-->
+            <!--android:gravity="fill_horizontal|center_vertical"-->
+            <!--android:text="  음성파일 목록"-->
+            <!--android:textColor="#FFFFFF"-->
+            <!--android:textSize="20dp" />-->
+    <!--</RelativeLayout>-->
 
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -36,7 +36,6 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="50dp"
             tools:context=".MainActivity"
             android:foreground="@drawable/shadow_window_dim"
             >

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="55dp"
+    android:layout_height="60dp"
     android:id="@+id/recyclerItemLayout"
     android:background="@drawable/recycleritem_bg"
     android:clickable="true"
@@ -9,15 +9,18 @@
     >
 
     <TextView
+        android:text="녹음파일이름"
         android:id="@+id/nameView"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:gravity="fill_horizontal|center_vertical"
         android:layout_marginLeft="40dp"
         android:textColor="@android:color/black"
-        android:textSize="18sp" />
+        android:textSize="20sp" />
 
     <TextView
+        android:text="0시 00분 00초"
+        android:textSize="15sp"
         android:id="@+id/timeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

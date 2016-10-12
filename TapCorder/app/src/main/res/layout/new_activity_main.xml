@@ -1,8 +1,7 @@
-<RelativeLayout
-    android:id="@+id/main_layout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".NewMainActivity">
@@ -18,20 +17,53 @@
     <!--android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
     <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>-->
 
+
+    <RelativeLayout
+        android:drawableLeft="@drawable/tap32"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/title_top_btm"
+        android:gravity="center_vertical"
+        android:id="@+id/relativeLayout">
+        <TextView
+            android:layout_marginLeft="15dp"
+            android:drawableLeft="@drawable/tap32"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text=" TapCorder"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"/>
+    </RelativeLayout>
+
+    <!--android:id="@+id/tab_layout"-->
+    <!--android:background="@drawable/tablayout_bg"-->
+
+
+
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"
+        style="@style/AppTabLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:layout_height="50dp"
         android:elevation="6dp"
-        android:layout_below="@+id/pager"
         android:minHeight="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+        app:tabIndicatorHeight="2.8dp"
+        app:tabSelectedTextColor="#df5539"
+        app:tabTextAppearance="@style/AppTabTextAppearance"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_alignParentStart="true" />
+
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="520dp"
-        />
-
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tab_layout" />
 </RelativeLayout>

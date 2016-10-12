@@ -35,16 +35,16 @@ public class NewMainActivity extends AppCompatActivity {
         } else{
             new DownloadTask(pref.getValue("disablePnum","files","disablePnum")).execute();
             new DownloadGPS(pref.getValue("disablePnum", "files", "disablePnum")).execute();
-            ReadGPS();
+            //ReadGPS();
         }
     }
 
     public void init_layout()
     {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 1"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 2"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 3"));
+        tabLayout.addTab(tabLayout.newTab().setText("음성 파일"));
+        tabLayout.addTab(tabLayout.newTab().setText("현재 위치"));
+        tabLayout.addTab(tabLayout.newTab().setText("설정"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);

@@ -1,66 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/mainLayout"
     android:background="#000000">
 
+    <!--<ImageView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:id="@+id/imageView"-->
+    <!--android:layout_alignBottom="@+id/gmap" />-->
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/gmap"
+            class="com.google.android.gms.maps.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentTop="true" />
+        <!--줌인-->
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/zoom_in"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:alpha="0.7"
+                android:elevation="10dp"
+                app:backgroundTint="@color/primary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:elevation="16dp"
+                android:text="+"
+                android:textColor="@android:color/white"
+                android:textSize="16dp" />
+        </FrameLayout>
+
+        <!--줌아웃-->
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="75dp">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/zoom_out"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:alpha="0.7"
+                android:elevation="10dp"
+                app:backgroundTint="@color/primary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:elevation="16dp"
+                android:text="-"
+                android:textColor="@android:color/white"
+                android:textSize="16dp" />
+        </FrameLayout>
+    </RelativeLayout>
+
+    <!--근처 파출소 및 경찰서 정보 레이아웃-->
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/Sub_Layout"
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:id="@+id/Sub_Layout"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="false"
         android:background="#FFFFFF">
 
         <Button
+            android:id="@+id/call"
             android:layout_width="120dp"
             android:layout_height="60dp"
-            android:text="02-862-6828"
-            android:id="@+id/call"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:text="02-862-6828" />
 
         <ImageView
+            android:id="@+id/mark_icon"
             android:layout_width="100dp"
             android:layout_height="70dp"
-            android:src="@drawable/policeoffice"
-            android:id="@+id/mark_icon"
             android:layout_above="@+id/call"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:src="@drawable/policeoffice" />
 
         <TextView
+            android:id="@+id/between_distance"
             android:layout_width="100dp"
             android:layout_height="30dp"
-            android:text="약 : 7.17km"
-            android:id="@+id/between_distance"
             android:layout_above="@+id/call"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:text="약 : 7.17km" />
 
         <TextView
+            android:id="@+id/policeStationName"
             android:layout_width="200dp"
             android:layout_height="50dp"
-            android:text="서울"
-            android:textSize ="15dp"
-            android:textStyle="bold"
-            android:id="@+id/policeStationName"
             android:layout_alignBottom="@+id/mark_icon"
-            android:layout_toEndOf="@+id/mark_icon" />
+            android:layout_toEndOf="@+id/mark_icon"
+            android:text="서울"
+            android:textSize="15dp"
+            android:textStyle="bold" />
     </RelativeLayout>
-
-
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/gmap"
-        android:layout_width="match_parent"
-        android:layout_height="430dp"
-        android:layout_below="@+id/Sub_Layout"
-        class="com.google.android.gms.maps.MapFragment" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:layout_alignBottom="@+id/gmap" />
-
-
 
 </RelativeLayout>
 

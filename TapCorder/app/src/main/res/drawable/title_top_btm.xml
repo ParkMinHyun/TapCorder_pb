@@ -8,15 +8,15 @@
         </shape>
     </item>
 
-    <!--bottom-->
-    <item android:top="-5dp" android:right="-5dp" android:left="-5dp">
-        <shape>
-            <solid android:color="@android:color/transparent" />
-            <stroke
-                android:width="3.5dp"
-                android:color="#6a8fb8" />
-        </shape>
-    </item>
+    <!--&lt;!&ndash;bottom&ndash;&gt;-->
+    <!--<item android:top="-5dp" android:right="-5dp" android:left="-5dp">-->
+        <!--<shape>-->
+            <!--<solid android:color="@android:color/transparent" />-->
+            <!--<stroke-->
+                <!--android:width="3.5dp"-->
+                <!--android:color="#6a8fb8" />-->
+        <!--</shape>-->
+    <!--</item>-->
 
     <!--&lt;!&ndash;top&ndash;&gt;-->
     <!--<item android:left="-5dp" android:right="-5dp" android:bottom="-5dp">-->

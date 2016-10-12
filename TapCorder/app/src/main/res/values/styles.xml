@@ -1,25 +1,4 @@
-<!--
-  ~ Copyright (C) 2015 Antonio Leiva
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~       http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
 <resources>
-
-    <!--<style name="animationName" parent="android:Animation">-->
-        <!--<item name="android:windowEnterAnimation">@anim/set_anim_on</item>-->
-        <!--&lt;!&ndash;<item name="android:windowExitAnimation">@anim/set_anim_off</item>&ndash;&gt;-->
-    <!--</style>-->
 
     <style name="AppTheme" parent="BaseTheme" />
 
@@ -62,4 +41,23 @@
     <!--<color name="accent">#FFEB3B</color>-->
     <!--<color name="accent_translucent">#80FFEB3B</color>-->
     <!--<color name="accent_bright">#FFF493</color>-->
+
+    <style name="AppTabLayout" parent="Widget.Design.TabLayout">
+        <!--<item name="tabMaxWidth">@dimen/tab_max_width</item>-->
+        <item name="tabIndicatorColor">@color/primary_dark</item>
+        <item name="tabIndicatorHeight">1.5dp</item>
+        <item name="tabPaddingStart">6dp</item>
+        <item name="tabPaddingEnd">6dp</item>
+        <item name="tabTextAppearance">@style/AppTabTextAppearance</item>
+        <item name="tabSelectedTextColor">@color/primary_dark</item>
+    </style>
+
+    <!-- for text -->
+    <style name="AppTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/primary_dark</item>
+        <item name="android:textStyle">bold</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
 </resources>
