@@ -42,9 +42,9 @@ public class NewMainActivity extends AppCompatActivity {
     public void init_layout()
     {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("음성 녹음"));
-        tabLayout.addTab(tabLayout.newTab().setText("현재 위치"));
-        tabLayout.addTab(tabLayout.newTab().setText("설정"));
+        tabLayout.addTab(tabLayout.newTab().setText("녹음파일"));
+        tabLayout.addTab(tabLayout.newTab().setText("사용자 위치"));
+        tabLayout.addTab(tabLayout.newTab().setText("일반"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
