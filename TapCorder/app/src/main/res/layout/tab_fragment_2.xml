@@ -39,16 +39,17 @@
                 android:layout_alignParentRight="true"
                 android:alpha="0.7"
                 android:elevation="10dp"
-                app:backgroundTint="@color/primary" />
+                app:backgroundTint="@color/fab_color"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:elevation="16dp"
                 android:text="+"
+                android:textStyle="bold"
                 android:textColor="@android:color/white"
-                android:textSize="16dp" />
+                android:textSize="35dp" />
         </FrameLayout>
 
         <!--줌아웃-->
@@ -65,16 +66,16 @@
                 android:layout_height="50dp"
                 android:alpha="0.7"
                 android:elevation="10dp"
-                app:backgroundTint="@color/primary" />
+                app:backgroundTint="@color/fab_color" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:elevation="16dp"
                 android:text="-"
+                android:textStyle="bold"
                 android:textColor="@android:color/white"
-                android:textSize="16dp" />
+                android:textSize="35dp" />
         </FrameLayout>
     </RelativeLayout>
 
