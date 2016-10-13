@@ -39,12 +39,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -228,7 +226,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         @Override
         public void onReceive(Context ctxt, Intent intent) {
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-            new UploadBattery(mContext, "" + level).execute();
+            new UploadBattery(mContext, String.valueOf(level) + "%").execute();
         }
     };
     @Override
@@ -469,7 +467,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         // list에 dataset 넣기 ( 핸드폰 안에 있는 음성 파일 )
         for (int i = 0; i < fileList.length; i++)
         {
-            if(fileList[i].getName().contains("gps")){
+            if(fileList[i].getName().contains("gps") || fileList[i].getName().contains("bt")){
                 continue;
             }
             insertRecFile(i, fileList, dataset);

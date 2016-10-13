@@ -32,7 +32,7 @@ public class TabFragment3 extends Fragment {
         textView = (TextView)view.findViewById(R.id.textView_phoneNum);
         tvBattery = (TextView)view.findViewById(R.id.tvBattery);
         textView.setText(pref.getValue("disablePnum", "번호를 저장하세요.", "disablePnum"));
-        tvBattery.setText(pref.getValue("0", "98", "bt") + "%");
+        tvBattery.setText(pref.getValue("0", "98%", "bt"));
         mChange = (Button)view.findViewById(R.id.btn_change_num);
         mChange.setOnClickListener(new View.OnClickListener() {
             @Override

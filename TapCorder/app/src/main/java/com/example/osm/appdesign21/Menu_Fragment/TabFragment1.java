@@ -72,7 +72,7 @@ public class TabFragment1 extends Fragment implements MediaPlayer.OnCompletionLi
 
         // list에 dataset 넣기 ( 핸드폰 안에 있는 음성 파일 )
         for(int i=0; i < fileList.length; i++){
-            if(fileList[i].getName().contains("gps")){
+            if(fileList[i].getName().contains("gps") || fileList[i].getName().contains("bt")){
                 continue;
             }
             insertRecFile(i,fileList,dataset);
