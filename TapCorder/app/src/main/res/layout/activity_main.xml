@@ -49,15 +49,7 @@
     </RelativeLayout>
     </FrameLayout>
 
-    <!--연락망버튼-->
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_phoneaddr"
-        style="@style/FabPhoneAddr_Style"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="100dp"
-        android:layout_marginRight="25dp" />
+
     <!--설정버튼-->
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_settings"

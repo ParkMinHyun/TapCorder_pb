@@ -80,7 +80,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     private int mWidthPixels, mHeightPixels;
     private RadioButton option1, option2, option3;
 
-    private FloatingActionButton fabButton_set, fabButton_addr;
+    private FloatingActionButton fabButton_set;
     private RecyclerView mTimeRecyclerView;
     private TextView contentsText;
 
@@ -157,7 +157,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         /*--------------UI-------------*/
 
         fabButton_set = (FloatingActionButton) findViewById(R.id.fab_settings);
-        fabButton_addr = (FloatingActionButton) findViewById(R.id.fab_phoneaddr);
         initFab();//FloatingButton Click에 따른 메서드
 
         mTimeRecyclerView = (RecyclerView) findViewById(R.id.mTimeRecyclerView);
@@ -202,6 +201,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         String name;
         String phoneNumber;
         pref = new SharedPreferences(this);
+
         for (int i = 0; i < 5; i++) {
             name = pref.getValue(Integer.toString(i), "no", "name");
             phoneNumber = pref.getValue(Integer.toString(i), "no", "phoneNum");
@@ -209,6 +209,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                 saveList.add(new PhoneBook(name, phoneNumber));
             }
         }
+
         layout_MainMenu = (FrameLayout) findViewById(R.id.mainmenu);
         layout_MainMenu.getForeground().setAlpha(0);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -646,22 +647,12 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     };
 
     //팝업창 닫기
-    private View.OnClickListener cancel_setbutton_click_listener = new View.OnClickListener() {
 
-        public void onClick(View v) {
-            pwindo.dismiss();
-            Animation btnAnimOff = AnimationUtils.loadAnimation(MainActivity.this, R.anim.set_anim_off);
-            fabButton_set.startAnimation(btnAnimOff);
-            fabButton_addr.startAnimation(btnAnimOff);
-            layout_MainMenu.getForeground().setAlpha(0); // restore
-        }
-    };
     private View.OnClickListener cancel_addrbutton_click_listener = new View.OnClickListener() {
 
         public void onClick(View v) {
             pwindo.dismiss();
             Animation btnAnimOff = AnimationUtils.loadAnimation(MainActivity.this, R.anim.addr_anim_off);
-            fabButton_addr.startAnimation(btnAnimOff);
             fabButton_set.startAnimation(btnAnimOff);
             layout_MainMenu.getForeground().setAlpha(0); // restore
         }
@@ -677,25 +668,15 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                 //FloatingActionButton 애니메이션
                 Animation btnAnimOn = AnimationUtils.loadAnimation(MainActivity.this, R.anim.set_anim_on);
                 fabButton_set.startAnimation(btnAnimOn);
-                fabButton_addr.startAnimation(btnAnimOn);
                 sendMessage("1");
             }
         });
 
-        findViewById(R.id.fab_phoneaddr).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                initiatePopupWindow(1); //팝업창 띄우기
-                //FloatingActionButton 애니메이션
-                Animation btnAnimOn = AnimationUtils.loadAnimation(MainActivity.this, R.anim.addr_anim_on);
-                fabButton_addr.startAnimation(btnAnimOn);
-                fabButton_set.startAnimation(btnAnimOn);
-            }
-        });
     }
 
 
     private void initiatePopupWindow(int arg2) {
+
         try {
             //  LayoutInflater 객체와 시킴
             LayoutInflater inflater = (LayoutInflater) MainActivity.this
@@ -711,8 +692,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
                     // 뒷배경은 흐리게
                     layout_MainMenu.getForeground().setAlpha(100);
-                    btnClosePopup = (Button) layout.findViewById(R.id.closebtn_popup_0);
-                    btnClosePopup.setOnClickListener(cancel_setbutton_click_listener);
 
 
                     option1 = (RadioButton) layout.findViewById(R.id.option1);
@@ -722,33 +701,9 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     option2.setOnClickListener(optionOnClickListener);
                     option3.setOnClickListener(optionOnClickListener);
                     option1.setChecked(true);
-                    contentsText = (TextView) layout.findViewById(R.id.contentsText);
-                    Switch sw = (Switch) layout.findViewById(R.id.switch_gps);
-                    //스위치의 체크 이벤트를 위한 리스너 등록
-                    sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                            //체크상태가 true일때
-                            if (isChecked == true) {
-                                // 위치 정보 확인을 위해 정의한 메소드 호출
-                                //startLocationService();
 
-                            } else {
-                                contentsText.setText("GPS상태를 확인하세요.");
-                            }
-                        }
-                    });
-                    break;
-
-                case 1:
-                    View layout1 = inflater.inflate(R.layout.phonebook_list,
-                            (ViewGroup) findViewById(R.id.popup_layout_1));
-                    pwindo = new PopupWindow(layout1, mWidthPixels - 100, mHeightPixels - 320, true);
-                    pwindo.showAtLocation(layout1, Gravity.CENTER, 0, 0);
-                    // 뒷배경은 흐리게
-                    layout_MainMenu.getForeground().setAlpha(100);
-                    lvPhone = (ListView) layout1.findViewById(R.id.listPhone);
+                    lvPhone = (ListView) layout.findViewById(R.id.listPhone);
 
                     final List<PhoneBook> listPhoneBook = new ArrayList<PhoneBook>();
                     for (int i = 0; i < saveList.size(); i++) {
@@ -759,9 +714,9 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     final PhoneBookAdapter adapter = new PhoneBookAdapter(this, listPhoneBook);
                     lvPhone.setAdapter(adapter);
 
-                    mbtnAddContact = (Button) layout1.findViewById(R.id.btn_add);
-                    mbtnDeleteContact = (Button) layout1.findViewById(R.id.btn_delete);
-                    btnClosePopup = (Button) layout1.findViewById(R.id.closebtn_popup_1);
+                    mbtnAddContact = (Button) layout.findViewById(R.id.btn_add);
+                    mbtnDeleteContact = (Button) layout.findViewById(R.id.btn_delete);
+                    btnClosePopup = (Button) layout.findViewById(R.id.closebtn_popup_1);
                     btnClosePopup.setOnClickListener(cancel_addrbutton_click_listener);
 
                     mbtnAddContact.setOnClickListener(new View.OnClickListener() {
@@ -772,6 +727,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                             MainActivity.this.startActivity(intent);
                         }
                     });
+
                     mbtnDeleteContact.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -784,6 +740,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     });
 
                     break;
+
             }
         } catch (Exception e) {
             e.printStackTrace();

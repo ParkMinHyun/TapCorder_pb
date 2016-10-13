@@ -16,7 +16,7 @@
             <solid android:color="@android:color/transparent" />
             <stroke
                 android:width="2dp"
-                android:color="#B8D6DE" />
+                android:color="#d5d3cc" />
         </shape>
     </item>
 </layer-list>

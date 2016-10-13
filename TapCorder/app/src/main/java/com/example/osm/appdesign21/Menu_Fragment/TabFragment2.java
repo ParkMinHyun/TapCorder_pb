@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -138,7 +139,7 @@ public class TabFragment2 extends Fragment {
 
         String strNumber = String.format("%.1f", CalculationByDistance(short_policeStation,mCurrent_Location)*1000);
 
-        mDistance.setText("약 : " + strNumber + "M ");
+        mDistance.setText(strNumber + "M ");
         mPoliceOffice_name.setText(" 서울 광진 경찰서 화양 지구대" );
         //mPoliceOffice_name.setText(mSpot_array.get(0).get_name());
 

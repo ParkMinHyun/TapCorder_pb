@@ -40,19 +40,20 @@
     <color name="accent_translucent">#4ca6af</color>
     <color name="accent_bright">#7fbfc6</color>
     <!--<color name="fab_color">#83a8d2</color>-->
-    <color name="fab_color">#ce4e3d</color>
+    <!--<color name="fab_color">#ce4e3d</color>-->
+    <color name="tab_color">#3b4f66</color>
     <!--<color name="accent">#FFEB3B</color>-->
     <!--<color name="accent_translucent">#80FFEB3B</color>-->
     <!--<color name="accent_bright">#FFF493</color>-->
 
     <style name="AppTabLayout" parent="Widget.Design.TabLayout">
         <!--<item name="tabMaxWidth">@dimen/tab_max_width</item>-->
-        <item name="tabIndicatorColor">@color/main_comple</item>
+        <item name="tabIndicatorColor">@color/tab_color</item>
     <item name="tabIndicatorHeight">1.5dp</item>
     <item name="tabPaddingStart">6dp</item>
     <item name="tabPaddingEnd">6dp</item>
     <item name="tabTextAppearance">@style/AppTabTextAppearance</item>
-    <item name="tabSelectedTextColor">@color/main_comple</item>
+    <item name="tabSelectedTextColor">@color/tab_color</item>
 </style>
 
     <!-- for text -->

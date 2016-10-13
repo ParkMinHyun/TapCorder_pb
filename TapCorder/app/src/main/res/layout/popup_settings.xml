@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/popup_layout_0"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/popup_bg"
-    android:orientation="vertical"
-    android:elevation="10dp">
+    android:elevation="10dp"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/set_title"
@@ -28,135 +28,140 @@
         android:fillViewport="true"
         android:visibility="visible">
 
-        <LinearLayout android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <RelativeLayout
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/popupmenu_bg"
+                android:text="  녹음 시간  "
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="18dp" />
+
+            <RadioGroup
+                android:id="@+id/set_radiogroup"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/popup_accel_both"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/option1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="2분"
+                    android:textSize="16dp" />
+
+                <RadioButton
+                    android:id="@+id/option2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:text="3분"
+                    android:textSize="16dp" />
+
+                <RadioButton
+                    android:id="@+id/option3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:text="5분"
+                    android:textSize="16dp" />
+            </RadioGroup>
+
+            <TextView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/popupmenu_bg"
+                android:text="  보호자 연락망  "
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="18dp" />
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/popup_layout_1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@drawable/popup_bg">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="25dp"
+                    android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="22dp"
                     android:layout_marginTop="15dp"
-                    android:background="@drawable/popupmenu_bg"
-                    android:text="  녹음 시간  "
-                    android:textAlignment="center"
-                    android:textColor="#000000"
-                    android:textSize="18dp" />
-                <!--android:text="     녹음 시간"-->
+                    android:gravity="center_horizontal">
 
-                <RadioGroup
-                    android:id="@+id/set_radiogroup"
-                    android:layout_width="fill_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="45dp"
-                    android:background="@drawable/popup_accel_both"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/option1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="2분"
+                    <Button
+                        android:id="@+id/btn_add"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_alignTop="@+id/textView"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/add_contact"
+                        android:gravity="center_vertical"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:textAlignment="center"
                         android:textSize="16dp" />
 
-                    <RadioButton
-                        android:id="@+id/option2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="20dp"
-                        android:text="3분"
+                    <Button
+                        android:id="@+id/btn_delete"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_alignLeft="@+id/btn_add"
+                        android:layout_below="@+id/textView"
+                        android:layout_marginLeft="50dp"
+                        android:background="@drawable/remove_contact"
+                        android:gravity="center_vertical"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:textAlignment="center"
                         android:textSize="16dp" />
+                </LinearLayout>
 
-                    <RadioButton
-                        android:id="@+id/option3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="20dp"
-                        android:text="5분"
-                        android:textSize="16dp" />
-                </RadioGroup>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="22dp"
-                    android:layout_marginTop="105dp"
-                    android:background="@drawable/popupmenu_bg"
-                    android:text="  GPS 수신  "
-                    android:textAlignment="center"
-                    android:textColor="#000000"
-                    android:textSize="18dp" />
-
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="40dp"
-                    android:layout_alignBottom="@+id/switch_gps"
-                    android:layout_marginTop="135dp"
-                    android:layout_toLeftOf="@+id/switch_gps"
-                    android:background="@drawable/popup_accel_left"
-                    android:gravity="center_vertical"
-                    android:text="OFF"
-                    android:textAlignment="textEnd"
-                    android:textSize="20dp" />
-
-                <Switch
-                    android:id="@+id/switch_gps"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="135dp"
-                    android:background="#f3f3f7" />
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="40dp"
-                    android:layout_alignBottom="@+id/switch_gps"
-                    android:layout_marginTop="135dp"
-                    android:layout_toRightOf="@+id/switch_gps"
-                    android:background="@drawable/popup_accel_right"
-                    android:gravity="center_vertical"
-                    android:text="ON"
-                    android:textSize="20dp" />
-
-                <!--주소 텍스트뷰-->
-                <TextView
-                    android:id="@+id/contentsText"
+                <ListView
+                    android:id="@+id/listPhone"
                     android:layout_width="match_parent"
-                    android:layout_height="130dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="210dp"
-                    android:background="@drawable/popupaddr_bg"
-                    android:gravity="center_vertical"
-                    android:text="gps값에 따른 주소를 표시합니다."
-                    android:textAlignment="center"
-                    android:textColor="#d82735"
-                    android:textSize="15dp" />
-                <!--android:textColor="#00007f"-->
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="70dp"
+                    android:background="@drawable/popup_accel_both" />
+
                 <Button
-                    android:id="@+id/closebtn_popup_0"
+                    android:paddingBottom="50dp"
+                    android:layout_alignBottom="@+id/listPhone"
+                    android:id="@+id/closebtn_popup_1"
                     android:layout_width="150dp"
                     android:layout_height="40dp"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentLeft="false"
                     android:layout_centerHorizontal="true"
+                    android:layout_gravity="fill_horizontal"
                     android:layout_marginBottom="15dp"
                     android:background="@drawable/closebtn_bg"
                     android:gravity="center_vertical"
                     android:text="닫  기"
                     android:textAlignment="center"
                     android:textSize="16dp" />
+
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 
 
-</RelativeLayout>
+</LinearLayout>

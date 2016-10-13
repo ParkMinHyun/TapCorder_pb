@@ -33,13 +33,13 @@
             android:layout_marginTop="15dp">
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/zoom_in"
+                android:id="@+id/zoom_out"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_alignParentRight="true"
                 android:alpha="0.7"
                 android:elevation="10dp"
-                app:backgroundTint="@color/fab_color" />
+                app:backgroundTint="@color/tab_color" />
 
             <ImageButton
                 android:layout_width="17dp"
@@ -60,12 +60,12 @@
             android:layout_marginTop="75dp">
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/zoom_out"
+                android:id="@+id/zoom_in"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:alpha="0.7"
                 android:elevation="10dp"
-                app:backgroundTint="@color/fab_color" />
+                app:backgroundTint="@color/tab_color" />
 
             <ImageButton
                 android:layout_width="17dp"
@@ -79,75 +79,86 @@
     </RelativeLayout>
 
     <!--근처 파출소 및 경찰서 정보 레이아웃-->
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/Sub_Layout"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="false"
         android:background="#FFFFFF"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="15dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="15dp">
+
+        <ImageView
+            android:id="@+id/mark_icon"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/policeoffice" />
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-            <ImageView
-                android:id="@+id/mark_icon"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:src="@drawable/policeoffice" />
+            android:layout_height="80dp"
+            android:layout_marginRight="50dp"
+            android:layout_toEndOf="@+id/mark_icon"
+            android:orientation="vertical">
+
             <TextView
-                android:gravity="center_vertical"
-                android:layout_gravity="center_vertical"
-                android:paddingLeft="15dp"
-                android:layout_toRightOf="@+id/mark_icon"
                 android:id="@+id/policeStationName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="서울"
-                android:textSize="15dp"
+                android:paddingLeft="10dp"
+                android:text="서울 경찰서 및 지구대 이름"
+                android:textColor="#040303"
+                android:textIsSelectable="false"
+                android:textSize="18dp"
                 android:textStyle="bold" />
-            <Button
-                android:layout_marginRight="10dp"
-                android:layout_alignParentEnd="true"
-                android:id="@+id/call"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:background="@drawable/tap_icon"/>
 
-        </RelativeLayout>
-        <!--<RelativeLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content">-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/between_distance"
+                android:layout_toStartOf="@+id/between_distance"
+                android:paddingRight="10dp"
+                android:text="현재 위치에서 약"
+                android:textSize="17dp" />
+
             <TextView
                 android:id="@+id/between_distance"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:text="약 : 7.17km"
-                android:gravity="right"
-                android:layout_gravity="right"
-                android:paddingRight="10dp"/>
+                android:layout_gravity="bottom|right"
+                android:gravity="bottom"
+                android:paddingRight="15dp"
+                android:text="7.17km"
+                android:textColor="@color/main_comple"
+                android:textSize="18dp"
+                android:textStyle="bold" />
 
 
+        </RelativeLayout>
 
+        <Button
+            android:id="@+id/call"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="right"
+            android:layout_marginRight="10dp"
+            android:gravity="bottom|end|right"
+            android:src="@drawable/call"
+            android:background="@drawable/call" />
 
-        <!--</RelativeLayout>-->
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:elevation="16dp"
-        android:text="-"
-        android:textColor="@android:color/white"
-        android:textSize="16dp" />
+    </RelativeLayout>
 
 </RelativeLayout>
 
