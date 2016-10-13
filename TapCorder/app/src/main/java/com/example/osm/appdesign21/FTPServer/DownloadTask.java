@@ -1,4 +1,4 @@
-package com.example.osm.appdesign21;
+package com.example.osm.appdesign21.FTPServer;
 
 import android.os.AsyncTask;
 import android.util.Log;

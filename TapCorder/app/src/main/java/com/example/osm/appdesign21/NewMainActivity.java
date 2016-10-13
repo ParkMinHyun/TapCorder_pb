@@ -8,6 +8,10 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.osm.appdesign21.FTPServer.DownloadBattery;
+import com.example.osm.appdesign21.FTPServer.DownloadGPS;
+import com.example.osm.appdesign21.FTPServer.DownloadTask;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,6 +41,7 @@ public class NewMainActivity extends AppCompatActivity {
         } else{
             new DownloadTask(pref.getValue("disablePnum","files","disablePnum")).execute();
             new DownloadGPS(pref.getValue("disablePnum", "files", "disablePnum")).execute();
+            new DownloadBattery(pref.getValue("disablePnum","files", "disablePnum")).execute();
             new CountDownTimer(5000, 1000) {
                 @Override
                 public void onTick(long l) {
@@ -46,6 +51,7 @@ public class NewMainActivity extends AppCompatActivity {
                 @Override
                 public void onFinish() {
                     ReadGPS();
+                    ReadBattery();
                 }
             }.start();
         }
@@ -101,6 +107,29 @@ public class NewMainActivity extends AppCompatActivity {
             gps = line.split(",");
             pref.putValue("0", gps[0], "lati");
             pref.putValue("0", gps[1], "longi");
+
+        } catch(FileNotFoundException e){
+
+        } catch(IOException ex){
+
+        }
+    }
+    public void ReadBattery(){
+        String line = null;
+        try{
+            FileInputStream fileInputStream = new FileInputStream(new File("/storage/emulated/0/" + pref.getValue("disablePnum", "progress_recorder", "disablePnum") + "/bt.txt"));
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            StringBuilder stringBuilder = new StringBuilder();
+
+            while((line = bufferedReader.readLine()) != null){
+                stringBuilder.append(line + System.getProperty("line.separator"));
+            }
+            fileInputStream.close();
+            line = stringBuilder.toString();
+            bufferedReader.close();
+
+            pref.putValue("0", line, "bt");
 
         } catch(FileNotFoundException e){
 

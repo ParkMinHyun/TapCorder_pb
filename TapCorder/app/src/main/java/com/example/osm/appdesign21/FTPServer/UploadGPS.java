@@ -1,8 +1,10 @@
-package com.example.osm.appdesign21;
+package com.example.osm.appdesign21.FTPServer;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.example.osm.appdesign21.SharedPreferences;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -23,7 +25,7 @@ public class UploadGPS extends AsyncTask<Void, Void, Void> {
 
     final static String TAG = "UploadGPS";
 
-    public UploadGPS(Context context, String gps){
+    public UploadGPS(Context context, String gps) {
         mContext = context;
         mGps = gps;
     }
@@ -78,14 +80,14 @@ public class UploadGPS extends AsyncTask<Void, Void, Void> {
         Log.e(TAG, "업로드 완료");
     }
 
-    private void generateNoteOnSD(Context context, String sBody){
-        try{
+    private void generateNoteOnSD(Context context, String sBody) {
+        try {
             File gpxFile = new File("/storage/emulated/0/progress_recorder", "gps.txt");
             FileWriter writer = new FileWriter(gpxFile);
             writer.append(sBody);
             writer.flush();
             writer.close();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
