@@ -3,15 +3,17 @@ package com.example.osm.appdesign21;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 
 
 public class NewMainActivity extends AppCompatActivity {
@@ -35,16 +37,26 @@ public class NewMainActivity extends AppCompatActivity {
         } else{
             new DownloadTask(pref.getValue("disablePnum","files","disablePnum")).execute();
             new DownloadGPS(pref.getValue("disablePnum", "files", "disablePnum")).execute();
-            //ReadGPS();
+            new CountDownTimer(5000, 1000) {
+                @Override
+                public void onTick(long l) {
+
+                }
+
+                @Override
+                public void onFinish() {
+                    ReadGPS();
+                }
+            }.start();
         }
     }
 
     public void init_layout()
     {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("녹음파일"));
-        tabLayout.addTab(tabLayout.newTab().setText("사용자 위치"));
-        tabLayout.addTab(tabLayout.newTab().setText("일반"));
+        tabLayout.addTab(tabLayout.newTab().setText("Tab 1"));
+        tabLayout.addTab(tabLayout.newTab().setText("Tab 2"));
+        tabLayout.addTab(tabLayout.newTab().setText("Tab 3"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
@@ -71,32 +83,29 @@ public class NewMainActivity extends AppCompatActivity {
     }
 
     public void ReadGPS(){
-        String text = null;
+        String line = null;
         String[] gps = null;
         try{
-            File file = getFileStreamPath("gps.txt");
-            FileInputStream fIs = new FileInputStream(file);
-            Reader in = new InputStreamReader(fIs);
-            int size = fIs.available();
-            char[] buffer = new char[size];
-            in.read(buffer);
-            in.close();
+            FileInputStream fileInputStream = new FileInputStream(new File(pref.getValue("disablePnum", "progress_recorder", "disablePnum") + "gps.txt"));
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            StringBuilder stringBuilder = new StringBuilder();
 
-            text = new String(buffer);
-
-            if(!text.equals("")){
-                gps = text.split(",");
-                pref.putValue("0", gps[0], "lati");
-                pref.putValue("0", gps[1], "longi");
-            }else {
-
+            while((line = bufferedReader.readLine()) != null){
+                stringBuilder.append(line + System.getProperty("line.separator"));
             }
+            fileInputStream.close();
+            line = stringBuilder.toString();
+            bufferedReader.close();
 
-        } catch (IOException e){
-            throw new RuntimeException(e);
+            gps = line.split(",");
+            pref.putValue("0", gps[0], "lati");
+            pref.putValue("0", gps[1], "longi");
+
+        } catch(FileNotFoundException e){
+
+        } catch(IOException ex){
+
         }
-
-
     }
-
 }
