@@ -15,14 +15,26 @@
 
         <TextView
             android:id="@+id/textView_title"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:drawableLeft="@drawable/tap32"
             android:gravity="fill_horizontal|center_vertical"
             android:text="  음성파일 목록"
             android:textColor="#FFFFFF"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:textColor="#FFFFFF"
+            android:textSize="18.5dp"
+            android:text="100%"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="35dp" />
     </RelativeLayout>
 
     <FrameLayout
@@ -46,6 +58,7 @@
             android:layout_height="wrap_content"
             android:background="#CAC0E4"
             android:scrollbars="vertical" />
+
     </RelativeLayout>
     </FrameLayout>
 
