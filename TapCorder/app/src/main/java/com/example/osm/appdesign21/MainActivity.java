@@ -240,15 +240,15 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, Bluetooth_MagicNumber.REQUEST_ENABLE_BT);
         } else {
-            //if (mChatService == null)
-                //setupChat();
+            if (mChatService == null)
+                setupChat();
         }
 
         // onStart에서 블루투스 자동 커넥 시키기
-        if (first_start == false) {
-            bluetooth_connect();
-            first_start = true;
-        }
+        //if (first_start == false) {
+            //bluetooth_connect();
+            //first_start = true;
+        //}
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         Action viewAction = Action.newAction(
