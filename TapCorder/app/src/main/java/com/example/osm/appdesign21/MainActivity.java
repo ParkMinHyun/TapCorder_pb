@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
@@ -20,6 +21,7 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -124,10 +126,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     private int secs = 0;
     private int mins = 0;
     Handler stopwatch_handler = new Handler();
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+
     private GoogleApiClient client;
 
     /* 업로드에 관한 것들 */
@@ -138,16 +137,23 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         // 파일 자동 업로드
         mContext = this;
         while(fileExistance("/storage/emulated/0/progress_recorder/recordFile" + fcnt + ".amr")){
             new UploadTask("/storage/emulated/0/progress_recorder/recordFile" + fcnt + ".amr", mContext).execute();
             fcnt++;
         }
-        
+
+        /*------------- GPS --------------*/
+
+        chkGpsService();    // 켜져있는지 안 켜져있는지 확인 -> 안 켜져 있을시 Alert창을 통해 설정할 수 있음
+
         /*--------------블루투스-------------*/
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();   //아답터 얻기
+
 
         // 만약 어댑터가 null이면 블루투스 종료
         if (mBluetoothAdapter == null) {
@@ -234,7 +240,8 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, Bluetooth_MagicNumber.REQUEST_ENABLE_BT);
         } else {
-            if (mChatService == null) setupChat();
+            //if (mChatService == null)
+                //setupChat();
         }
 
         // onStart에서 블루투스 자동 커넥 시키기
@@ -435,7 +442,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     setupChat();
                 } else {
                     // 유저가 블루투스를 할 수 없을 경우
-                    Log.d(TAG, "BT not enabled");
                     Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
                     finish();
                 }
@@ -811,6 +817,39 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
 /*------------------------------------- GPS   ------------------------------------------*/
 /*--------------------------------------------------------------------------------------*/
+
+    //GPS 설정 체크
+    private boolean chkGpsService() {
+
+        String gps = android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+
+        Log.d(gps, "aaaa");
+
+        if (!(gps.matches(".*gps.*") && gps.matches(".*network.*"))) {
+
+            // GPS OFF 일때 Dialog 표시
+            AlertDialog.Builder gsDialog = new AlertDialog.Builder(this);
+            gsDialog.setTitle("위치 서비스 설정");
+            gsDialog.setMessage("무선 네트워크 사용, GPS 위성 사용을 모두 체크하셔야 정확한 위치 서비스가 가능합니다.\n위치 서비스 기능을 설정하시겠습니까?");
+            gsDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // GPS설정 화면으로 이동
+                    Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    intent.addCategory(Intent.CATEGORY_DEFAULT);
+                    startActivity(intent);
+                }
+            })
+                    .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            return;
+                        }
+                    }).create().show();
+            return false;
+
+        } else {
+            return true;
+        }
+    }
     /**
      * 위치 정보 확인을 위해 정의한 메소드
      */
