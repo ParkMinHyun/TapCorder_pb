@@ -4,7 +4,8 @@
 
     <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primary</item> 
-        <item name="colorPrimaryDark">#4d7aad</item> 
+        <item name="colorPrimaryDark">#3b4f66</item>
+        <!--<item name="colorPrimaryDark">#4d7aad</item> -->
         <item name="colorControlHighlight">@color/accent_translucent</item> 
         <item name="colorAccent">#769fcd</item>
         <!--<item name="selectableItemBackground">@drawable/selectable_item_background</item>-->
@@ -38,24 +39,26 @@
     <color name="accent">#00808e</color>
     <color name="accent_translucent">#4ca6af</color>
     <color name="accent_bright">#7fbfc6</color>
+    <!--<color name="fab_color">#83a8d2</color>-->
+    <color name="fab_color">#ce4e3d</color>
     <!--<color name="accent">#FFEB3B</color>-->
     <!--<color name="accent_translucent">#80FFEB3B</color>-->
     <!--<color name="accent_bright">#FFF493</color>-->
 
     <style name="AppTabLayout" parent="Widget.Design.TabLayout">
         <!--<item name="tabMaxWidth">@dimen/tab_max_width</item>-->
-        <item name="tabIndicatorColor">@color/primary_dark</item>
-        <item name="tabIndicatorHeight">1.5dp</item>
-        <item name="tabPaddingStart">6dp</item>
-        <item name="tabPaddingEnd">6dp</item>
-        <item name="tabTextAppearance">@style/AppTabTextAppearance</item>
-        <item name="tabSelectedTextColor">@color/primary_dark</item>
-    </style>
+        <item name="tabIndicatorColor">@color/main_comple</item>
+    <item name="tabIndicatorHeight">1.5dp</item>
+    <item name="tabPaddingStart">6dp</item>
+    <item name="tabPaddingEnd">6dp</item>
+    <item name="tabTextAppearance">@style/AppTabTextAppearance</item>
+    <item name="tabSelectedTextColor">@color/main_comple</item>
+</style>
 
     <!-- for text -->
     <style name="AppTabTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">17sp</item>
-        <item name="android:textColor">@color/primary_dark</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#a2a5b2</item>
         <item name="android:textStyle">bold</item>
         <item name="textAllCaps">false</item>
     </style>
