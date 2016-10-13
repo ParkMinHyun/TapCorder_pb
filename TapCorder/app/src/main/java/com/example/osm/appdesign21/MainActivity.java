@@ -144,7 +144,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             new UploadTask("/storage/emulated/0/progress_recorder/recordFile" + fcnt + ".amr", mContext).execute();
             fcnt++;
         }
-
+        
         /*--------------블루투스-------------*/
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();   //아답터 얻기
