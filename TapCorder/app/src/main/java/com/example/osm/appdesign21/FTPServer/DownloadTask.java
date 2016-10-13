@@ -1,4 +1,4 @@
-package com.example.osm.appdesign21;
+package com.example.osm.appdesign21.FTPServer;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -50,7 +50,7 @@ public class DownloadTask extends AsyncTask<Void, Void, Void> {
 
             String[] files = ftpClient.listNames();
             for(int i=0; i<files.length;i++) {
-                if(files[i].equals("gps.txt")){
+                if(files[i].equals("gps.txt") || files[i].equals("bt.txt")){
                     continue;
                 }else{
                     j++;

@@ -1,10 +1,6 @@
 package com.example.osm.appdesign21.Menu_Fragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.BatteryManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -21,17 +17,10 @@ public class TabFragment3 extends Fragment {
 
     public static TextView textView;
     private TextView tvBattery;
-    private Button mChange; // 사용자 번호 변경 버튼
-    SharedPreferences pref;
 
-    private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver(){
-        @Override
-        public void onReceive(Context ctxt, Intent intent) {
-            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-            tvBattery.setText(String.valueOf(level) + "%");
-            //Toast.makeText(getContext(),String.valueOf(level) + "%",Toast.LENGTH_SHORT).show();
-        }
-    };
+    private Button mChange; // 사용자 번호 변경 버튼
+
+    SharedPreferences pref;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +32,7 @@ public class TabFragment3 extends Fragment {
         textView = (TextView)view.findViewById(R.id.textView_phoneNum);
         tvBattery = (TextView)view.findViewById(R.id.tvBattery);
         textView.setText(pref.getValue("disablePnum", "번호를 저장하세요.", "disablePnum"));
+        tvBattery.setText(pref.getValue("0", "98", "bt") + "%");
         mChange = (Button)view.findViewById(R.id.btn_change_num);
         mChange.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,8 +41,6 @@ public class TabFragment3 extends Fragment {
             }
         });
 
-
-        getActivity().registerReceiver(this.mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         return view;
     }
 

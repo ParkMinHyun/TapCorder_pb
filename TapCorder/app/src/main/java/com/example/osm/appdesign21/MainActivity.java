@@ -3,9 +3,11 @@ package com.example.osm.appdesign21;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.location.Location;
@@ -14,6 +16,7 @@ import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,6 +51,9 @@ import android.widget.Toast;
 import com.example.osm.appdesign21.BlueTooth.BluetoothChatService;
 import com.example.osm.appdesign21.BlueTooth.Bluetooth_MagicNumber;
 import com.example.osm.appdesign21.BlueTooth.DeviceListActivity;
+import com.example.osm.appdesign21.FTPServer.UploadBattery;
+import com.example.osm.appdesign21.FTPServer.UploadGPS;
+import com.example.osm.appdesign21.FTPServer.UploadTask;
 import com.example.osm.appdesign21.Recorder.MyData;
 import com.example.osm.appdesign21.Recorder.RecFiles_makeDir;
 import com.example.osm.appdesign21.Recorder.Record_Time;
@@ -216,8 +222,15 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
+        registerReceiver(this.mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
     }
-
+    BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver(){
+        @Override
+        public void onReceive(Context ctxt, Intent intent) {
+            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+            new UploadBattery(mContext, "" + level).execute();
+        }
+    };
     @Override
     public void onStart() {
         super.onStart();

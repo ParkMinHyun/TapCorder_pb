@@ -1,7 +1,10 @@
-package com.example.osm.appdesign21;
+package com.example.osm.appdesign21.FTPServer;
 
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.example.osm.appdesign21.NewMainActivity;
+import com.example.osm.appdesign21.SharedPreferences;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
