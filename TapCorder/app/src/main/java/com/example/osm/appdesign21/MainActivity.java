@@ -73,7 +73,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     private GPSListener gpsListener;
     private double userLatitude;
     private double userLongitude;
-    private LatLng userCurrentLatlng;
 
     private TimeRecyclerAdapter adapter;
     private PopupWindow pwindo;
@@ -99,7 +98,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     FrameLayout layout_MainMenu;
 
     /* 블루투스에 관한 것들 */
-    private boolean first_start = false;
     private String mConnectedDeviceName = null;               // 연결된 디바이스의 이름
     private ArrayAdapter<String> mConversationArrayAdapter;   // thread 소통을 위한 ArrayAdapter
     private StringBuffer mOutStringBuffer;                    // 송신을 위한 outGoing StringBuffer
@@ -139,7 +137,8 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         setContentView(R.layout.activity_main);
 
 
-        // 파일 자동 업로드
+        /*------------ Server ------------*/
+        //파일 자동 업로드
         mContext = this;
         while(fileExistance("/storage/emulated/0/progress_recorder/recordFile" + fcnt + ".amr")){
             new UploadTask("/storage/emulated/0/progress_recorder/recordFile" + fcnt + ".amr", mContext).execute();
@@ -149,18 +148,11 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         /*------------- GPS --------------*/
 
         chkGpsService();    // 켜져있는지 안 켜져있는지 확인 -> 안 켜져 있을시 Alert창을 통해 설정할 수 있음
+        startLocationService();      // 위치확인 시작~
 
         /*--------------블루투스-------------*/
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();   //아답터 얻기
-
-
-        // 만약 어댑터가 null이면 블루투스 종료
-        if (mBluetoothAdapter == null) {
-            Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
-            finish();
-            return;
-        }
 
         /*--------------UI-------------*/
 
@@ -223,8 +215,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
-        // 위치확인 시작~
-        startLocationService();
     }
 
     @Override
@@ -233,7 +223,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
-        if (Bluetooth_MagicNumber.D) Log.e(TAG, "++ ON START ++");
 
         // 블루투스 아답터 연동시키기
         if (!mBluetoothAdapter.isEnabled()) {
@@ -244,11 +233,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                 setupChat();
         }
 
-        // onStart에서 블루투스 자동 커넥 시키기
-        //if (first_start == false) {
-            //bluetooth_connect();
-            //first_start = true;
-        //}
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         Action viewAction = Action.newAction(
@@ -281,7 +265,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                 Uri.parse("android-app://com.example.osm.appdesign21/http/host/path")
         );
         AppIndex.AppIndexApi.end(client, viewAction);
-        if (Bluetooth_MagicNumber.D) Log.e(TAG, "-- ON STOP --");
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.disconnect();
@@ -290,7 +273,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     @Override
     public synchronized void onResume() {
         super.onResume();
-        if (Bluetooth_MagicNumber.D) Log.e(TAG, "+ ON RESUME +");
 
         if (mChatService != null) {
             // 이미 mChatService를 받았는지 안 받았는지 체크
@@ -319,7 +301,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 /*--------------------------------------------------------------------------------------*/
 
     private void setupChat() {
-        Log.d(TAG, "setupChat()");
 
         // thread통신을 위한 adapter를 담는 배열아답터 추가
         mConversationArrayAdapter = new ArrayAdapter<String>(this, R.layout.message);
@@ -440,6 +421,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                 if (resultCode == Activity.RESULT_OK) {
                     // 블루투스 비활성화일 경우
                     setupChat();
+                    bluetooth_connect();
                 } else {
                     // 유저가 블루투스를 할 수 없을 경우
                     Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
@@ -532,7 +514,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
     // 녹음 시작 메서드
     private void startRec() {
-        int mCurProgressTimeDisplay = 0;
 
         if (mRecorder == null) {
             mRecorder = new MediaRecorder();
@@ -813,8 +794,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         return file.exists();
     }
 
-
-
 /*------------------------------------- GPS   ------------------------------------------*/
 /*--------------------------------------------------------------------------------------*/
 
@@ -822,8 +801,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     private boolean chkGpsService() {
 
         String gps = android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
-
-        Log.d(gps, "aaaa");
 
         if (!(gps.matches(".*gps.*") && gps.matches(".*network.*"))) {
 
@@ -903,7 +880,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             userLatitude = location.getLatitude();
             userLongitude = location.getLongitude();
 
-            userCurrentLatlng = new LatLng(userLatitude,userLongitude);
+            LatLng userCurrentLatlng = new LatLng(userLatitude, userLongitude);
 
             if(mUploadingGPS == false){
                 new UploadGPS(mContext, userLatitude + "," + userLongitude).execute();
