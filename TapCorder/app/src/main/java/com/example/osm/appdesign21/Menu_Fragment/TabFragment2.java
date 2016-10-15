@@ -130,7 +130,7 @@ public class TabFragment2 extends Fragment {
 
         // 이 사용자 현재 위치도 바꿔줘야해!!
         Marker mUserMarker = gMap.addMarker(new MarkerOptions().position(mCurrent_Location)
-                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("userin", 140, 170))));
+                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("red_user", 120, 120))));
 
         LatLng short_policeStation = new LatLng(37.546757, 127.071366);
         Marker mPoliceMarker = gMap.addMarker(new MarkerOptions().position(short_policeStation)
