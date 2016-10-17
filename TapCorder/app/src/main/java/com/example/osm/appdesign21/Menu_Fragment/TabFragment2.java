@@ -1,16 +1,21 @@
 package com.example.osm.appdesign21.Menu_Fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +37,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
-import java.text.DecimalFormat;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +73,9 @@ public class TabFragment2 extends Fragment {
     private RelativeLayout layout_police;
     private RelativeLayout layout_user;
 
+
+    public static StringBuilder URL = new StringBuilder("https://m.map.naver.com/spirra/findCarRoute.nhn?route=route3&output=json&coord_type=latlng&search=0&car=0&mileage=12.4&start=127.0738840,37.5514706&destination=126.9522394,37.4640070");
+    LatLng short_policeStation = new LatLng(37.546757, 127.071366);
     SharedPreferences pref;
 
     @Override
@@ -152,23 +167,26 @@ public class TabFragment2 extends Fragment {
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                 mCurrent_Location, mZoomLevel));
 
-        // 이 사용자 현재 위치도 바꿔줘야해!!
         Marker mUserMarker = gMap.addMarker(new MarkerOptions().position(mCurrent_Location)
                 .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("red_user", 120, 120))));
-
-
-        LatLng short_policeStation = new LatLng(37.546757, 127.071366);
         Marker mPoliceMarker = gMap.addMarker(new MarkerOptions().position(short_policeStation)
                 .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("policeoffice", 130, 130))));
 
+        ExecuteJSONparsing();
 
-        String strNumber = String.format("%.1f", CalculationByDistance(short_policeStation,mCurrent_Location)*1000);
-
-        mDistance.setText(strNumber + "M ");
         mPoliceOffice_name.setText(" 서울 광진 경찰서 화양 지구대" );
-        //mPoliceOffice_name.setText(mSpot_array.get(0).get_name());
 
         checkDangerousPermissions();
+    }
+
+    private void ExecuteJSONparsing()
+    {
+        if (isConnected()) {
+        }
+        URL = new StringBuilder("https://m.map.naver.com/spirra/findCarRoute.nhn?route=route3&output=json&coord_type=latlng&search=0&car=0&mileage=12.4" +
+            "&start=" + mCurrent_Location.longitude + "," + mCurrent_Location.latitude + "&destination=" + short_policeStation.longitude +"," + short_policeStation.latitude);
+        // 이 URL에 대한 Json 파싱시작 -> HttpAsyncTask() 메소드로 감.
+        new HttpAsyncTask().execute(URL.toString());
     }
 
     private void init_DB() {
@@ -325,28 +343,75 @@ public class TabFragment2 extends Fragment {
         }
     }
 
-    /* 나중엔 JSON  파싱으로 네이버 지도에서 두 지점간의 거리를 정확하게 받아오는걸로 바꿀거임 */
-    public double CalculationByDistance(LatLng StartP, LatLng EndP) {
-        int Radius = 6371;// radius of earth in Km
-        double lat1 = StartP.latitude;
-        double lat2 = EndP.latitude;
-        double lon1 = StartP.longitude;
-        double lon2 = EndP.longitude;
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
-                + Math.cos(Math.toRadians(lat1))
-                * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
-                * Math.sin(dLon / 2);
-        double c = 2 * Math.asin(Math.sqrt(a));
-        double valueResult = Radius * c;
-        double km = valueResult / 1;
-        DecimalFormat newFormat = new DecimalFormat("####");
-        int kmInDec = Integer.valueOf(newFormat.format(km));
-        double meter = valueResult % 1000;
-        int meterInDec = Integer.valueOf(newFormat.format(meter));
+    public static String GET(String url) {
+        InputStream inputStream = null;
+        String result = "";
+        try {
+            // create HttpClient
+            HttpClient httpclient = new DefaultHttpClient();
 
-        return Radius * c;
+            // make GET request to the given URL
+            HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
+
+            // receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
+
+            // convert inputstream to string
+            if (inputStream != null)
+                result = convertInputStreamToString(inputStream);
+            else
+                result = "Did not work!";
+
+        } catch (Exception e) {
+            Log.d("InputStream", e.getLocalizedMessage());
+        }
+
+        return result;
     }
 
+    private static String convertInputStreamToString(InputStream inputStream) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        String line = "";
+        String result = "";
+        while ((line = bufferedReader.readLine()) != null)
+            result += line;
+
+        inputStream.close();
+        return result;
+    }
+
+    public boolean isConnected() {
+        ConnectivityManager connMgr = (ConnectivityManager)getContext().getSystemService(Activity.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected())
+            return true;
+        else
+            return false;
+    }
+
+    private class HttpAsyncTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            // GET 메소드로 이동동
+            return GET(urls[0]);
+        }
+
+        // onPostExecute displays the results of the AsyncTask.
+        // AsyncTask 작업이 완료된 후 실행되는 Method -> Json 파싱 다듬기 및 Alert창 띄우기
+        @Override
+        protected void onPostExecute(String result) {
+            int index_dist = result.indexOf("totalDistance");                                 // Json 파싱 후 전체 Text에서 짜르고 싶은 부분을 나누기 위해
+            int totalTime = result.indexOf("totalTime");                                      // 첫 index 값 과 끝 index 값 저장을 위한 변수 생성.
+
+            StringBuilder stringBuilder = new StringBuilder(result);                          // Json 파싱한 Text ( result )를 StringBuilder에 넣기
+            stringBuilder.delete(0, index_dist);
+            stringBuilder.delete(totalTime - index_dist, stringBuilder.length());             // Json 파싱 결과값 다듬기
+
+            String a = stringBuilder.toString();                                              // 총 거리 정보를
+            String[] split_stringBuilder = a.split("[:,]");                                   // 배열부분에 담는다
+            StringBuilder distance = new StringBuilder(split_stringBuilder[1]);
+
+            mDistance.setText(distance.toString()+ " M");
+        }
+    }
 }
