@@ -777,6 +777,10 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Action for 'Yes' Button
+                        pref.removeAllPreferences("mode");
+                        Intent intent = new Intent(MainActivity.this, SelectModeActivity.class);
+                        MainActivity.this.startActivity(intent);
+                        finish();
                     }
                 }).setNegativeButton("아니오",
                 new DialogInterface.OnClickListener() {
