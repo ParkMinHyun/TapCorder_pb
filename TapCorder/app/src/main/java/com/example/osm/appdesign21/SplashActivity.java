@@ -20,7 +20,6 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.splash);
 
         pref = new SharedPreferences(this);
-        pref.removeAllPreferences("mode");
 
         Handler hd = new Handler();
         hd.postDelayed(new Runnable() {

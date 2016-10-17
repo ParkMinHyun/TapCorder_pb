@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.osm.appdesign21.Pop;
 import com.example.osm.appdesign21.R;
+import com.example.osm.appdesign21.SelectModeActivity;
 import com.example.osm.appdesign21.SharedPreferences;
 
 public class TabFragment3 extends Fragment {
@@ -66,6 +67,10 @@ public class TabFragment3 extends Fragment {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Action for 'Yes' Button
+                        pref.removeAllPreferences("mode");
+                        Intent intent = new Intent(getActivity(), SelectModeActivity.class);
+                        getActivity().startActivity(intent);
+                        getActivity().finish();
                     }
                 }).setNegativeButton("아니오",
                 new DialogInterface.OnClickListener() {

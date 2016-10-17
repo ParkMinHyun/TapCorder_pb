@@ -45,6 +45,5 @@ public class SelectModeActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 }
