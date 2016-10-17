@@ -38,7 +38,7 @@ public class SelectModeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 TelephonyManager tMgr = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
                 String mPhoneNumber = tMgr.getLine1Number();
-                pref.putValue("fpnum",mPhoneNumber.substring(mPhoneNumber.length()-8),"fpnum");
+                //pref.putValue("fpnum",mPhoneNumber.substring(mPhoneNumber.length()-8),"fpnum");
                 pref.putValue("mode", "disabled", "mode");
                 Intent intent = new Intent(SelectModeActivity.this, MainActivity.class);
                 SelectModeActivity.this.startActivity(intent);

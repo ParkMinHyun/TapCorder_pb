@@ -146,7 +146,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         /*------------ Server ------------*/
         //파일 자동 업로드
         mContext = this;
-        while(fileExistance("/storage/emulated/0/progress_recorder/recordFile" + fcnt + ".amr")){
+        while (fileExistance("/storage/emulated/0/progress_recorder/recordFile" + fcnt + ".amr")) {
             new UploadTask("/storage/emulated/0/progress_recorder/recordFile" + fcnt + ".amr", mContext).execute();
             fcnt++;
         }
@@ -224,13 +224,15 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
         registerReceiver(this.mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
     }
-    BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver(){
+
+    BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context ctxt, Intent intent) {
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
             new UploadBattery(mContext, String.valueOf(level) + "%").execute();
         }
     };
+
     @Override
     public void onStart() {
         super.onStart();
@@ -243,8 +245,10 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, Bluetooth_MagicNumber.REQUEST_ENABLE_BT);
         } else {
-            if (mChatService == null)
+            if (mChatService == null) {
                 setupChat();
+                bluetooth_connect();
+            }
         }
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -467,9 +471,8 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         fileList = getFileList(mFilePath);
 
         // list에 dataset 넣기 ( 핸드폰 안에 있는 음성 파일 )
-        for (int i = 0; i < fileList.length; i++)
-        {
-            if(fileList[i].getName().contains("gps") || fileList[i].getName().contains("bt")){
+        for (int i = 0; i < fileList.length; i++) {
+            if (fileList[i].getName().contains("gps") || fileList[i].getName().contains("bt")) {
                 continue;
             }
             insertRecFile(i, fileList, dataset);
@@ -752,8 +755,8 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                         }
                     });
 
-                    changeModeLayout=(RelativeLayout)layout.findViewById(R.id.changeMode);
-                    changeModeLayout.setOnClickListener(new View.OnClickListener(){
+                    changeModeLayout = (RelativeLayout) layout.findViewById(R.id.changeMode);
+                    changeModeLayout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             changeModeDialog();
@@ -770,7 +773,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     }
 
     //모드 변경 레이아웃 클릭시 뜨는 다이알로그창
-    private void changeModeDialog(){
+    private void changeModeDialog() {
         AlertDialog.Builder alt_bld = new AlertDialog.Builder(this);
         alt_bld.setMessage("앱 모드를 변경하시겠습니까?\n'예'를 누르시면 모드 선택 초기화면으로 돌아갑니다.").setCancelable(
                 false).setPositiveButton("예",
@@ -798,7 +801,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     }
 
 
-    public boolean fileExistance(String fname){
+    public boolean fileExistance(String fname) {
         File file = new File(fname);
         return file.exists();
     }
@@ -836,6 +839,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             return true;
         }
     }
+
     /**
      * 위치 정보 확인을 위해 정의한 메소드
      */
@@ -875,7 +879,6 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             ex.printStackTrace();
         }
 
-        Toast.makeText(getApplicationContext(), "위치 확인이 시작되었습니다. 로그를 확인하세요.", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -891,11 +894,10 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
             LatLng userCurrentLatlng = new LatLng(userLatitude, userLongitude);
 
-            if(mUploadingGPS == false){
+            if (mUploadingGPS == false) {
                 new UploadGPS(mContext, userLatitude + "," + userLongitude).execute();
                 mUploadingGPS = true;
             }
-            Toast.makeText(getApplication(),userLatitude +" " + userLongitude ,Toast.LENGTH_SHORT).show();
         }
 
         public void onProviderDisabled(String provider) {
