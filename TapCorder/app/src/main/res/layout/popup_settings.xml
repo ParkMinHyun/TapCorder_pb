@@ -10,27 +10,26 @@
     <!--설정 상단바-->
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
+        android:layout_height="wrap_content"
+        android:background="@drawable/popup_title"
+        >
         <TextView
             android:id="@+id/set_title"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@drawable/popup_title"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:text="설   정"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF"
-            android:textSize="22dp"
-            android:textStyle="normal" />
-
+            android:textColor="@color/yellow_txtcolor"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            />
         <Button
             android:id="@+id/closebtn_popup_1"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="15dp"
             android:background="@drawable/close" />
     </RelativeLayout>
 
@@ -50,27 +49,40 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginBottom="20dp">
+
+                <!--&lt;!&ndash;gap &ndash;&gt;-->
+                <!--<TextView-->
+                    <!--android:layout_marginLeft="2dp"-->
+                    <!--android:layout_marginRight="2dp"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="5dp"-->
+                    <!--android:background="#dddbd6"/>-->
 
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="15dp"
-                    android:background="@drawable/popupmenu_bg"
-                    android:text="  녹음 시간  "
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:background="@color/yellow_title"
+                    android:text="녹음 시간"
                     android:textAlignment="center"
-                    android:textColor="#000000"
-                    android:textSize="18dp" />
+                    android:textColor="@color/yellow_txtcolor"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
 
                 <RadioGroup
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
                     android:id="@+id/set_radiogroup"
                     android:layout_width="fill_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/popup_accel_both"
+                    android:layout_marginTop="10dp"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal">
 
@@ -80,7 +92,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:text="2분"
-                        android:textSize="16dp" />
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
 
                     <RadioButton
                         android:id="@+id/option2"
@@ -89,7 +102,8 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="20dp"
                         android:text="3분"
-                        android:textSize="16dp" />
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
 
                     <RadioButton
                         android:id="@+id/option3"
@@ -98,26 +112,30 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="20dp"
                         android:text="5분"
-                        android:textSize="16dp" />
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
                 </RadioGroup>
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="30dp"
-                    android:background="@drawable/popupmenu_bg"
-                    android:text="  보호자 연락망  "
+                    android:gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/yellow_title"
+                    android:text="보호자 연락망"
                     android:textAlignment="center"
-                    android:textColor="#000000"
-                    android:textSize="18dp" />
+                    android:textColor="@color/yellow_txtcolor"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
 
                 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/popup_layout_1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/popup_bg">
+                    >
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -155,29 +173,40 @@
                     </LinearLayout>
 
                     <ListView
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
                         android:id="@+id/listPhone"
                         android:layout_width="match_parent"
                         android:layout_height="250dp"
                         android:layout_marginTop="70dp"
-                        android:background="@drawable/popup_accel_both" />
-
+                        />
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:id="@+id/changeMode">
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/changeMode"
+                    android:background="@drawable/title_date"
+                    android:gravity="center">
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:background="@drawable/title_date"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="25dp"
+                        android:id="@+id/modeChangeTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:gravity="center"
                         android:text="앱 모드 변경"
                         android:textColor="@color/yellow_txtcolor"
                         android:textSize="18sp"
                         android:textStyle="bold" />
+                    <ImageView
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@+id/modeChangeTxt"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/next" />
                 </RelativeLayout>
 
 

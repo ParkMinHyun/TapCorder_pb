@@ -20,116 +20,241 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:background="@drawable/title_date"
+                android:background="@drawable/settings_title"
                 android:gravity="center_vertical"
-                android:paddingLeft="25dp"
+                android:paddingLeft="20dp"
                 android:text="사용자 기기 배터리"
                 android:textColor="@color/yellow_txtcolor"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
+            <!--사용자 기기 배터리 뷰-->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="240dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/settings_bg"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
+                    android:layout_height="130dp"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:weightSum="1">
+                    android:weightSum="10">
 
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_marginLeft="18dp"
-                        android:background="@drawable/phone_battery" />
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.5"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:background="@drawable/phone_battery" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.5"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/tvBattery"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="100%"
+                            android:textColor="@color/main_comple"
+                            android:textSize="30dp" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="130dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.5"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="100dp"
+                            android:layout_height="70dp"
+                            android:background="@drawable/battery_tapcorder" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.5"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="100%"
+                            android:textColor="@color/main_comple"
+                            android:textSize="30dp" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--&lt;!&ndash;갭&ndash;&gt;-->
+            <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="10dp"-->
+            <!--android:background="#e3e2de"></RelativeLayout>-->
+
+
+            <!--보호자 설정 바-->
+            <RelativeLayout
+                android:id="@+id/settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/settings_title">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:text="보호자 설정"
+                    android:textColor="@color/yellow_txtcolor"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:orientation="vertical"
+                android:visibility="visible">
+                <!--보호자 설정(번호)-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tvBattery"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="40dp"
-                        android:text="100%"
-                        android:textColor="@color/main_comple"
-                        android:textSize="30dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_weight="0.09" />
+                        android:layout_height="38dp"
+                        android:gravity="bottom"
+                        android:paddingLeft="15dp"
+                        android:text="보호자 연락처"
+                        android:textColor="@color/yellow_txtcolor"
+                        android:textSize="19sp"
+                        android:textStyle="bold" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="38dp"
+                        android:gravity="top"
+                        android:paddingLeft="15dp"
+                        android:text="탭코더 작동시 문자 알림 및 사용자 위치를 제공합니다."
+                        android:textSize="15.5sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
+                    android:background="#FFFFFF"
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="70dp"
-                        android:background="@drawable/battery_tapcorder" />
+                    <TextView
+                        android:id="@+id/textView_phoneNum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="휴대폰 번호를 저장하세요."
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="30dp" />
+
+                    <Button
+                        android:id="@+id/btn_change_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="연락처 변경" />
+                </LinearLayout>
+
+                <!--앱 모드 설정 바-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/settings_title">
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="40dp"
-                        android:text="100%"
-                        android:textColor="@color/main_comple"
-                        android:textSize="30dp" />
+                        android:layout_height="45dp"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="20dp"
+                        android:text="애플리케이션 설정"
+                        android:textColor="@color/yellow_txtcolor"
+                        android:textSize="19sp"
+                        android:textStyle="bold" />
 
-                </LinearLayout>
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:background="@drawable/title_date"
-                android:gravity="center_vertical"
-                android:paddingLeft="25dp"
-                android:text="보호자 설정"
-                android:textColor="@color/yellow_txtcolor"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:background="@drawable/recycleritem"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView_phoneNum"
+                </RelativeLayout>
+                <!--앱 모드 변경-->
+                <RelativeLayout
+                    android:id="@+id/changeMode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="휴대폰 번호를 저장하세요."
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="30dp" />
+                    android:background="#FFFFFF"
+                    android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/btn_change_num"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="연락처 변경" />
+                    <TextView
+                        android:id="@+id/changeModeTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="38dp"
+                        android:gravity="bottom"
+                        android:paddingLeft="15dp"
+                        android:text="모드 변경"
+                        android:textColor="@color/yellow_txtcolor"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:id="@+id/gapLayout"
+                        android:layout_below="@+id/changeModeTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+
+                    <TextView
+                        android:id="@+id/changeModeEx"
+                        android:layout_width="wrap_content"
+                        android:layout_height="38dp"
+                        android:layout_below="@+id/gapLayout"
+                        android:gravity="top"
+                        android:paddingLeft="15dp"
+                        android:text="애플리케이션 모드(사용자/보호자)를 변경합니다."
+                        android:textSize="15.5sp"
+                        android:layout_alignParentEnd="false"
+                        android:layout_alignParentBottom="true" />
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="15dp"
+                        android:background="@drawable/next" />
+                </RelativeLayout>
+
             </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/changeMode">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:background="@drawable/title_date"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="25dp"
-                    android:text="앱 모드 변경"
-                    android:textColor="@color/yellow_txtcolor"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-            </RelativeLayout>
 
 
         </LinearLayout>

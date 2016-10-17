@@ -3,7 +3,7 @@
     <item android:state_pressed="false" android:drawable="@drawable/selectmode_user_unpressed">
 
     </item>
-    <item android:state_pressed="true" android:drawable="@drawable/selectmode_pressed">
+    <item android:state_pressed="true" android:drawable="@drawable/selectmode_user_pressed">
 
     </item>
 

@@ -699,12 +699,13 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                 case 0:
                     View layout = inflater.inflate(R.layout.popup_settings,
                             (ViewGroup) findViewById(R.id.popup_layout_0));
-                    pwindo = new PopupWindow(layout, mWidthPixels - 100, mHeightPixels - 320, true);
+//                    pwindo = new PopupWindow(layout, mWidthPixels - 100, mHeightPixels - 320, true);
+                    pwindo = new PopupWindow(layout, mWidthPixels, mHeightPixels-150, true);
 
-                    pwindo.showAtLocation(layout, Gravity.CENTER, 0, 0);
+                    pwindo.showAtLocation(layout, Gravity.BOTTOM, 0, 0);
 
                     // 뒷배경은 흐리게
-                    layout_MainMenu.getForeground().setAlpha(100);
+                    layout_MainMenu.getForeground().setAlpha(150);
 
 
                     option1 = (RadioButton) layout.findViewById(R.id.option1);

@@ -5,7 +5,21 @@
     android:layout_height="match_parent"
     tools:context="com.example.osm.appdesign21.ContactActivity">
 
-    <ListView android:id="@+id/contactList"
+    <TextView
+        android:id="@+id/addrTxt"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="@color/yellow_txtcolor"
+        android:background="@drawable/popup_title"
+        android:text="연락처"
+        />
+
+    <ListView
+        android:layout_below="@+id/addrTxt"
+        android:id="@+id/contactList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         />

@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainmenu"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:foreground="@drawable/shadow_window_dim">
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
 
-
     <!--음성파일목록RecyclerView-->
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/title_layout"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:background="@drawable/title_top_btm"
-        android:orientation="vertical"
         android:gravity="center_vertical"
-        >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/textView_title"
@@ -22,60 +26,57 @@
             android:layout_marginLeft="20dp"
             android:drawableLeft="@drawable/tap32"
             android:gravity="fill_horizontal|center_vertical"
-            android:text="  음성파일 목록"
+            android:text="  사용자 모드"
             android:textColor="#FFFFFF"
             android:textSize="20dp"
-            />
+            android:textStyle="bold" />
 
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/battery_tapcorder"
             android:layout_alignParentEnd="false"
-            android:layout_toLeftOf="@+id/battery_tapcorder"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
-            />
+            android:layout_toLeftOf="@+id/battery_tapcorder"
+            android:src="@drawable/battery_tapcorder" />
 
         <TextView
             android:id="@+id/battery_tapcorder"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:textColor="#FFFFFF"
-            android:textSize="19dp"
-            android:text="100%"
-            android:layout_marginRight="10dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="20dp" />
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center_vertical"
+            android:text="100%"
+            android:textColor="#FFFFFF"
+            android:textSize="19dp" />
 
     </RelativeLayout>
 
-    <FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/mainmenu"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:foreground="@drawable/shadow_window_dim" >
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="50dp"
-        tools:context=".MainActivity"
-        android:foreground="@drawable/shadow_window_dim"
-        >
+    <!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--android:id="@+id/mainmenu"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="fill_parent"-->
+        <!--android:layout_below="@+id/title_layout"-->
+        <!--android:foreground="@drawable/shadow_window_dim">-->
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/mTimeRecyclerView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#CAC0E4"
-            android:scrollbars="vertical" />
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:foreground="@drawable/shadow_window_dim"
+            android:layout_below="@+id/title_layout"
+            tools:context=".MainActivity">
 
-    </RelativeLayout>
-    </FrameLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/mTimeRecyclerView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:scrollbars="vertical" />
 
+        </RelativeLayout>
+    <!--</FrameLayout>-->
 
     <!--설정버튼-->
     <android.support.design.widget.FloatingActionButton
@@ -86,7 +87,8 @@
         android:layout_alignParentRight="true"
         android:layout_gravity="bottom|right"
         android:layout_margin="25dp" />
+
 </RelativeLayout>
 
-
+</FrameLayout>
 
