@@ -780,7 +780,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     //모드 변경 레이아웃 클릭시 뜨는 다이알로그창
     private void changeModeDialog() {
         AlertDialog.Builder alt_bld = new AlertDialog.Builder(this);
-        alt_bld.setMessage("앱 모드를 변경하시겠습니까?\n'예'를 누르시면 모드 선택 초기화면으로 돌아갑니다.").setCancelable(
+        alt_bld.setMessage("모드를 변경하시겠습니까?\n'예'를 누르시면 모드 선택 초기화면으로 돌아갑니다.").setCancelable(
                 false).setPositiveButton("예",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -799,7 +799,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                 });
         AlertDialog alert = alt_bld.create();
         // Title for AlertDialog
-        alert.setTitle("앱 모드 변경");
+        alert.setTitle("애플리케이션 모드 변경");
         // Icon for AlertDialog
 //        alert.setIcon(R.drawable.icon);
         alert.show();

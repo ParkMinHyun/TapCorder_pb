@@ -196,7 +196,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
                         android:gravity="center"
-                        android:text="앱 모드 변경"
+                        android:text="애플리케이션 모드 변경"
                         android:textColor="@color/yellow_txtcolor"
                         android:textSize="18sp"
                         android:textStyle="bold" />
