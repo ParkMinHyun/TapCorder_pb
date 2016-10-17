@@ -80,7 +80,7 @@
 
     <!--근처 파출소 및 경찰서 정보 레이아웃-->
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/Sub_Layout"
+        android:id="@+id/sub_layout_police"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -91,10 +91,11 @@
         android:paddingBottom="15dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="15dp">
+        android:paddingTop="15dp"
+        android:visibility="gone">
 
         <ImageView
-            android:id="@+id/mark_icon"
+            android:id="@+id/mark_icon_police"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_alignParentStart="true"
@@ -106,7 +107,7 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_marginRight="50dp"
-            android:layout_toEndOf="@+id/mark_icon"
+            android:layout_toEndOf="@+id/mark_icon_police"
             android:orientation="vertical">
 
             <TextView
@@ -147,7 +148,7 @@
         </RelativeLayout>
 
         <Button
-            android:id="@+id/call"
+            android:id="@+id/call_police"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_alignParentEnd="true"
@@ -155,10 +156,81 @@
             android:layout_gravity="right"
             android:layout_marginRight="10dp"
             android:gravity="bottom|end|right"
-            android:src="@drawable/call"
             android:background="@drawable/call_police" />
 
     </RelativeLayout>
 
+
+    <!--사용자 정보 레이아웃-->
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/sub_layout_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="false"
+        android:background="#FFFFFF"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="15dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="15dp"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/mark_icon_user"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/user" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginRight="50dp"
+            android:layout_toEndOf="@+id/mark_icon_user"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="현재 위치 주소"
+                android:textColor="#040303"
+                android:textIsSelectable="false"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/user_addr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:text="서울시 광진구 군자동 131"
+                android:textColor="@color/color_user"
+                android:textSize="17dp"
+                android:textStyle="bold"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"/>
+
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/call_user"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="right"
+            android:layout_marginRight="10dp"
+            android:gravity="bottom|end|right"
+            android:background="@drawable/call_user" />
+
+    </RelativeLayout>
 </RelativeLayout>
 

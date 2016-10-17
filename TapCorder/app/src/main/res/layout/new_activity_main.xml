@@ -54,7 +54,7 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/call"
+                android:src="@drawable/call_user"
                 android:layout_marginRight="5dp"
                 />
             <TextView
