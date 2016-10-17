@@ -35,37 +35,37 @@
             android:drawableLeft="@drawable/tap32"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
-            android:text=" TapCorder"
+            android:text=" 보호자 모드"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="15dp"
-            android:background="#FFFFFF"
-            android:padding="5dp">
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/call_user"
-                android:layout_marginRight="5dp"
-                />
-            <TextView
-                android:gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="사용자"
-                android:textStyle="bold"
-                android:textColor="#000000"/>
+        <!--<LinearLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_marginRight="15dp"-->
+            <!--android:background="#FFFFFF"-->
+            <!--android:padding="5dp">-->
+            <!--<ImageView-->
+                <!--android:layout_width="25dp"-->
+                <!--android:layout_height="25dp"-->
+                <!--android:src="@drawable/call_user"-->
+                <!--android:layout_marginRight="5dp"-->
+                <!--/>-->
+            <!--<TextView-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="사용자"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textColor="#000000"/>-->
 
-        </LinearLayout>
+        <!--</LinearLayout>-->
     </RelativeLayout>
 
     <!--android:id="@+id/tab_layout"-->
@@ -80,9 +80,9 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/relativeLayout"
         android:background="@drawable/tablayout_bg"
-        android:elevation="6dp"
         android:minHeight="?attr/actionBarSize"
-        app:tabIndicatorHeight="3dp"
+        app:tabIndicatorHeight="2.5dp"
+        android:elevation="3dp"
         app:tabSelectedTextColor="@color/tab_color"
         app:tabTextAppearance="@style/AppTabTextAppearance" />
 
