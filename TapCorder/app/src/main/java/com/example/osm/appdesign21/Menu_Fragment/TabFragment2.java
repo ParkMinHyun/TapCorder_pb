@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +58,8 @@ public class TabFragment2 extends Fragment {
     public Button mCall_btn;
     private FloatingActionButton mZoonIn_btn;
     private FloatingActionButton mZoonOut_btn;
+    private RelativeLayout layout_police;
+    private RelativeLayout layout_user;
 
     SharedPreferences pref;
 
@@ -73,6 +76,7 @@ public class TabFragment2 extends Fragment {
         init_Map(view);
         set_ClickEvent();
 
+
         return view;
     }
 
@@ -82,9 +86,12 @@ public class TabFragment2 extends Fragment {
 
         this.mDistance = (TextView)view.findViewById(R.id.between_distance);
         this.mPoliceOffice_name = (TextView)view.findViewById(R.id.policeStationName);
-        this.mCall_btn = (Button)view.findViewById(R.id.call);
+        this.mCall_btn = (Button)view.findViewById(R.id.call_police);
         this.mZoonIn_btn = (FloatingActionButton)view.findViewById(R.id.zoom_in);
         this.mZoonOut_btn = (FloatingActionButton)view.findViewById(R.id.zoom_out);
+
+        layout_police=(RelativeLayout)view.findViewById(R.id.sub_layout_police);
+        layout_user=(RelativeLayout)view.findViewById(R.id.sub_layout_user);
 
         mapView = (MapView) view.findViewById(R.id.gmap);
         mapView.onCreate(savedInstanceState);
@@ -118,13 +125,17 @@ public class TabFragment2 extends Fragment {
 
             public boolean onMarkerClick(Marker marker) {
 
+                //사용자 마커일때
                 if (marker.getId().equals("m0")) {
-                    String text = "[마커 클릭 이벤트] latitude ="
-                            + marker.getPosition().latitude + ", longitude ="
-                            + marker.getPosition().longitude;
-                    Toast.makeText(getContext(), text, Toast.LENGTH_LONG)
-                            .show();
+                    layout_user.setVisibility(View.VISIBLE);
+                    layout_police.setVisibility(View.GONE);
                 }
+                //경찰 마커일때
+                else if(marker.getId().equals("m1")){
+                    layout_police.setVisibility(View.VISIBLE);
+                    layout_user.setVisibility(View.GONE);
+                }
+
                 return false;
             }
         });

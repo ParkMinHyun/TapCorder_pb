@@ -314,7 +314,7 @@ public class BluetoothChatService {
 
             // Make a connection to the BluetoothSocket
             try {
-                // This is a blocking call and will only return on a
+                // This is a blocking call_user and will only return on a
                 // successful connection or an exception
                 mmSocket.connect();
             } catch (IOException e) {
