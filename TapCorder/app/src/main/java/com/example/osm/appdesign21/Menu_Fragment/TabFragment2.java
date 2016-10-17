@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,7 +71,7 @@ public class TabFragment2 extends Fragment {
         init_Property(view,savedInstanceState);
         init_DB();
         init_Map(view);
-        set_ButtonClick();
+        set_ClickEvent();
 
         return view;
     }
@@ -92,7 +91,7 @@ public class TabFragment2 extends Fragment {
 
     }
 
-    public void set_ButtonClick(){
+    public void set_ClickEvent(){
 
         mCall_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +112,17 @@ public class TabFragment2 extends Fragment {
             @Override
             public void onClick(View view) {
                 getCameraPosition_ConvertZoom("ZoomOut");
+            }
+        });
+        gMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
+            public boolean onMarkerClick(Marker marker) {
+                String text = "[마커 클릭 이벤트] latitude ="
+                        + marker.getPosition().latitude + ", longitude ="
+                        + marker.getPosition().longitude;
+                Toast.makeText(getContext(), text, Toast.LENGTH_LONG)
+                        .show();
+                return false;
             }
         });
     }
