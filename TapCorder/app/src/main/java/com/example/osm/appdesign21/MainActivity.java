@@ -477,7 +477,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             }
             insertRecFile(i, fileList, dataset);
         }
-        newRecordNum = fileList.length + 1;
+        newRecordNum = fileList.length - 1;
         return dataset;
     }
 
@@ -625,6 +625,10 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                 stopRec();
                 Toast.makeText(getApplicationContext(), "녹음 완료", Toast.LENGTH_SHORT).show();
                 initStopWatch();
+
+                new UploadTask("/storage/emulated/0/progress_recorder/recordFile" + fcnt + ".amr", mContext).execute();
+                fcnt++;
+
             }
         }
 
