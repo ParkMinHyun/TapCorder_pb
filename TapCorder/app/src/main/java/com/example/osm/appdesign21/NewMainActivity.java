@@ -45,7 +45,7 @@ public class NewMainActivity extends AppCompatActivity {
             new DownloadTask(pref.getValue("disablePnum","files","disablePnum")).execute();
             new DownloadGPS(pref.getValue("disablePnum", "files", "disablePnum")).execute();
             new DownloadBattery(pref.getValue("disablePnum","files", "disablePnum")).execute();
-            new CountDownTimer(3000, 1000) {
+            new CountDownTimer(4000, 1000) {
                 @Override
                 public void onTick(long l) {
 

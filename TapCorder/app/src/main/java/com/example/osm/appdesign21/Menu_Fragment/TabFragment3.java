@@ -53,12 +53,18 @@ public class TabFragment3 extends Fragment {
         // 저장해둔 사용자 번호 설정
         textView = (TextView)view.findViewById(R.id.textView_phoneNum);
         tvBattery = (TextView)view.findViewById(R.id.tvBattery);
+        if(pref.getValue("0", "98", "bt").equals("98")){
+            tvBattery.setText(pref.getValue("0", "98%", "bt"));
+        }else{
+            String bt = pref.getValue("0", "98%", "bt").substring(0, 4);
+
+            tvBattery.setText(bt);
+        }
         if(pref.getValue("disablePnum", "no", "disablePnum").equals("no")){
             textView.setText("번호를 저장하세요");
         } else{
             textView.setText("010" + pref.getValue("disablePnum", "번호를 저장하세요.", "disablePnum"));
         }
-        tvBattery.setText(pref.getValue("0", "98%", "bt"));
         mChange = (Button)view.findViewById(R.id.btn_change_num);
         frameLayout = (FrameLayout) getActivity().findViewById(R.id.mainmenu_new);
         frameLayout.getForeground().setAlpha(0);
