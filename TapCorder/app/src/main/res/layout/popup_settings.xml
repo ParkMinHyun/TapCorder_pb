@@ -11,8 +11,8 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/popup_title"
-        >
+        android:background="@drawable/popup_title">
+
         <TextView
             android:id="@+id/set_title"
             android:layout_width="match_parent"
@@ -21,8 +21,8 @@
             android:text="설   정"
             android:textColor="@color/yellow_txtcolor"
             android:textSize="20sp"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
+
         <Button
             android:id="@+id/closebtn_popup_1"
             android:layout_width="20dp"
@@ -49,39 +49,39 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_marginBottom="20dp">
+                android:layout_marginBottom="20dp"
+                android:orientation="vertical">
 
                 <!--&lt;!&ndash;gap &ndash;&gt;-->
                 <!--<TextView-->
-                    <!--android:layout_marginLeft="2dp"-->
-                    <!--android:layout_marginRight="2dp"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="5dp"-->
-                    <!--android:background="#dddbd6"/>-->
+                <!--android:layout_marginLeft="2dp"-->
+                <!--android:layout_marginRight="2dp"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="5dp"-->
+                <!--android:background="#dddbd6"/>-->
 
 
                 <TextView
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="2dp"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center_vertical"
-                    android:gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
                     android:background="@color/yellow_title"
+                    android:gravity="center_vertical"
                     android:text="녹음 시간"
                     android:textAlignment="center"
                     android:textColor="@color/yellow_txtcolor"
                     android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <RadioGroup
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="2dp"
                     android:id="@+id/set_radiogroup"
                     android:layout_width="fill_parent"
                     android:layout_height="40dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
                     android:layout_marginTop="10dp"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal">
@@ -93,7 +93,7 @@
                         android:layout_gravity="center_vertical"
                         android:text="2분"
                         android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <RadioButton
                         android:id="@+id/option2"
@@ -103,7 +103,7 @@
                         android:layout_marginLeft="20dp"
                         android:text="3분"
                         android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <RadioButton
                         android:id="@+id/option3"
@@ -113,84 +113,111 @@
                         android:layout_marginLeft="20dp"
                         android:text="5분"
                         android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
                 </RadioGroup>
 
                 <TextView
-                    android:layout_marginRight="2dp"
-                    android:layout_marginLeft="2dp"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_centerHorizontal="true"
-                    android:gravity="center"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
                     android:layout_marginTop="10dp"
                     android:background="@color/yellow_title"
+                    android:gravity="center"
                     android:text="보호자 연락망"
                     android:textAlignment="center"
                     android:textColor="@color/yellow_txtcolor"
                     android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
-                <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/popup_layout_1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    >
+                    android:orientation="vertical">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="15dp"
-                        android:gravity="center_horizontal">
+                        android:gravity="center_horizontal"
+                        android:paddingBottom="5dp"
+                        android:paddingTop="5dp">
 
-                        <Button
+                        <!--추가 버튼-->
+                        <RelativeLayout
+                            android:padding="5dp"
                             android:id="@+id/btn_add"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/shadowbtn_bg">
+                        <ImageView
+                            android:elevation="5dp"
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:layout_alignTop="@+id/textView"
                             android:layout_centerHorizontal="true"
                             android:background="@drawable/add_contact"
                             android:gravity="center_vertical"
-                            android:minHeight="0dp"
-                            android:minWidth="0dp"
-                            android:textAlignment="center"
-                            android:textSize="16dp" />
+                            />
+                        </RelativeLayout>
 
-                        <Button
+                        <!--삭제 버튼-->
+                        <RelativeLayout
+                            android:padding="5dp"
                             android:id="@+id/btn_delete"
+                            android:layout_marginLeft="50dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/shadowbtn_bg"
+                            >
+                        <ImageView
+                            android:elevation="5dp"
                             android:layout_width="35dp"
                             android:layout_height="35dp"
-                            android:layout_alignLeft="@+id/btn_add"
                             android:layout_below="@+id/textView"
-                            android:layout_marginLeft="50dp"
                             android:background="@drawable/remove_contact"
                             android:gravity="center_vertical"
-                            android:minHeight="0dp"
-                            android:minWidth="0dp"
-                            android:textAlignment="center"
-                            android:textSize="16dp" />
+                            />
+                        </RelativeLayout>
                     </LinearLayout>
 
-                    <ListView
+                    <!--갭-->
+                    <LinearLayout
                         android:layout_marginLeft="2dp"
                         android:layout_marginRight="2dp"
-                        android:id="@+id/listPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/yellow_title"></LinearLayout>
+
+                    <!--리스트뷰 스크롤-->
+                    <ScrollView
+                        android:id="@+id/scroll_lvphone"
                         android:layout_width="match_parent"
                         android:layout_height="250dp"
-                        android:layout_marginTop="70dp"
-                        />
-                </RelativeLayout>
+                        android:fillViewport="true"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp">
+
+                        <ListView
+                            android:id="@+id/listPhone"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                             />
+                    </ScrollView>
+                </LinearLayout>
 
                 <RelativeLayout
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="2dp"
+                    android:id="@+id/changeMode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
                     android:layout_marginTop="10dp"
-                    android:id="@+id/changeMode"
                     android:background="@drawable/title_date"
                     android:gravity="center">
+
                     <TextView
                         android:id="@+id/modeChangeTxt"
                         android:layout_width="wrap_content"
@@ -200,12 +227,13 @@
                         android:textColor="@color/yellow_txtcolor"
                         android:textSize="18sp"
                         android:textStyle="bold" />
+
                     <ImageView
-                        android:layout_marginLeft="10dp"
-                        android:layout_toRightOf="@+id/modeChangeTxt"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@+id/modeChangeTxt"
                         android:background="@drawable/next" />
                 </RelativeLayout>
 

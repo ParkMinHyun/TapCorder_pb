@@ -81,7 +81,7 @@
         android:layout_below="@+id/relativeLayout"
         android:background="@drawable/tablayout_bg"
         android:minHeight="?attr/actionBarSize"
-        app:tabIndicatorHeight="2.5dp"
+        app:tabIndicatorHeight="3dp"
         android:elevation="3dp"
         app:tabSelectedTextColor="@color/tab_color"
         app:tabTextAppearance="@style/AppTabTextAppearance" />
