@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ public class Pop extends AppCompatActivity {
     private TextView mPhoneNumView_Pop;
     private String mPhoneNum;
     SharedPreferences pref;
+    private LinearLayout popupLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,7 @@ public class Pop extends AppCompatActivity {
         setContentView(R.layout.activity_pop);
 
         mPhoneNumView_Pop = (TextView)findViewById(R.id.editText_pop);
+        popupLayout=(LinearLayout)findViewById(R.id.popup_layout_2);
 
         pref = new SharedPreferences(this);
         // 팝업 윈도우로 사용하기 위한 설정
@@ -33,6 +36,7 @@ public class Pop extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
         int heigth = dm.heightPixels;
+//        getWindow().setLayout(popupLayout.getWidth(),popupLayout.getHeight());
         getWindow().setLayout((int)(width*.8), (int)(heigth*.4));
 
         mStore = (Button)findViewById(R.id.btn_store);
