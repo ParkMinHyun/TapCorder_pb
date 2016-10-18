@@ -1,20 +1,26 @@
 package com.example.osm.appdesign21.Menu_Fragment;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.osm.appdesign21.Pop;
 import com.example.osm.appdesign21.R;
 import com.example.osm.appdesign21.SelectModeActivity;
 import com.example.osm.appdesign21.SharedPreferences;
@@ -25,29 +31,66 @@ public class TabFragment3 extends Fragment {
     private TextView tvBattery;
 
     private Button mChange; // 사용자 번호 변경 버튼
-
+    FrameLayout frameLayout;
     SharedPreferences pref;
 
     private RelativeLayout changeModeLayout;
     private LinearLayout settings_layout;
     private ImageButton settings_btn;
+    private PopupWindow popupWindow;
+    private Button mStore;
+    private Button mCancel;
+    private TextView mPhoneNumView_Pop;
+    private String mPhoneNum;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         LayoutInflater lf = getActivity().getLayoutInflater();
         View view = lf.inflate(R.layout.tab_fragment_3, null);
+        View view_pop = lf.inflate(R.layout.activity_pop, null);
         pref = new SharedPreferences(getContext());
         // 저장해둔 사용자 번호 설정
         textView = (TextView)view.findViewById(R.id.textView_phoneNum);
         tvBattery = (TextView)view.findViewById(R.id.tvBattery);
-        textView.setText("010" + pref.getValue("disablePnum", "번호를 저장하세요.", "disablePnum"));
-        tvBattery.setText(pref.getValue("0", "98%", "bt"));
+        if(pref.getValue("0", "98", "bt").equals("98")){
+            tvBattery.setText(pref.getValue("0", "98%", "bt"));
+        }else{
+            String bt = pref.getValue("0", "98%", "bt").substring(0, 4);
+
+            tvBattery.setText(bt);
+        }
+        if(pref.getValue("disablePnum", "no", "disablePnum").equals("no")){
+            textView.setText("번호를 저장하세요");
+        } else{
+            textView.setText("010" + pref.getValue("disablePnum", "번호를 저장하세요.", "disablePnum"));
+        }
         mChange = (Button)view.findViewById(R.id.btn_change_num);
+        frameLayout = (FrameLayout) getActivity().findViewById(R.id.mainmenu_new);
+        frameLayout.getForeground().setAlpha(0);
+
         mChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), Pop.class));
+                //startActivity(new Intent(getActivity(), Pop.class));
+                DisplayMetrics dm = new DisplayMetrics();
+                getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+                int width = dm.widthPixels;
+                int heigth = dm.heightPixels;
+                LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View layout = inflater.inflate(R.layout.activity_pop, (ViewGroup)getActivity().findViewById(R.id.popup_layout_2));
+                popupWindow = new PopupWindow(layout, width, heigth, true);
+                popupWindow.showAtLocation(layout, Gravity.BOTTOM, 0, 0);
+
+                mStore = (Button)layout.findViewById(R.id.btn_store);
+                mStore.setOnClickListener(btnStore_Listener);
+                mCancel = (Button)layout.findViewById(R.id.btn_cancel_pop);
+                mCancel.setOnClickListener(btn_Cancel_Listener);
+                mPhoneNumView_Pop = (EditText)layout.findViewById(R.id.editText_pop);
+
+
+
+                frameLayout.getForeground().setAlpha(150);
             }
         });
 
@@ -114,6 +157,29 @@ public class TabFragment3 extends Fragment {
         alert.show();
     }
 
+    private View.OnClickListener btnStore_Listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            mPhoneNum = mPhoneNumView_Pop.getText().toString();
+            if(mPhoneNum.length() != 11){
+                Toast.makeText(getContext(), "올바르지 않은 번호입니다.", Toast.LENGTH_SHORT).show();
+            } else{
+                popupWindow.dismiss();
+                pref.putValue("disablePnum", mPhoneNum.substring(mPhoneNum.length()-8), "disablePnum");
+                textView.setText(mPhoneNum);
+                frameLayout.getForeground().setAlpha(0);
+            }
+
+        }
+    };
+
+    private View.OnClickListener btn_Cancel_Listener = new View.OnClickListener(){
+        @Override
+        public void onClick(View view){
+            popupWindow.dismiss();
+            frameLayout.getForeground().setAlpha(0);
+        }
+    };
 
 
 }

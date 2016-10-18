@@ -7,6 +7,7 @@ import android.os.CountDownTimer;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.FrameLayout;
 
 import com.example.osm.appdesign21.FTPServer.DownloadBattery;
 import com.example.osm.appdesign21.FTPServer.DownloadGPS;
@@ -25,6 +26,7 @@ public class NewMainActivity extends AppCompatActivity {
     private static String TAG = "NewMainActivity";
     SharedPreferences pref;
     public static Context mContext;
+    FrameLayout frameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +40,12 @@ public class NewMainActivity extends AppCompatActivity {
         pref = new SharedPreferences(this);
         if(pref.getValue("disablePnum", "no", "disablePnum").equals("no")){
             startActivity(new Intent(NewMainActivity.this, Pop.class));
+            finish();
         } else{
             new DownloadTask(pref.getValue("disablePnum","files","disablePnum")).execute();
             new DownloadGPS(pref.getValue("disablePnum", "files", "disablePnum")).execute();
             new DownloadBattery(pref.getValue("disablePnum","files", "disablePnum")).execute();
-            new CountDownTimer(5000, 1000) {
+            new CountDownTimer(4000, 1000) {
                 @Override
                 public void onTick(long l) {
 
@@ -86,6 +89,8 @@ public class NewMainActivity extends AppCompatActivity {
 
             }
         });
+        frameLayout = (FrameLayout)findViewById(R.id.mainmenu_new);
+        frameLayout.getForeground().setAlpha(0);
     }
 
     public void ReadGPS(){
