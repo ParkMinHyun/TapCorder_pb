@@ -1,5 +1,6 @@
 package com.example.osm.appdesign21;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -46,6 +47,7 @@ public class Pop extends AppCompatActivity {
                     pref.putValue("disablePnum",mPhoneNum.substring(mPhoneNum.length()-8),"disablePnum");
                     new DownloadTask(pref.getValue("disablePnum","files","disablePnum")).execute();
                     TabFragment3.textView.setText(mPhoneNum);
+                    startActivity(new Intent(Pop.this, NewMainActivity.class));
                     finish();
                 }
             }
@@ -54,6 +56,8 @@ public class Pop extends AppCompatActivity {
         mCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                pref.removeAllPreferences("mode");
+                startActivity(new Intent(Pop.this, SelectModeActivity.class));
                 finish();
             }
         });
