@@ -10,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.osm.appdesign21.FTPServer.DownloadTask;
-import com.example.osm.appdesign21.Menu_Fragment.TabFragment3;
 
 public class Pop extends AppCompatActivity {
 
@@ -46,7 +45,6 @@ public class Pop extends AppCompatActivity {
                 }else{
                     pref.putValue("disablePnum",mPhoneNum.substring(mPhoneNum.length()-8),"disablePnum");
                     new DownloadTask(pref.getValue("disablePnum","files","disablePnum")).execute();
-                    TabFragment3.textView.setText(mPhoneNum);
                     startActivity(new Intent(Pop.this, NewMainActivity.class));
                     finish();
                 }

@@ -27,7 +27,7 @@ import com.example.osm.appdesign21.SharedPreferences;
 
 public class TabFragment3 extends Fragment {
 
-    public static TextView textView;
+    private TextView textView;
     private TextView tvBattery;
 
     private Button mChange; // 사용자 번호 변경 버튼

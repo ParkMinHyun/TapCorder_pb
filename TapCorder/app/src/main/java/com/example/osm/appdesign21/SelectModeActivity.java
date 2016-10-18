@@ -21,6 +21,8 @@ public class SelectModeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_select_mode);
 
         pref = new SharedPreferences(this);
+        pref.removeAllPreferences("mode");
+        pref.removeAllPreferences("disablePnum");
 
         mProtectorLayout = (RelativeLayout)findViewById(R.id.protector);
         mProtectorLayout.setOnClickListener(new View.OnClickListener() {
