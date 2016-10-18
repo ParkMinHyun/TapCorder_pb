@@ -12,7 +12,7 @@
         <shape>
             <!--<solid android:color="@android:color/transparent" />-->
             <stroke
-                android:width="2.5dp"
+                android:width="3dp"
                 android:color="#a2a5b2" />
         </shape>
     </item>

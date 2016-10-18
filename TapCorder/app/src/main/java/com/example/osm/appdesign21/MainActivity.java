@@ -32,6 +32,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -44,6 +45,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,11 +91,12 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
     private FloatingActionButton fabButton_set;
     private RecyclerView mTimeRecyclerView;
     private TextView contentsText;
+    private ScrollView lvScrollPhone;
 
     // 연락처 ListView
     private ListView lvPhone;
-    private Button mbtnAddContact;
-    private Button mbtnDeleteContact;
+    private RelativeLayout mbtnAddContact;
+    private RelativeLayout mbtnDeleteContact;
 
     private boolean mUploadingGPS = false;
 
@@ -725,7 +728,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
 
 
                     lvPhone = (ListView) layout.findViewById(R.id.listPhone);
-
+                    lvScrollPhone=(ScrollView)layout.findViewById(R.id.scroll_lvphone);
                     final List<PhoneBook> listPhoneBook = new ArrayList<PhoneBook>();
                     for (int i = 0; i < saveList.size(); i++) {
                         listPhoneBook.add(new PhoneBook(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher),
@@ -735,8 +738,17 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     final PhoneBookAdapter adapter = new PhoneBookAdapter(this, listPhoneBook);
                     lvPhone.setAdapter(adapter);
 
-                    mbtnAddContact = (Button) layout.findViewById(R.id.btn_add);
-                    mbtnDeleteContact = (Button) layout.findViewById(R.id.btn_delete);
+                    lvPhone.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View view, MotionEvent motionEvent) {
+                            lvScrollPhone.requestDisallowInterceptTouchEvent(true);
+
+                            return false;
+                        }
+                    });
+
+                    mbtnAddContact = (RelativeLayout) layout.findViewById(R.id.btn_add);
+                    mbtnDeleteContact = (RelativeLayout) layout.findViewById(R.id.btn_delete);
                     btnClosePopup = (Button) layout.findViewById(R.id.closebtn_popup_1);
                     btnClosePopup.setOnClickListener(cancel_addrbutton_click_listener);
 

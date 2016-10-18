@@ -4,57 +4,71 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:foreground="@drawable/shadow_window_dim">
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
 
-
-    <!--음성파일목록RecyclerView-->
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/title_layout"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@drawable/title_top_btm"
-        android:gravity="center_vertical"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView_title"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
-            android:drawableLeft="@drawable/tap32"
-            android:gravity="fill_horizontal|center_vertical"
-            android:text="  사용자 모드"
-            android:textColor="#FFFFFF"
-            android:textSize="20dp"
-            android:textStyle="bold" />
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="false"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
-            android:layout_toLeftOf="@+id/battery_tapcorder"
-            android:src="@drawable/battery_tapcorder" />
-
-        <TextView
-            android:id="@+id/battery_tapcorder"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="20dp"
-            android:layout_marginRight="10dp"
+        <!--음성파일목록RecyclerView-->
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/title_layout"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/title_top_btm"
             android:gravity="center_vertical"
-            android:text="100%"
-            android:textColor="#FFFFFF"
-            android:textSize="19dp" />
+            android:orientation="vertical">
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/textView_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:drawableLeft="@drawable/tap32"
+                android:gravity="fill_horizontal|center_vertical"
+                android:text="  사용자 모드"
+                android:textColor="#FFFFFF"
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
-    <!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+
+            <!--탭코더 배터리 뷰-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="false"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/tapcorder" />
+                <TextView
+                    android:id="@+id/battery_tapcorder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="center_vertical"
+                    android:text="100%"
+                    android:textColor="@color/main_comple"
+                    android:textSize="19dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
         <!--android:id="@+id/mainmenu"-->
         <!--android:layout_width="fill_parent"-->
         <!--android:layout_height="fill_parent"-->
@@ -65,8 +79,8 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:foreground="@drawable/shadow_window_dim"
             android:layout_below="@+id/title_layout"
+            android:foreground="@drawable/shadow_window_dim"
             tools:context=".MainActivity">
 
             <android.support.v7.widget.RecyclerView
@@ -76,19 +90,19 @@
                 android:scrollbars="vertical" />
 
         </RelativeLayout>
-    <!--</FrameLayout>-->
+        <!--</FrameLayout>-->
 
-    <!--설정버튼-->
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_settings"
-        style="@style/FabSettings_Style"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="25dp" />
+        <!--설정버튼-->
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_settings"
+            style="@style/FabSettings_Style"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="25dp" />
 
-</RelativeLayout>
+    </RelativeLayout>
 
 </FrameLayout>
 
