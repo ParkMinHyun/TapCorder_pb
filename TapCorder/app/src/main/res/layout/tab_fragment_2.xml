@@ -94,28 +94,36 @@
         android:paddingTop="5dp"
         android:visibility="gone">
         <!--경찰서 이미지뷰-->
-        <ImageView
-            android:id="@+id/mark_icon_police"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+        <LinearLayout
+            android:id="@+id/layout_image_police"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/police" />
+            android:background="@drawable/info_imageview_style"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/mark_icon_police"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:src="@drawable/police" />
+        </LinearLayout>
         <!--경찰서 레이아웃 텍스트-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="50dp"
-            android:layout_toEndOf="@+id/mark_icon_police"
+            android:layout_toEndOf="@+id/layout_image_police"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/policeStationName"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
-                android:paddingLeft="10dp"
                 android:gravity="bottom"
+                android:paddingLeft="5dp"
                 android:text="서울 경찰서 및 지구대 이름"
                 android:textColor="@color/yellow_txtcolor"
                 android:textIsSelectable="false"
@@ -125,30 +133,32 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="10dp"></RelativeLayout>
+
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                >
-            <TextView
-                android:layout_toLeftOf="@+id/between_distance"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:paddingRight="10dp"
-                android:text="현재 위치에서 약"
-                android:textColor="#706e67"
-                android:textSize="15dp"
-                android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/between_distance"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:gravity="top|right"
-                android:layout_alignParentRight="true"
-                android:paddingRight="15dp"
-                android:text="7.17km"
-                android:textColor="@color/color_police"
-                android:textSize="18dp"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_toLeftOf="@+id/between_distance"
+                    android:paddingRight="10dp"
+                    android:text="현재 위치에서 약"
+                    android:textColor="#706e67"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/between_distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_alignParentRight="true"
+                    android:gravity="top|right"
+                    android:paddingRight="15dp"
+                    android:text="7.17km"
+                    android:textColor="@color/color_police"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
         </LinearLayout>
@@ -161,9 +171,8 @@
             android:layout_centerVertical="true"
             android:layout_gravity="right"
             android:layout_marginRight="10dp"
-            android:gravity="bottom|end|right"
             android:background="@drawable/call_police"
-            />
+            android:gravity="bottom|end|right" />
 
     </RelativeLayout>
 
@@ -185,14 +194,25 @@
         android:visibility="gone">
 
         <!--사용자 이미지-->
-        <ImageView
-            android:id="@+id/mark_icon_user"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+        <LinearLayout
+            android:id="@+id/layout_image_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/user" />
+            android:background="@drawable/info_imageview_style"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/mark_icon_user"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/user" />
+        </LinearLayout>
 
         <!--사용자 레이아웃 텍스트-->
         <LinearLayout
@@ -200,14 +220,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="50dp"
-            android:layout_toEndOf="@+id/mark_icon_user"
+            android:layout_toEndOf="@+id/layout_image_user"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
+                android:gravity="bottom"
                 android:paddingLeft="10dp"
                 android:text="사용자 현재 위치"
-                android:gravity="bottom"
                 android:textColor="@color/yellow_txtcolor"
                 android:textIsSelectable="false"
                 android:textSize="18dp"
@@ -216,21 +237,21 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="10dp"></RelativeLayout>
+
             <TextView
-                android:gravity="top|left"
                 android:id="@+id/user_addr"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
+                android:gravity="top|left"
+                android:paddingLeft="12dp"
+                android:paddingRight="15dp"
                 android:text="서울시 광진구 군자동 131"
                 android:textColor="#706e67"
                 android:textSize="15dp"
-                android:textStyle="bold"
-                android:paddingLeft="12dp"
-                android:paddingRight="15dp"
-                />
+                android:textStyle="bold" />
         </LinearLayout>
+
         <Button
-            android:layout_toLeftOf="@+id/user_text_layout"
             android:id="@+id/call_user"
             android:layout_width="45dp"
             android:layout_height="45dp"
@@ -238,8 +259,9 @@
             android:layout_centerVertical="true"
             android:layout_gravity="right"
             android:layout_marginRight="10dp"
-            android:gravity="bottom|end|right"
-            android:background="@drawable/call_user" />
+            android:layout_toLeftOf="@+id/user_text_layout"
+            android:background="@drawable/call_user"
+            android:gravity="bottom|end|right" />
     </RelativeLayout>
 
 
