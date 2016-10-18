@@ -505,6 +505,21 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         mBtnStartPlayOnClick(adapter.getItem(position).getName());
     }
 
+    @Override
+    public boolean canPause() {
+        return false;
+    }
+
+    @Override
+    public boolean canSeekBackward() {
+        return false;
+    }
+
+    @Override
+    public boolean canseekForward() {
+        return false;
+    }
+
     // 특정 폴더의 파일 목록을 구해서 반환
     public File[] getFileList(String strPath) {
         File[] files;
