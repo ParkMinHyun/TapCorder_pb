@@ -56,8 +56,10 @@ public class TabFragment3 extends Fragment {
         if(pref.getValue("0", "98", "bt").equals("98")){
             tvBattery.setText(pref.getValue("0", "98%", "bt"));
         }else{
-            String bt = pref.getValue("0", "98%", "bt").substring(0, 4);
-
+            String bt = pref.getValue("0", "98%", "bt").substring(0, 3);
+            if(bt.equals("100")){
+                bt = bt + "%";
+            }
             tvBattery.setText(bt);
         }
         if(pref.getValue("disablePnum", "no", "disablePnum").equals("no")){
