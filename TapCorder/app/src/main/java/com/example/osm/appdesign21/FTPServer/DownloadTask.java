@@ -48,13 +48,13 @@ public class DownloadTask extends AsyncTask<Void, Void, Void> {
             ftpClient.cwd("public"); // ftp 상의 업로드 디렉토리
             ftpClient.cwd(mfileName); // 다운로드 디렉토리로 이동
 
-            String[] files = ftpClient.listNames();
-            for(int i=0; i<files.length;i++) {
-                if(files[i].equals("gps.txt") || files[i].equals("bt.txt")){
-                    continue;
-                }else{
-                    j++;
-                }
+                String[] files = ftpClient.listNames();
+                for(int i=0; i<files.length;i++) {
+                    if(files[i].equals("gps.txt") || files[i].equals("bt.txt")){
+                        continue;
+                    }else{
+                        j++;
+                    }
 
                 File downloadFile = new File("/storage/emulated/0/" + mfileName + "/recordFile" + (j) + ".amr"); // 저장할 파일 이름(local file 형식으로 된 저장할 위치)
                 if(downloadFile.exists()){
