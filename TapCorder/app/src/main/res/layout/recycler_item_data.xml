@@ -1,40 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/recyclerItemLayout"
     android:layout_width="match_parent"
     android:layout_height="65dp"
-    android:id="@+id/recyclerItemLayout"
-    android:background="@drawable/recycleritem_bg"
+    android:background="@drawable/recycleritem"
     android:clickable="true"
     android:gravity="center_vertical"
-    >
+    android:orientation="horizontal">
 
-    <TextView
-        android:text="녹음파일이름"
-        android:id="@+id/nameView"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:gravity="fill_horizontal|center_vertical"
-        android:layout_marginLeft="20dp"
-        android:textColor="@android:color/black"
-        android:textSize="20sp" />
-
-    <TextView
-        android:text="0시 00분 00초"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:id="@+id/timeView"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="3dp"
-        android:layout_marginRight="7dp"/>
+        android:background="@drawable/shadowbtn_bg"
+        android:layout_marginLeft="10dp"
+        >
+        <Button
+            android:id="@+id/button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/play_file" />
+    </RelativeLayout>
 
-    <Button
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:text="▶"
-        android:id="@+id/button"
-        android:layout_alignParentStart="true" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp">
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/nameView"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:gravity="fill_horizontal|center_vertical"
+            android:text="녹음파일이름"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/timeView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:paddingBottom="5dp"
+            android:paddingRight="8dp"
+            android:text="0시 00분 00초"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+</LinearLayout>
