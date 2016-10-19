@@ -42,7 +42,9 @@ public class NewMainActivity extends AppCompatActivity {
             startActivity(new Intent(NewMainActivity.this, Pop.class));
             finish();
         } else{
+
             new DownloadTask(pref.getValue("disablePnum","files","disablePnum")).execute();
+
             new DownloadGPS(pref.getValue("disablePnum", "files", "disablePnum")).execute();
             new DownloadBattery(pref.getValue("disablePnum","files", "disablePnum")).execute();
             new CountDownTimer(4000, 1000) {

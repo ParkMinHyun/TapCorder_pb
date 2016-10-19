@@ -55,7 +55,11 @@ public class DownloadTask extends AsyncTask<Void, Void, Void> {
                 }else{
                     j++;
                 }
+
                 File downloadFile = new File("/storage/emulated/0/" + mfileName + "/recordFile" + (j) + ".amr"); // 저장할 파일 이름(local file 형식으로 된 저장할 위치)
+                if(downloadFile.exists()){
+                    continue; // 다운로드 하려는 파일이 존재하면 다운로드 하지않음
+                }
                 File parentDir = downloadFile.getParentFile();
                 if (!parentDir.exists()) {
                     parentDir.mkdir();
@@ -90,5 +94,6 @@ public class DownloadTask extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
     }
+
 }
 
