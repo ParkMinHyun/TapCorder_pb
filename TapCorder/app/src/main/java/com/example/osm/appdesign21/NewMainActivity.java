@@ -7,8 +7,11 @@ import android.os.CountDownTimer;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
+import com.example.osm.appdesign21.FTPServer.CheckProtector;
 import com.example.osm.appdesign21.FTPServer.DownloadBattery;
 import com.example.osm.appdesign21.FTPServer.DownloadGPS;
 import com.example.osm.appdesign21.FTPServer.DownloadTask;
@@ -19,12 +22,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.concurrent.ExecutionException;
 
 
 public class NewMainActivity extends AppCompatActivity {
 
     private static String TAG = "NewMainActivity";
     SharedPreferences pref;
+    private boolean checkProtector;
     public static Context mContext;
     FrameLayout frameLayout;
 
@@ -42,9 +47,27 @@ public class NewMainActivity extends AppCompatActivity {
             startActivity(new Intent(NewMainActivity.this, Pop.class));
             finish();
         } else{
+            Toast.makeText(this, "보호자 확인중입니다.", Toast.LENGTH_SHORT).show();
+            TelephonyManager tMgr = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+            String mPhoneNumber = tMgr.getLine1Number();
+            String Phonenum = mPhoneNumber.substring(mPhoneNumber.length()-8);
+
+            try {
+                checkProtector = new CheckProtector(Phonenum, pref.getValue("disablePnum", "no", "disablePnum")).execute().get();
+                if(checkProtector == false){
+                    Toast.makeText(this ,"보호자로 등록되어있지 않습니다.\n등록 후 확인하실 수 있습니다.", Toast.LENGTH_SHORT).show();
+                    pref.removeAllPreferences("mode");
+                    pref.removeAllPreferences("disablePnum");
+                    startActivity(new Intent(NewMainActivity.this, SelectModeActivity.class));
+                    finish();
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
 
             new DownloadTask(pref.getValue("disablePnum","files","disablePnum")).execute();
-
             new DownloadGPS(pref.getValue("disablePnum", "files", "disablePnum")).execute();
             new DownloadBattery(pref.getValue("disablePnum","files", "disablePnum")).execute();
             new CountDownTimer(4000, 1000) {
