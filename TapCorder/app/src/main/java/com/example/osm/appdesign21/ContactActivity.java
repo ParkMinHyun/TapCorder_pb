@@ -1,6 +1,7 @@
 package com.example.osm.appdesign21;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
@@ -13,6 +14,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.osm.appdesign21.FTPServer.UploadProtectors;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,11 +27,13 @@ public class ContactActivity extends AppCompatActivity {
     private ListView mlvContact;
 
     SharedPreferences pref;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
+        mContext = this;
 
         contactList = new ArrayList<>();
         pref = new SharedPreferences(this);
@@ -71,7 +76,7 @@ public class ContactActivity extends AppCompatActivity {
                 PhoneBook person = (PhoneBook) mlvContact.getItemAtPosition(i);
                 String name = person.getmName();
                 String phoneNumber = person.getmPhone();
-
+                new UploadProtectors(mContext, phoneNumber.substring(phoneNumber.length() - 8)).execute();
                 for(int j = 0; j < 5 ; j++){
                     if(pref.getValue(Integer.toString(j), "no", "name") == "no"){
                         pref.putValue(Integer.toString(j), name, "name");

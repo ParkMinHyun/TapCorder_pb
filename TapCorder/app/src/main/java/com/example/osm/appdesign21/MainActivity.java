@@ -54,6 +54,7 @@ import com.example.osm.appdesign21.BlueTooth.Bluetooth_MagicNumber;
 import com.example.osm.appdesign21.BlueTooth.DeviceListActivity;
 import com.example.osm.appdesign21.FTPServer.UploadBattery;
 import com.example.osm.appdesign21.FTPServer.UploadGPS;
+import com.example.osm.appdesign21.FTPServer.UploadProtectors;
 import com.example.osm.appdesign21.FTPServer.UploadTask;
 import com.example.osm.appdesign21.Recorder.MyData;
 import com.example.osm.appdesign21.Recorder.RecFiles_makeDir;
@@ -746,8 +747,9 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     lvScrollPhone=(ScrollView)layout.findViewById(R.id.scroll_lvphone);
                     final List<PhoneBook> listPhoneBook = new ArrayList<PhoneBook>();
                     for (int i = 0; i < saveList.size(); i++) {
+                        String pnum = saveList.get(i).getmPhone();
                         listPhoneBook.add(new PhoneBook(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher),
-                                saveList.get(i).getmName(), saveList.get(i).getmPhone(), ""));
+                                saveList.get(i).getmName(), pnum, ""));
                     }
 
                     final PhoneBookAdapter adapter = new PhoneBookAdapter(this, listPhoneBook);
@@ -768,13 +770,13 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     btnClosePopup.setOnClickListener(cancel_addrbutton_click_listener);
 
                     mbtnAddContact.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            finish();
-                            Intent intent = new Intent(MainActivity.this, ContactActivity.class);
-                            MainActivity.this.startActivity(intent);
-                        }
-                    });
+                    @Override
+                    public void onClick(View view) {
+                        finish();
+                        Intent intent = new Intent(MainActivity.this, ContactActivity.class);
+                        MainActivity.this.startActivity(intent);
+                    }
+                });
 
                     mbtnDeleteContact.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -783,6 +785,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                             pref.removeAllPreferences("phoneNum");
                             listPhoneBook.clear();
                             saveList.clear();
+                            new UploadProtectors(mContext, "").execute();
                             Toast.makeText(MainActivity.this, "삭제 완료되었습니다.", Toast.LENGTH_SHORT).show();
                         }
                     });
