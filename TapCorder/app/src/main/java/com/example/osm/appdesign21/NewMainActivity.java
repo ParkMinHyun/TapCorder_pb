@@ -67,7 +67,13 @@ public class NewMainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            new DownloadTask(pref.getValue("disablePnum","files","disablePnum")).execute();
+            try {
+                new DownloadTask(pref.getValue("disablePnum","files","disablePnum")).execute().get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
             new DownloadGPS(pref.getValue("disablePnum", "files", "disablePnum")).execute();
             new DownloadBattery(pref.getValue("disablePnum","files", "disablePnum")).execute();
             new CountDownTimer(4000, 1000) {

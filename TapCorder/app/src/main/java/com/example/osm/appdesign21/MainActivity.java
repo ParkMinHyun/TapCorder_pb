@@ -482,15 +482,17 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
         // SD카드에 디렉토리를 만든다.
         mFilePath = RecFiles_makeDir.makeDir("progress_recorder");
         fileList = getFileList(mFilePath);
-
+        int j = 1;
         // list에 dataset 넣기 ( 핸드폰 안에 있는 음성 파일 )
         for (int i = 0; i < fileList.length; i++) {
-            if (fileList[i].getName().contains("gps") || fileList[i].getName().contains("bt")) {
+            if (!fileList[i].getName().contains("record")) {
                 continue;
+            }else{
+                j++;
             }
             insertRecFile(i, fileList, dataset);
         }
-        newRecordNum = fileList.length - 1;
+        newRecordNum = j;
         return dataset;
     }
 
