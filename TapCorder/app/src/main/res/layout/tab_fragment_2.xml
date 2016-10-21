@@ -243,7 +243,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:gravity="top|left"
-                android:paddingLeft="12dp"
+                android:paddingLeft="11dp"
                 android:paddingRight="15dp"
                 android:text="서울시 광진구 군자동 131"
                 android:textColor="#706e67"
