@@ -1,17 +1,13 @@
 package com.example.osm.appdesign21;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.TelephonyManager;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
-import com.example.osm.appdesign21.FTPServer.CheckProtector;
 import com.example.osm.appdesign21.FTPServer.DownloadBattery;
 import com.example.osm.appdesign21.FTPServer.DownloadGPS;
 import com.example.osm.appdesign21.FTPServer.DownloadTask;
@@ -43,7 +39,7 @@ public class NewMainActivity extends AppCompatActivity {
         init_layout();
 
         pref = new SharedPreferences(this);
-        if(pref.getValue("disablePnum", "no", "disablePnum").equals("no")){
+/*        if(pref.getValue("disablePnum", "no", "disablePnum").equals("no")){
             startActivity(new Intent(NewMainActivity.this, Pop.class));
             finish();
         } else{
@@ -65,34 +61,33 @@ public class NewMainActivity extends AppCompatActivity {
                 e.printStackTrace();
             } catch (ExecutionException e) {
                 e.printStackTrace();
-            }
+            }*/
 
-            try {
-                new DownloadTask(pref.getValue("disablePnum","files","disablePnum")).execute().get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-            new DownloadGPS(pref.getValue("disablePnum", "files", "disablePnum")).execute();
-            new DownloadBattery(pref.getValue("disablePnum","files", "disablePnum")).execute();
-            new CountDownTimer(4000, 1000) {
-                @Override
-                public void onTick(long l) {
-
-                }
-
-                @Override
-                public void onFinish() {
-                    ReadGPS();
-                    ReadBattery();
-                }
-            }.start();
+        try {
+            new DownloadTask(pref.getValue("disablePnum", "files", "disablePnum")).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
-    }
+        new DownloadGPS(pref.getValue("disablePnum", "files", "disablePnum")).execute();
+        new DownloadBattery(pref.getValue("disablePnum", "files", "disablePnum")).execute();
+        new CountDownTimer(4000, 1000) {
+            @Override
+            public void onTick(long l) {
 
-    public void init_layout()
-    {
+            }
+
+            @Override
+            public void onFinish() {
+                ReadGPS();
+                ReadBattery();
+            }
+        }.start();
+    }
+/*    }*/
+
+    public void init_layout() {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("음성 파일"));
         tabLayout.addTab(tabLayout.newTab().setText("사용자 위치"));
@@ -120,20 +115,20 @@ public class NewMainActivity extends AppCompatActivity {
 
             }
         });
-        frameLayout = (FrameLayout)findViewById(R.id.mainmenu_new);
+        frameLayout = (FrameLayout) findViewById(R.id.mainmenu_new);
         frameLayout.getForeground().setAlpha(0);
     }
 
-    public void ReadGPS(){
+    public void ReadGPS() {
         String line = null;
         String[] gps = null;
-        try{
+        try {
             FileInputStream fileInputStream = new FileInputStream(new File("/storage/emulated/0/" + pref.getValue("disablePnum", "progress_recorder", "disablePnum") + "/gps.txt"));
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             StringBuilder stringBuilder = new StringBuilder();
 
-            while((line = bufferedReader.readLine()) != null){
+            while ((line = bufferedReader.readLine()) != null) {
                 stringBuilder.append(line + System.getProperty("line.separator"));
             }
             fileInputStream.close();
@@ -144,21 +139,22 @@ public class NewMainActivity extends AppCompatActivity {
             pref.putValue("0", gps[0], "lati");
             pref.putValue("0", gps[1], "longi");
 
-        } catch(FileNotFoundException e){
+        } catch (FileNotFoundException e) {
 
-        } catch(IOException ex){
+        } catch (IOException ex) {
 
         }
     }
-    public void ReadBattery(){
+
+    public void ReadBattery() {
         String line = null;
-        try{
+        try {
             FileInputStream fileInputStream = new FileInputStream(new File("/storage/emulated/0/" + pref.getValue("disablePnum", "progress_recorder", "disablePnum") + "/bt.txt"));
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             StringBuilder stringBuilder = new StringBuilder();
 
-            while((line = bufferedReader.readLine()) != null){
+            while ((line = bufferedReader.readLine()) != null) {
                 stringBuilder.append(line + System.getProperty("line.separator"));
             }
             fileInputStream.close();
@@ -167,9 +163,9 @@ public class NewMainActivity extends AppCompatActivity {
 
             pref.putValue("0", line, "bt");
 
-        } catch(FileNotFoundException e){
+        } catch (FileNotFoundException e) {
 
-        } catch(IOException ex){
+        } catch (IOException ex) {
 
         }
     }

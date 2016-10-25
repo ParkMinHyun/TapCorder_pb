@@ -400,14 +400,14 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
                     Toast.makeText(getApplicationContext(), readMessage, Toast.LENGTH_LONG).show();
                     if (readMessage.equals("P")) {
-                        for(int i = 0; i < 5; i++){
+/*                        for(int i = 0; i < 5; i++){
                             if(pref.getValue(Integer.toString(i), "no", "phoneNum").equals("no")){
                                 break;
                             }else{
                                 sendSMS(pref.getValue(Integer.toString(i), "no", "phoneNum"),
                                         "Tapcorder가 실행되었습니다. 현재 위치는 " + "서울특별시 광진구 군자동 114" + "입니다.");
                             }
-                        }
+                        }*/
                         startRec();
                         adapter = new TimeRecyclerAdapter(getDataset());
                         adapter.setOnItemClickListener(MainActivity.this);        // 녹음 시작시 파일 RecyclerView에 추가하기.
@@ -652,14 +652,14 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
             stopwatch_handler.postDelayed(this, 0);
 
             if (secs > 10) {
-                for(int i = 0; i < 5; i++){
+/*                for(int i = 0; i < 5; i++){
                     if(pref.getValue(Integer.toString(i), "no", "phoneNum").equals("no")){
                         break;
                     }else{
                         sendSMS(pref.getValue(Integer.toString(i), "no", "phoneNum"),
                                 "Tapcorder음성이 전송 완료되었습니다. App을 열어 확인해 주세요.");
                     }
-                }
+                }*/
                 stopRec();
                 Toast.makeText(getApplicationContext(), "녹음 완료", Toast.LENGTH_SHORT).show();
                 initStopWatch();
