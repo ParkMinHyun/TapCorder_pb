@@ -399,7 +399,7 @@ public class MainActivity extends ActionBarActivity implements MediaPlayer.OnCom
                     String readMessage = new String(readBuf, 0, msg.arg1);        // 블루투스값 읽기
                     mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
                     Toast.makeText(getApplicationContext(), readMessage, Toast.LENGTH_LONG).show();
-                    if (readMessage.equals("P")) {
+                    if (readMessage.equals("R")) {
                         for(int i = 0; i < 5; i++){
                             if(pref.getValue(Integer.toString(i), "no", "phoneNum").equals("no")){
                                 break;
