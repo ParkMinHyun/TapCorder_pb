@@ -6,4 +6,7 @@
 https://www.youtube.com/watch?v=8eniZmDnJb4
 
 # TapCorder 사진
-![image](https://user-images.githubusercontent.com/18719563/33088219-63e7a832-cf30-11e7-992d-8053c431e872.png
+#### Hardware
+![image](https://user-images.githubusercontent.com/18719563/33088219-63e7a832-cf30-11e7-992d-8053c431e872.png)
+
+#### Software
